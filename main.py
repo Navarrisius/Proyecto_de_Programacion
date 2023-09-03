@@ -1,11 +1,13 @@
 import pygame
+from clases import partida
 
 def main():
     ANCHO_VENTANA = 1280
     ALTO_VENTANA = 720
     NOMBRE_VENTANA = "Juego XD"
     pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
-    running = True
+    game = partida.Partida()
+    running = game.en_partida
     reloj = pygame.time.Clock()
 
     # Se inicia Pygame y se cambia el título de la ventana
@@ -26,7 +28,8 @@ def main():
 
         pantalla.fill((255, 255, 255))
 
-        pygame.display.flip()
+        game.cargar_fondo(pantalla)
 
+        pygame.display.flip()
 
 main()
