@@ -16,7 +16,7 @@ class Partida:
         mountain_png = pygame.image.load("img/Background/mountain.png").convert_alpha()
         screen.blit(mountain_png, (0, 0))
 
-    def generar_terreno(ANCHO_MUNDO,ALTURA_MUNDO):
+    def generar_terreno(ANCHO_MUNDO, ALTURA_MUNDO):
 
         terreno = pygame.Surface((ANCHO_MUNDO, ALTURA_MUNDO))
 

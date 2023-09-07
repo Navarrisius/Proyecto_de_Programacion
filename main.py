@@ -12,6 +12,8 @@ def main():
     ALTURA_MUNDO = math.ceil(ALTO_VENTANA/1.5)
     pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA), pygame.RESIZABLE,pygame.OPENGL)
     game = partida.Partida()
+    print(ANCHO_MUNDO)
+    print(ALTURA_MUNDO)
     textura_terreno = game.generar_terreno(ANCHO_MUNDO,ALTURA_MUNDO)
     running = game.en_partida
     reloj = pygame.time.Clock()
@@ -34,9 +36,10 @@ def main():
             # Captura el cierre de la ventana
             if event.type == pygame.QUIT:
                 running = False
-            elif event.type == pygame.VIDEORESIZE:
+            elif event.type == pygame.VIDEORESIZE: # Captura eventos de cambio de tamaño de ventana
                 NUEVO_ANCHO, NUEVA_ALTURA = event.size
-                pantalla = pygame.display.set_mode((NUEVO_ANCHO, NUEVA_ALTURA), pygame.RESIZABLE,pygame.OPENGL)
+                pantalla = pygame.display.set_mode((NUEVO_ANCHO, NUEVA_ALTURA), pygame.RESIZABLE,pygame.OPENGL)# Cambia el tamaño de la ventana
+                
         terreno_escalado = pygame.transform.scale(textura_terreno, (pantalla.get_width(), pantalla.get_height()))
         
         pantalla.blit(terreno_escalado, (0, 0))
