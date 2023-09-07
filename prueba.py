@@ -36,7 +36,7 @@ def main():
                 corriendo = False
             elif event.type == pygame.VIDEORESIZE:  # Captura eventos de cambio de tamaño de ventana
                 new_width, new_height = event.size
-                screen = pygame.display.set_mode((new_width, new_height), pygame.RESIZABLE)  # Cambia el tamaño de la ventana
+                screen = pygame.display.set_mode((new_width, new_height), pygame.RESIZABLE,pygame.OPENGL)  # Cambia el tamaño de la ventana
 
         terreno_escalado = pygame.transform.scale(textura_terreno, (screen.get_width(), screen.get_height()))
         
