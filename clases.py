@@ -37,14 +37,16 @@ class Partida:
     def generar_terreno(self, ANCHO_MUNDO, ALTURA_MUNDO):
         ESCALA_RUIDO = 0.01
         COLOR_TERRENO = (128, 64, 0)
+        ARREGLO_ALTURA = []
         semilla = random.randint(0, 50)
         terreno = pygame.Surface((ANCHO_MUNDO, ALTURA_MUNDO))
         for x in range(ANCHO_MUNDO):
         # Determina la altura del terreno en este punto, el primer decimal para aumentar la altura de las montañas , el segundo para aumentar o disminuir el terreno
             altura = int(noise.pnoise1(x * ESCALA_RUIDO, base=semilla) * 0.3 * ALTURA_MUNDO + 0.5 * ALTURA_MUNDO)
+            ARREGLO_ALTURA.append(altura)
         # Rellena el terreno hasta esta altura
             pygame.draw.line(terreno, COLOR_TERRENO, (x, ALTURA_MUNDO), (x, altura), 1)
-        return terreno
+        return terreno, ARREGLO_ALTURA
     
 class Tanque:
     color = None

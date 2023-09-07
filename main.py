@@ -12,7 +12,7 @@ def main():
     ALTURA_MUNDO = math.ceil(ALTO_VENTANA/1.5)
     pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA), pygame.RESIZABLE,pygame.OPENGL)
     game = clases.Partida()
-    textura_terreno = game.generar_terreno(ANCHO_MUNDO, ALTURA_MUNDO)
+    textura_terreno, arreglo_altura = game.generar_terreno(ANCHO_MUNDO, ALTURA_MUNDO)
     running = game.en_partida
     reloj = pygame.time.Clock()
 
