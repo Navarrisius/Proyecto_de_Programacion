@@ -13,6 +13,12 @@ class Disparo:
     def __init__(self, angulo, velocidad_inicial):
         self.angulo = angulo
         self.velocidad_inicial = velocidad_inicial
+    
+    def dibujar_disparo(self):
+        '''
+        TODO: Dibujar trayectoria del disparo y mostrar la altura máxima alcanzada y la distancia recorrida
+        '''
+        pass
 
 class Jugador:
     nombre = None
@@ -56,3 +62,13 @@ class Tanque:
 
     def __init__(self, color):
         self.color = color
+    
+    def disparar(self, pos_x, pos_y, angulo, velocidad_inicial):
+        '''
+        Fórmula trayectoria balística
+        g = gravedad
+        a = angulo
+        v = velocidad inicial
+        y = x * tan(a) - (g * x^2 / 2 * v * cos^2(a))
+        '''
+        GRAVEDAD = 9.8
