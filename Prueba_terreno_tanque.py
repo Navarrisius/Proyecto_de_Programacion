@@ -27,9 +27,12 @@ def main():
 
     #Seting tanque
     tanque_1 = clases.Tanque("red")
+    tanque_2 = clases.Tanque("blue")
     gravedad = 1
     tanque_1.posicion_x = 30
     tanque_1.posicion_y = 30
+    tanque_2.posicion_x = 200*4
+    tanque_2.posicion_y = 30
     radio = 30
     angulo_n = 0
 
@@ -92,12 +95,17 @@ def main():
             pygame.draw.line(screen, (150,150,150), turret_start, turret_end, 4)
         #Agregar tanque
         draw_tank(pantalla, tanque_1)
+        draw_tank(pantalla, tanque_2)
         #pygame.draw.rect(pantalla,(0, 255, 0), (tanque_1.posicion_x, tanque_1.posicion_y, 50, 30))
         #pygame.draw.line(pantalla, (150, 150, 150),(tanque_1.posicion_x, tanque_1.posicion_y), (x1, y1), 10)
         if(tanque_1.posicion_y == ALTURA_TERRENO[tanque_1.posicion_x]+120):
             tanque_1.posicion_y += 0
         else:
             tanque_1.posicion_y += gravedad
+        if(tanque_2.posicion_y == ALTURA_TERRENO[tanque_2.posicion_x]+130):
+            tanque_2.posicion_y += 0
+        else:
+            tanque_2.posicion_y += gravedad
 
         pygame.display.flip()
         # Limita los FPS a 60
