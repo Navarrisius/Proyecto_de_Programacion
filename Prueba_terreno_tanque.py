@@ -94,7 +94,7 @@ def main():
         draw_tank(pantalla, tanque_1)
         #pygame.draw.rect(pantalla,(0, 255, 0), (tanque_1.posicion_x, tanque_1.posicion_y, 50, 30))
         #pygame.draw.line(pantalla, (150, 150, 150),(tanque_1.posicion_x, tanque_1.posicion_y), (x1, y1), 10)
-        if(tanque_1.posicion_y == ALTURA_TERRENO[tanque_1.posicion_x] + 100):
+        if(tanque_1.posicion_y == ALTURA_TERRENO[tanque_1.posicion_x]+120):
             tanque_1.posicion_y += 0
         else:
             tanque_1.posicion_y += gravedad
