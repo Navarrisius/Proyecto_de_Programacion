@@ -18,7 +18,7 @@ def main():
     reloj = pygame.time.Clock()
     tecla_a_pulsada = False
     tecla_d_pulsada = False
-    limite_angulo_min = -180
+    limite_angulo_min = 0
     limite_angulo_max = 180
 
     # Se inicia Pygame y se cambia el título de la ventana
@@ -80,10 +80,20 @@ def main():
         terreno_escalado = pygame.transform.scale(textura_terreno, (pantalla.get_width(), pantalla.get_height()))
         pantalla.blit(terreno_escalado, (0, 0))
         escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(angulo_n) + "°", color_fuente=(255, 255, 255), color_fondo=(0, 0, 255), x=tanque_1.posicion_x + 100, y=tanque_1.posicion_y)
-
+        def draw_tank(screen, tanque):
+            tank_points = [(tanque.posicion_x - 50 // 2, tanque.posicion_y),(tanque.posicion_x - 50 // 2, tanque.posicion_y - 10),
+                           (tanque.posicion_x - 50 // 2 + 5, tanque.posicion_y - 13),(tanque.posicion_x + 50 // 2 - 5, tanque.posicion_y - 13),
+                           (tanque.posicion_x + 50 // 2, tanque.posicion_y - 10),(tanque.posicion_x + 50 // 2, tanque.posicion_y)]
+            pygame.draw.polygon(screen, tanque.color, tank_points)
+            # Dibuja la torreta del tanque
+            turret_length = 30
+            turret_start = (tanque.posicion_x, tanque.posicion_y - 10)
+            turret_end = (tanque.posicion_x + turret_length * math.cos(angulo),tanque.posicion_y - 10 - turret_length * math.sin(angulo))
+            pygame.draw.line(screen, (150,150,150), turret_start, turret_end, 4)
         #Agregar tanque
-        pygame.draw.rect(pantalla,(0, 255, 0), (tanque_1.posicion_x, tanque_1.posicion_y, 50, 30))
-        pygame.draw.line(pantalla, (150, 150, 150),(tanque_1.posicion_x, tanque_1.posicion_y), (x1, y1), 10)
+        draw_tank(pantalla, tanque_1)
+        #pygame.draw.rect(pantalla,(0, 255, 0), (tanque_1.posicion_x, tanque_1.posicion_y, 50, 30))
+        #pygame.draw.line(pantalla, (150, 150, 150),(tanque_1.posicion_x, tanque_1.posicion_y), (x1, y1), 10)
         if(tanque_1.posicion_y == ALTURA_TERRENO[tanque_1.posicion_x] + 100):
             tanque_1.posicion_y += 0
         else:
