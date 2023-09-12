@@ -5,6 +5,9 @@ import random
 import math
 import clases
 
+
+def generar_terreno(x, altura_maxima, width):
+    return altura_maxima * math.e ** (-((x - width) ** 2) / (2 * (width / 2) ** 2)) * math.cos(0.01 * (x - width)) + 200
 def main():
     ANCHO_VENTANA = 1280
     ALTO_VENTANA = 768
@@ -13,7 +16,9 @@ def main():
     ALTURA_MUNDO = math.ceil(ALTO_VENTANA/1.5)
     pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA), pygame.RESIZABLE,pygame.OPENGL)
     game = clases.Partida()
-    textura_terreno, ALTURA_TERRENO = game.generar_terreno(ANCHO_MUNDO, ALTURA_MUNDO)
+    altura_terreno = [0] * ANCHO_VENTANA
+    for x in range(ANCHO_VENTANA):
+        altura_terreno[x] += generar_terreno(x, 200, ALTO_VENTANA)
     running = game.en_partida
     reloj = pygame.time.Clock()
     tecla_a_pulsada = False
@@ -75,13 +80,18 @@ def main():
                 angulo = math.radians(angulo_n)
             if tecla_d_pulsada:
                 angulo = math.radians(angulo_n)
+        #VACIA PANTALLA
+        pantalla.fill((0, 0, 0))
+
+        # Mantener el tanque en el terreno
+        tanque_1.posicion_y = ALTO_VENTANA - altura_terreno[tanque_1.posicion_x]
+        tanque_2.posicion_y = ALTO_VENTANA - altura_terreno[tanque_2.posicion_x]
 
         angulo = (math.radians(angulo_n))
+        #terreno
+        for x in range(ANCHO_VENTANA):
+            pygame.draw.rect(pantalla, (0, 255, 0), (x, ALTO_VENTANA - altura_terreno[x], 1, altura_terreno[x]))
 
-        x1 = tanque_1.posicion_x + 40 * math.cos(angulo)
-        y1 = tanque_1.posicion_y - 40 * math.sin(angulo)
-        terreno_escalado = pygame.transform.scale(textura_terreno, (pantalla.get_width(), pantalla.get_height()))
-        pantalla.blit(terreno_escalado, (0, 0))
         escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(angulo_n) + "°", color_fuente=(255, 255, 255), color_fondo=(0, 0, 255), x=tanque_1.posicion_x + 100, y=tanque_1.posicion_y)
         def draw_tank(screen, tanque):
             tank_points = [(tanque.posicion_x - 50 // 2, tanque.posicion_y),(tanque.posicion_x - 50 // 2, tanque.posicion_y - 10),
@@ -98,14 +108,6 @@ def main():
         draw_tank(pantalla, tanque_2)
         #pygame.draw.rect(pantalla,(0, 255, 0), (tanque_1.posicion_x, tanque_1.posicion_y, 50, 30))
         #pygame.draw.line(pantalla, (150, 150, 150),(tanque_1.posicion_x, tanque_1.posicion_y), (x1, y1), 10)
-        if(tanque_1.posicion_y == ALTURA_TERRENO[tanque_1.posicion_x]+120):
-            tanque_1.posicion_y += 0
-        else:
-            tanque_1.posicion_y += gravedad
-        if(tanque_2.posicion_y == ALTURA_TERRENO[tanque_2.posicion_x]+130):
-            tanque_2.posicion_y += 0
-        else:
-            tanque_2.posicion_y += gravedad
 
         pygame.display.flip()
         # Limita los FPS a 60
