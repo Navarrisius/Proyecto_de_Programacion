@@ -6,19 +6,18 @@ import math
 import clases
 
 
-def generar_terreno(x, altura_maxima, width):
-    return altura_maxima * math.e ** (-((x - width) ** 2) / (2 * (width / 2) ** 2)) * math.cos(0.01 * (x - width)) + 200
+
 def main():
     ANCHO_VENTANA = 1280
     ALTO_VENTANA = 768
     NOMBRE_VENTANA = "Juego XD"
-    ANCHO_MUNDO = math.ceil(ANCHO_VENTANA/1.5)
-    ALTURA_MUNDO = math.ceil(ALTO_VENTANA/1.5)
+    #ANCHO_MUNDO = math.ceil(ANCHO_VENTANA/1.5)
+    #ALTURA_MUNDO = math.ceil(ALTO_VENTANA/1.5)
     pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA), pygame.RESIZABLE,pygame.OPENGL)
     game = clases.Partida()
     altura_terreno = [0] * ANCHO_VENTANA
     for x in range(ANCHO_VENTANA):
-        altura_terreno[x] += generar_terreno(x, 200, ALTO_VENTANA)
+        altura_terreno[x] += game.generar_terreno(x, 250, ALTO_VENTANA)
     running = game.en_partida
     reloj = pygame.time.Clock()
     tecla_a_pulsada = False
@@ -58,6 +57,14 @@ def main():
                 NUEVO_ANCHO, NUEVA_ALTURA = event.size
                 # Cambia el tamaño de la ventana
                 pantalla = pygame.display.set_mode((NUEVO_ANCHO, NUEVA_ALTURA), pygame.RESIZABLE,pygame.OPENGL)
+                altura_terreno_nuevo = [0] * NUEVO_ANCHO
+                for x in range(NUEVO_ANCHO):
+                    altura_terreno_nuevo[x] += game.generar_terreno(x, 250, NUEVA_ALTURA)
+                for x in range(NUEVO_ANCHO):
+                    pygame.draw.rect(pantalla, (0, 255, 0), (x, NUEVA_ALTURA - altura_terreno_nuevo[x], 1, altura_terreno_nuevo[x]))
+            else:
+                for x in range(ANCHO_VENTANA):
+                    pygame.draw.rect(pantalla, (0, 255, 0), (x, ALTO_VENTANA - altura_terreno[x], 1, altura_terreno[x]))
             teclas = pygame.key.get_pressed()
             # Verifica si la tecla 'A' se mantiene presionada
             if teclas[pygame.K_a]:
@@ -81,7 +88,7 @@ def main():
             if tecla_d_pulsada:
                 angulo = math.radians(angulo_n)
         #VACIA PANTALLA
-        pantalla.fill((0, 0, 0))
+        #pantalla.fill((0, 0, 0))
 
         # Mantener el tanque en el terreno
         tanque_1.posicion_y = ALTO_VENTANA - altura_terreno[tanque_1.posicion_x]
@@ -89,10 +96,10 @@ def main():
 
         angulo = (math.radians(angulo_n))
         #terreno
-        for x in range(ANCHO_VENTANA):
-            pygame.draw.rect(pantalla, (0, 255, 0), (x, ALTO_VENTANA - altura_terreno[x], 1, altura_terreno[x]))
+        
 
-        escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(angulo_n) + "°", color_fuente=(255, 255, 255), color_fondo=(0, 0, 255), x=tanque_1.posicion_x + 100, y=tanque_1.posicion_y)
+        escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(angulo_n) + "°", color_fuente=(255, 255, 255), color_fondo=(0, 0, 255), x=tanque_1.posicion_x +50, y=tanque_1.posicion_y)
+        escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(angulo_n) + "°", color_fuente=(255, 255, 255), color_fondo=(255, 0, 0), x=tanque_2.posicion_x +50, y=tanque_2.posicion_y)
         def draw_tank(screen, tanque):
             tank_points = [(tanque.posicion_x - 50 // 2, tanque.posicion_y),(tanque.posicion_x - 50 // 2, tanque.posicion_y - 10),
                            (tanque.posicion_x - 50 // 2 + 5, tanque.posicion_y - 13),(tanque.posicion_x + 50 // 2 - 5, tanque.posicion_y - 13),

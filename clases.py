@@ -30,8 +30,6 @@ class Jugador:
         self.nombre = nombre
         self.tanque = tanque
 
-
-
 class Partida:
     en_partida = None
     def __init__(self):
@@ -41,19 +39,8 @@ class Partida:
         mountain_png = pygame.image.load("img/Background/mountain.png").convert_alpha()
         screen.blit(mountain_png, (0, 0))
 
-    def generar_terreno(self, ANCHO_MUNDO, ALTURA_MUNDO):
-        ESCALA_RUIDO = 0.01
-        COLOR_TERRENO = (128, 64, 0)
-        ARREGLO_ALTURA = []
-        semilla = random.randint(0, 50)
-        terreno = pygame.Surface((ANCHO_MUNDO, ALTURA_MUNDO))
-        for x in range(ANCHO_MUNDO):
-        # Determina la altura del terreno en este punto, el primer decimal para aumentar la altura de las montañas , el segundo para aumentar o disminuir el terreno
-            altura = int(noise.pnoise1(x * ESCALA_RUIDO, base=semilla) * 0.3 * ALTURA_MUNDO + 0.5 * ALTURA_MUNDO)
-            ARREGLO_ALTURA.append(altura)
-        # Rellena el terreno hasta esta altura
-            pygame.draw.line(terreno, COLOR_TERRENO, (x, ALTURA_MUNDO), (x, altura), 1)
-        return terreno, ARREGLO_ALTURA
+    def generar_terreno(self,x, altura_maxima, width):
+        return altura_maxima * math.e ** (-((x - width) ** 2) / (2 * (width / 2) ** 2)) * math.cos(0.01 * (x - width)) + 200
     
 class Tanque:
     color = None
