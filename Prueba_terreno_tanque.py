@@ -96,6 +96,7 @@ def main():
                             jugador_2.puede_jugar = False
                             jugador_1.puede_jugar = True
                         break
+
         #VACIA PANTALLA
         fondo.cargar_fondo(pantalla)
 

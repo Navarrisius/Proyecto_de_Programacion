@@ -62,8 +62,9 @@ class Terreno:
         for x in range(ancho):
             altura_terreno[x] += self.generar_terreno(x, 200, alto)
         for x in range(ancho):
-            pygame.draw.rect(pantalla, (60, 50, 40), (x, alto - altura_terreno[x], 1, altura_terreno[x]))
-    
+            pygame.draw.rect(pantalla, (220, 220, 220), (x, alto - altura_terreno[x], 1, altura_terreno[x]))
+        for x in range(ancho):
+            pygame.draw.rect(pantalla, (60, 50, 40), (x, alto - altura_terreno[x] + 5, 1, altura_terreno[x]))
 
 class Fondo:
     mountain_png = None
