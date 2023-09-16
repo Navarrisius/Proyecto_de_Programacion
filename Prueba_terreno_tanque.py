@@ -1,26 +1,9 @@
 import pygame
-import noise
 import random
 import math
 import clases
 from Constantes_Variables import *
 
-
-def escribir_texto(pantalla, texto, color_fuente, color_fondo, x, y):
-        fuente = pygame.font.SysFont("consolas", 18)
-        texto = fuente.render(texto, True, color_fuente, color_fondo)
-        pantalla.blit(texto, (x, y))
-
-def draw_tank(screen, tanque):
-    tank_points = [(tanque.posicion_x - 50 // 2, tanque.posicion_y),(tanque.posicion_x - 50 // 2, tanque.posicion_y - 10),
-                           (tanque.posicion_x - 50 // 2 + 5, tanque.posicion_y - 13),(tanque.posicion_x + 50 // 2 - 5, tanque.posicion_y - 13),
-                           (tanque.posicion_x + 50 // 2, tanque.posicion_y - 10),(tanque.posicion_x + 50 // 2, tanque.posicion_y)]
-    pygame.draw.polygon(screen, tanque.color, tank_points)
-    # Dibuja la torreta del tanque
-    turret_length = 30
-    turret_start = (tanque.posicion_x, tanque.posicion_y - 10)
-    turret_end = (tanque.posicion_x + turret_length * math.cos(tanque.angulo_canon),tanque.posicion_y - 10 - turret_length * math.sin(tanque.angulo_canon))
-    pygame.draw.line(screen, "gray", turret_start, turret_end, 4)
 
 def main():
     pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA), pygame.RESIZABLE,pygame.OPENGL)
@@ -36,7 +19,6 @@ def main():
     pygame.display.set_caption(NOMBRE_VENTANA)
 
     while running:
-        terreno.dibujar_terreno(ANCHO_VENTANA, ALTO_VENTANA)
         reloj = pygame.time.Clock()
         # Captura todos los eventos dentro del juego
         for event in pygame.event.get():
@@ -74,9 +56,11 @@ def main():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE: #Disparo
                         #Se intancia el disparo
-                        disparo = clases.Disparo(jugador_1.tanque.angulo_n, jugador_1.tanque.velocidad_disparo, jugador_1.tanque.posicion_x, jugador_1.tanque.posicion_y - 10)        
+                        disparo = clases.Disparo(jugador_1.tanque.angulo_n, jugador_1.tanque.velocidad_disparo)        
                         if jugador_1.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=ANCHO_VENTANA, alto=ALTO_VENTANA,disparo=disparo, altura_terreno=altura_terreno, tanque_enemigo=jugador_2.tanque):
-                            print("GANADOR JUGADOR 1")
+                            Escribir.escribir_texto(pantalla=pantalla, texto="GANADOR JUGADOR 1", color_fuente=(255, 255, 255), color_fondo=jugador_1.tanque.color, x=ANCHO_VENTANA // 2, y=ALTO_VENTANA // 2)
+                            pygame.time.delay(3000)
+                            running = False
                         else:
                             #Cambia turnos
                             jugador_2.puede_jugar = True
@@ -103,37 +87,33 @@ def main():
                     jugador_2.tanque.velocidad_disparo -= 1.5
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
-                        disparo = clases.Disparo(jugador_2.tanque.angulo_n, jugador_2.tanque.velocidad_disparo, jugador_2.tanque.posicion_x, jugador_2.tanque.posicion_y - 10)
+                        disparo = clases.Disparo(jugador_2.tanque.angulo_n, jugador_2.tanque.velocidad_disparo)
                         if jugador_2.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=ANCHO_VENTANA, alto=ALTO_VENTANA,disparo=disparo, altura_terreno=altura_terreno, tanque_enemigo=jugador_1.tanque):
-                            print("GANADOR JUGADOR 2")
+                            Escribir.escribir_texto(pantalla=pantalla, texto="GANADOR JUGADOR 2", color_fuente=(255, 255, 255), color_fondo=jugador_2.tanque.color, x=ANCHO_VENTANA // 2, y=ALTO_VENTANA // 2)
+                            pygame.time.delay(3000)
+                            running = False
                         else:
                             jugador_2.puede_jugar = False
                             jugador_1.puede_jugar = True
                         break
-
         #VACIA PANTALLA
         pantalla.fill((0, 0, 0))
-        #print(tecla_left_pulsada)
         # Mantener el tanque en el terreno
         jugador_1.tanque.posicion_y = ALTO_VENTANA - altura_terreno[jugador_1.tanque.posicion_x]
         jugador_2.tanque.posicion_y = ALTO_VENTANA - altura_terreno[jugador_2.tanque.posicion_x]
 
 
-        #Terrenoa
-        for x in range(ANCHO_VENTANA):
-            pygame.draw.rect(pantalla, (0, 255, 0), (x, ALTO_VENTANA - altura_terreno[x], 1, altura_terreno[x]))
+        #Terreno
+        terreno.dibujar_terreno(pantalla=pantalla, ancho=ANCHO_VENTANA, alto=ALTO_VENTANA)
 
         # Se escribe en pantalla la información del disparo de cada jugador
-        escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_1.tanque.angulo_n) + "°" + " | Velocidad Inicial: " + str(jugador_1.tanque.velocidad_disparo), color_fuente=(255, 255, 255), color_fondo=jugador_1.tanque.color, x=jugador_1.tanque.posicion_x + 100, y=jugador_1.tanque.posicion_y)
+        if jugador_1.puede_jugar == True:
+            Escribir.escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_1.tanque.angulo_n) + "°" + " | Velocidad Inicial: " + str(jugador_1.tanque.velocidad_disparo), color_fuente=(255, 255, 255), color_fondo=jugador_1.tanque.color, x=jugador_1.tanque.posicion_x + 100, y=jugador_1.tanque.posicion_y)
+        else:
+            Escribir.escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_2.tanque.angulo_n) + "°" + " | Velocidad Inicial: " + str(jugador_2.tanque.velocidad_disparo), color_fuente=(255, 255, 255), color_fondo=jugador_2.tanque.color, x=jugador_2.tanque.posicion_x + 100, y=jugador_2.tanque.posicion_y)
 
-        escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_2.tanque.angulo_n) + "°" + " | Velocidad Inicial: " + str(jugador_2.tanque.velocidad_disparo), color_fuente=(255, 255, 255), color_fondo=jugador_2.tanque.color, x=jugador_2.tanque.posicion_x + 100, y=jugador_2.tanque.posicion_y)
-
-        #Agregar tanque
-        draw_tank(pantalla, jugador_1.tanque)
-        draw_tank(pantalla, jugador_2.tanque)
-        #pygame.draw.rect(pantalla,(0, 255, 0), (tanque_1.posicion_x, tanque_1.posicion_y, 50, 30))
-        #pygame.draw.line(pantalla, (150, 150, 150),(tanque_1.posicion_x, tanque_1.posicion_y), (x1, y1), 10)
-
+        jugador_1.tanque.draw_tank(pantalla)
+        jugador_2.tanque.draw_tank(pantalla)
         pygame.display.flip()
         # Limita los FPS a 60
         reloj.tick(60)

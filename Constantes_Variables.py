@@ -1,4 +1,5 @@
 from clases import *
+
 #Constantes
 ANCHO_VENTANA = 1280
 ALTO_VENTANA = 768
