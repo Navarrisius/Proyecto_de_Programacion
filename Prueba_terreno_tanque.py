@@ -26,19 +26,18 @@ def main():
     pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA), pygame.RESIZABLE,pygame.OPENGL)
     game = clases.Partida()
     terreno = clases.Terreno()
+    running = game.en_partida
     altura_terreno = [0] * ANCHO_VENTANA
     for x in range(ANCHO_VENTANA):
         altura_terreno[x] += terreno.generar_terreno(x, 200, ALTO_VENTANA)
-    running = game.en_partida
-    reloj = pygame.time.Clock()
 
     # Se inicia Pygame y se cambia el título de la ventana
     pygame.init()
     pygame.display.set_caption(NOMBRE_VENTANA)
 
-
-
     while running:
+        terreno.dibujar_terreno(ANCHO_VENTANA, ALTO_VENTANA)
+        reloj = pygame.time.Clock()
         # Captura todos los eventos dentro del juego
         for event in pygame.event.get():
             # Captura el cierre de la ventana
@@ -59,29 +58,32 @@ def main():
                     if jugador_1.tanque.angulo_n > limite_angulo_max:
                         jugador_1.tanque.angulo_n = limite_angulo_max
                     jugador_1.tanque.angulo_canon = math.radians(jugador_1.tanque.angulo_n)
-
                 # Verifica si la tecla 'D' se mantiene presionada
                 if teclas[pygame.K_d]:
-                    tecla_d_pulsada = True
                     jugador_1.tanque.angulo_n -= 0.5
                     if jugador_1.tanque.angulo_n < limite_angulo_min:
                         jugador_1.tanque.angulo_n = limite_angulo_min
                     jugador_1.tanque.angulo_canon = math.radians(jugador_1.tanque.angulo_n)
+                # Verifica si la tecla 'FLECHA DERECHA' se mantiene presionada
+                if teclas[pygame.K_RIGHT]:
+                    jugador_1.tanque.velocidad_disparo += 1.5
+                # Verifica si la tecla 'FLECHA IZQUIERDA' se mantiene presionada
+                if teclas[pygame.K_LEFT]:
+                    jugador_1.tanque.velocidad_disparo -= 1.5
                 # Verifica disparo del tanque y cambio de turnos
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE: #Disparo
-
                         #Se intancia el disparo
-                        disparo = clases.Disparo(jugador_1.tanque.angulo_n, 100, jugador_1.tanque.posicion_x, jugador_1.tanque.posicion_y)
-                        print(f"DISPARO JUGADOR 1 | ANGULO: {disparo.angulo_grados}° VELOCIDAD: {disparo.velocidad_inicial}")            
-                        jugador_1.tanque.disparar(pantalla=pantalla, color=jugador_1.tanque.color, disparo=disparo)      
-                        #Cambia turnos
-                        jugador_2.puede_jugar = True
-                        jugador_1.puede_jugar = False
+                        disparo = clases.Disparo(jugador_1.tanque.angulo_n, jugador_1.tanque.velocidad_disparo, jugador_1.tanque.posicion_x, jugador_1.tanque.posicion_y - 10)        
+                        if jugador_1.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=ANCHO_VENTANA, alto=ALTO_VENTANA,disparo=disparo, altura_terreno=altura_terreno, tanque_enemigo=jugador_2.tanque):
+                            print("GANADOR JUGADOR 1")
+                        else:
+                            #Cambia turnos
+                            jugador_2.puede_jugar = True
+                            jugador_1.puede_jugar = False
                         break
 
             if jugador_2.puede_jugar:
-
                 if teclas[pygame.K_a]:
                     jugador_2.tanque.angulo_n += 0.5
                     if jugador_2.tanque.angulo_n > limite_angulo_max:
@@ -93,14 +95,20 @@ def main():
                     if jugador_2.tanque.angulo_n < limite_angulo_min:
                         jugador_2.tanque.angulo_n = limite_angulo_min
                     jugador_2.tanque.angulo_canon = math.radians(jugador_2.tanque.angulo_n)
-
+                # Verifica si la tecla 'FLECHA DERECHA' se mantiene presionada
+                if teclas[pygame.K_RIGHT]:
+                    jugador_2.tanque.velocidad_disparo += 1.5
+                # Verifica si la tecla 'FLECHA IZQUIERDA' se mantiene presionada
+                if teclas[pygame.K_LEFT]:
+                    jugador_2.tanque.velocidad_disparo -= 1.5
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
-                        disparo = clases.Disparo(jugador_2.tanque.angulo_n, 100, jugador_2.tanque.posicion_x, jugador_2.tanque.posicion_y)
-                        print(f"DISPARO JUGADOR 2 | ANGULO: {disparo.angulo_grados}° VELOCIDAD: {disparo.velocidad_inicial}")
-                        jugador_2.tanque.disparar(pantalla=pantalla, color=jugador_2.tanque.color, disparo=disparo)
-                        jugador_2.puede_jugar = False
-                        jugador_1.puede_jugar = True
+                        disparo = clases.Disparo(jugador_2.tanque.angulo_n, jugador_2.tanque.velocidad_disparo, jugador_2.tanque.posicion_x, jugador_2.tanque.posicion_y - 10)
+                        if jugador_2.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=ANCHO_VENTANA, alto=ALTO_VENTANA,disparo=disparo, altura_terreno=altura_terreno, tanque_enemigo=jugador_1.tanque):
+                            print("GANADOR JUGADOR 2")
+                        else:
+                            jugador_2.puede_jugar = False
+                            jugador_1.puede_jugar = True
                         break
 
         #VACIA PANTALLA
@@ -111,17 +119,14 @@ def main():
         jugador_2.tanque.posicion_y = ALTO_VENTANA - altura_terreno[jugador_2.tanque.posicion_x]
 
 
-
-        #terreno
+        #Terrenoa
         for x in range(ANCHO_VENTANA):
             pygame.draw.rect(pantalla, (0, 255, 0), (x, ALTO_VENTANA - altura_terreno[x], 1, altura_terreno[x]))
 
-
         # Se escribe en pantalla la información del disparo de cada jugador
-        escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_1.tanque.angulo_n) + "°", color_fuente=(255, 255, 255), color_fondo=jugador_1.tanque.color, x=jugador_1.tanque.posicion_x + 100, y=jugador_1.tanque.posicion_y)
+        escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_1.tanque.angulo_n) + "°" + " | Velocidad Inicial: " + str(jugador_1.tanque.velocidad_disparo), color_fuente=(255, 255, 255), color_fondo=jugador_1.tanque.color, x=jugador_1.tanque.posicion_x + 100, y=jugador_1.tanque.posicion_y)
 
-        escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_2.tanque.angulo_n) + "°", color_fuente=(255, 255, 255), color_fondo=jugador_2.tanque.color, x=jugador_2.tanque.posicion_x + 100, y=jugador_2.tanque.posicion_y)
-
+        escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_2.tanque.angulo_n) + "°" + " | Velocidad Inicial: " + str(jugador_2.tanque.velocidad_disparo), color_fuente=(255, 255, 255), color_fondo=jugador_2.tanque.color, x=jugador_2.tanque.posicion_x + 100, y=jugador_2.tanque.posicion_y)
 
         #Agregar tanque
         draw_tank(pantalla, jugador_1.tanque)
