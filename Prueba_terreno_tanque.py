@@ -1,5 +1,4 @@
 import pygame
-import random
 import math
 import clases
 from Constantes_Variables import *
@@ -9,7 +8,9 @@ def main():
     pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA), pygame.RESIZABLE,pygame.OPENGL)
     game = clases.Partida()
     terreno = clases.Terreno()
+    fondo = clases.Fondo()
     running = game.en_partida
+    reloj = pygame.time.Clock()
     altura_terreno = [0] * ANCHO_VENTANA
     for x in range(ANCHO_VENTANA):
         altura_terreno[x] += terreno.generar_terreno(x, 200, ALTO_VENTANA)
@@ -19,14 +20,13 @@ def main():
     pygame.display.set_caption(NOMBRE_VENTANA)
 
     while running:
-        reloj = pygame.time.Clock()
         # Captura todos los eventos dentro del juego
         for event in pygame.event.get():
             # Captura el cierre de la ventana
             if event.type == pygame.QUIT:
                 running = False
             # Captura eventos de cambio de tamaño de ventana
-            if event.type == pygame.VIDEORESIZE: 
+            if event.type == pygame.VIDEORESIZE:
                 NUEVO_ANCHO, NUEVA_ALTURA = event.size
                 # Cambia el tamaño de la ventana
                 pantalla = pygame.display.set_mode((NUEVO_ANCHO, NUEVA_ALTURA), pygame.RESIZABLE,pygame.OPENGL)
@@ -97,7 +97,8 @@ def main():
                             jugador_1.puede_jugar = True
                         break
         #VACIA PANTALLA
-        pantalla.fill((0, 0, 0))
+        fondo.cargar_fondo(pantalla)
+
         # Mantener el tanque en el terreno
         jugador_1.tanque.posicion_y = ALTO_VENTANA - altura_terreno[jugador_1.tanque.posicion_x]
         jugador_2.tanque.posicion_y = ALTO_VENTANA - altura_terreno[jugador_2.tanque.posicion_x]
@@ -108,9 +109,9 @@ def main():
 
         # Se escribe en pantalla la información del disparo de cada jugador
         if jugador_1.puede_jugar == True:
-            Escribir.escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_1.tanque.angulo_n) + "°" + " | Velocidad Inicial: " + str(jugador_1.tanque.velocidad_disparo), color_fuente=(255, 255, 255), color_fondo=jugador_1.tanque.color, x=jugador_1.tanque.posicion_x + 100, y=jugador_1.tanque.posicion_y)
+            Escribir.escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_1.tanque.angulo_n) + "°" + " | Velocidad Inicial: " + str(jugador_1.tanque.velocidad_disparo), color_fuente=(255, 255, 255), color_fondo=jugador_1.tanque.color, x=jugador_1.tanque.posicion_x + 10, y=jugador_1.tanque.posicion_y)
         else:
-            Escribir.escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_2.tanque.angulo_n) + "°" + " | Velocidad Inicial: " + str(jugador_2.tanque.velocidad_disparo), color_fuente=(255, 255, 255), color_fondo=jugador_2.tanque.color, x=jugador_2.tanque.posicion_x + 100, y=jugador_2.tanque.posicion_y)
+            Escribir.escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_2.tanque.angulo_n) + "°" + " | Velocidad Inicial: " + str(jugador_2.tanque.velocidad_disparo), color_fuente=(255, 255, 255), color_fondo=jugador_2.tanque.color, x=jugador_2.tanque.posicion_x + 10, y=jugador_2.tanque.posicion_y + 10)
 
         jugador_1.tanque.draw_tank(pantalla)
         jugador_2.tanque.draw_tank(pantalla)

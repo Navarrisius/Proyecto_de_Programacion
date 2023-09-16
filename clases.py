@@ -1,6 +1,4 @@
-
 import pygame
-import random
 import math
 
 
@@ -38,7 +36,6 @@ class Disparo:
         pygame.draw.circle(pantalla, color, (int(self.x_bala), int(self.y_bala)), self.radio_bala)
 
 
-
 class Jugador:
     nombre = None
     tanque = None
@@ -57,10 +54,6 @@ class Partida:
 
 
 class Terreno:
-    def cargar_fondo(self, screen):
-        mountain_png = pygame.image.load("img/Background/mountain.png").convert_alpha()
-        screen.blit(mountain_png, (0, 0))
-
     def generar_terreno(self, x, altura_maxima, width):
         return altura_maxima * math.e ** (-((x - width) ** 2) / (2 * (width / 2) ** 2)) * math.cos(0.01 * (x - width)) + 200
     
@@ -69,8 +62,17 @@ class Terreno:
         for x in range(ancho):
             altura_terreno[x] += self.generar_terreno(x, 200, alto)
         for x in range(ancho):
-            pygame.draw.rect(pantalla, (0, 255, 0), (x, alto - altura_terreno[x], 1, altura_terreno[x]))
+            pygame.draw.rect(pantalla, (60, 50, 40), (x, alto - altura_terreno[x], 1, altura_terreno[x]))
     
+
+class Fondo:
+    mountain_png = None
+
+    def __init__(self):
+        self.mountain_png = pygame.image.load("img/mountain.png").convert_alpha()
+
+    def cargar_fondo(self, screen):
+        screen.blit(self.mountain_png, (0, 0))
 
 class Tanque:
     color = None
@@ -106,18 +108,22 @@ class Tanque:
     def disparar(self, pantalla, ancho, alto, terreno, disparo, altura_terreno, tanque_enemigo):
         disparo.x_bala = self.turret_end[0]
         disparo.y_bala = self.turret_end[1]
+        fondo = Fondo()
         while True:
-            pantalla.fill((0,0,0))
+            fondo.cargar_fondo(pantalla)
             if disparo.x_bala >= ancho:
                 return 0
             if disparo.x_bala <= 0:
                 return 0
             disparo.actualizar()
             disparo.dibujar(pantalla, self.color)
-            if disparo.y_bala > alto - altura_terreno[int(disparo.x_bala)]:
-                disparo.impacto_terreno = True
-                print("IMPACTO CON TERRENO")
-                return 0
+            try:
+                if disparo.y_bala > alto - altura_terreno[int(disparo.x_bala)]:
+                    disparo.impacto_terreno = True
+                    print("IMPACTO CON TERRENO")
+                    return 0
+            except IndexError as e:
+                print("Bala fuera del mapa")
             if self.verificar_impacto_tanque_enemigo(disparo, tanque_enemigo):
                 print("IMPACTO CON TANQUE")
                 return 1
