@@ -1,5 +1,6 @@
 import pygame
 import math
+import random
 
 
 class Disparo:
@@ -64,7 +65,11 @@ class Terreno:
         for x in range(ancho):
             pygame.draw.rect(pantalla, (220, 220, 220), (x, alto - altura_terreno[x], 1, altura_terreno[x]))
         for x in range(ancho):
-            pygame.draw.rect(pantalla, (60, 50, 40), (x, alto - altura_terreno[x] + 5, 1, altura_terreno[x]))
+            pygame.draw.rect(pantalla, (173,204,246), (x, alto - altura_terreno[x] + 10, 1, altura_terreno[x]))
+        for x in range(ancho):
+            pygame.draw.rect(pantalla, (175,209,249), (x, alto - altura_terreno[x] + 150, 1, altura_terreno[x]))
+        for x in range(ancho):
+            pygame.draw.rect(pantalla, (178,214,250), (x, alto - altura_terreno[x] + 300, 1, altura_terreno[x]))
 
 class Fondo:
     mountain_png = None
