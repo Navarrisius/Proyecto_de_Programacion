@@ -1,6 +1,5 @@
 import pygame
 import math
-import random
 
 
 class Disparo:
@@ -9,7 +8,7 @@ class Disparo:
     velocidad_inicial = 10
     altura_maxima = None
     distancia_recorrida = None
-    radio_bala = 5
+    radio_bala = 3
     x_bala = None
     y_bala = None
     velocidad_x = None
@@ -49,6 +48,7 @@ class Jugador:
 
 class Partida:
     en_partida = None
+    ganador = None
 
     def __init__(self):
         self.en_partida = True
@@ -140,8 +140,8 @@ class Tanque:
             pygame.time.delay(10)
 
 class Escribir:
-    def escribir_texto(pantalla, texto, color_fuente, color_fondo, x, y):
-        fuente = pygame.font.SysFont("consolas", 18)
+    def escribir_texto(pantalla, texto, fuente, size_fuente, color_fuente, color_fondo, x, y):
+        fuente = pygame.font.SysFont(fuente, size_fuente)
         texto = fuente.render(texto, True, color_fuente, color_fondo)
         pantalla.blit(texto, (x, y))
     

@@ -76,9 +76,11 @@ def main():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE: #Disparo
                         #Se intancia el disparo
-                        disparo = clases.Disparo(jugador_1.tanque.angulo_n, jugador_1.tanque.velocidad_disparo, jugador_1.tanque.posicion_x, jugador_1.tanque.posicion_y - 10)        
+                        disparo = clases.Disparo(jugador_1.tanque.angulo_n, jugador_1.tanque.velocidad_disparo)        
                         if jugador_1.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=ANCHO_VENTANA, alto=ALTO_VENTANA,disparo=disparo, altura_terreno=altura_terreno, tanque_enemigo=jugador_2.tanque):
-                            print("GANADOR JUGADOR 1")
+                            game.ganador = jugador_1
+                            jugador_2.puede_jugar = False
+                            jugador_1.puede_jugar = False
                         else:
                             #Cambia turnos
                             jugador_2.puede_jugar = True
@@ -86,29 +88,49 @@ def main():
                         break
 
             if jugador_2.puede_jugar:
+                # Verifica si la tecla 'A' se mantiene presionada
                 if teclas[pygame.K_a]:
                     jugador_2.tanque.angulo_n += 0.5
                     if jugador_2.tanque.angulo_n > limite_angulo_max:
                         jugador_2.tanque.angulo_n = limite_angulo_max
                     jugador_2.tanque.angulo_canon = math.radians(jugador_2.tanque.angulo_n)
-
+                if teclas[pygame.K_a] and teclas[pygame.K_LSHIFT]:
+                    jugador_2.tanque.angulo_n += 1.5
+                    if jugador_2.tanque.angulo_n > limite_angulo_max:
+                        jugador_2.tanque.angulo_n = limite_angulo_max
+                    jugador_2.tanque.angulo_canon = math.radians(jugador_2.tanque.angulo_n) 
+                # Verifica si la tecla 'D' se mantiene presionada
                 if teclas[pygame.K_d]:
                     jugador_2.tanque.angulo_n -= 0.5
                     if jugador_2.tanque.angulo_n < limite_angulo_min:
                         jugador_2.tanque.angulo_n = limite_angulo_min
                     jugador_2.tanque.angulo_canon = math.radians(jugador_2.tanque.angulo_n)
-                # Verifica si la tecla 'FLECHA DERECHA' se mantiene presionada
+                if teclas[pygame.K_d] and teclas[pygame.K_LSHIFT]:
+                    jugador_2.tanque.angulo_n -= 1.5
+                    if jugador_2.tanque.angulo_n < limite_angulo_min:
+                        jugador_2.tanque.angulo_n = limite_angulo_min
+                    jugador_2.tanque.angulo_canon = math.radians(jugador_2.tanque.angulo_n)    
+                # Verifica si la tecla 'W' se mantiene presionada
                 if teclas[pygame.K_w]:
                     jugador_2.tanque.velocidad_disparo += 1.5
-                # Verifica si la tecla 'FLECHA IZQUIERDA' se mantiene presionada
+                if teclas[pygame.K_w] and teclas[pygame.K_LSHIFT]:
+                    jugador_2.tanque.velocidad_disparo += 3.0
+                # Verifica si la tecla 'S' se mantiene presionada
                 if teclas[pygame.K_s]:
                     jugador_2.tanque.velocidad_disparo -= 1.5
+                if teclas[pygame.K_s] and teclas[pygame.K_LSHIFT]:
+                    jugador_2.tanque.velocidad_disparo -= 3.0
+                # Verifica disparo del tanque y cambio de turnos
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        disparo = clases.Disparo(jugador_2.tanque.angulo_n, jugador_2.tanque.velocidad_disparo, jugador_2.tanque.posicion_x, jugador_2.tanque.posicion_y - 10)
+                    if event.key == pygame.K_SPACE: #Disparo
+                        #Se intancia el disparo
+                        disparo = clases.Disparo(jugador_2.tanque.angulo_n, jugador_2.tanque.velocidad_disparo)        
                         if jugador_2.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=ANCHO_VENTANA, alto=ALTO_VENTANA,disparo=disparo, altura_terreno=altura_terreno, tanque_enemigo=jugador_1.tanque):
-                            print("GANADOR JUGADOR 2")
+                            game.ganador = jugador_2
+                            jugador_2.puede_jugar = False
+                            jugador_1.puede_jugar = False
                         else:
+                            #Cambia turnos
                             jugador_2.puede_jugar = False
                             jugador_1.puede_jugar = True
                         break
@@ -125,19 +147,48 @@ def main():
         terreno.dibujar_terreno(pantalla=pantalla, ancho=ANCHO_VENTANA, alto=ALTO_VENTANA)
 
         # Se escribe en pantalla la información del disparo de cada jugador
+
         if jugador_1.puede_jugar == True:
-            Escribir.escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_1.tanque.angulo_n), color_fuente=(255, 255, 255), color_fondo=jugador_1.tanque.color, x=jugador_1.tanque.posicion_x + 30, y=jugador_1.tanque.posicion_y)
-            Escribir.escribir_texto(pantalla=pantalla, texto="Velocidad Inicial: " + str(jugador_1.tanque.velocidad_disparo), color_fuente=(255, 255, 255), color_fondo=jugador_1.tanque.color, x=jugador_1.tanque.posicion_x + 30, y=jugador_1.tanque.posicion_y + 20)
-        else:
-            Escribir.escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_2.tanque.angulo_n), color_fuente=(255, 255, 255), color_fondo=jugador_2.tanque.color, x=jugador_2.tanque.posicion_x + 30, y=jugador_2.tanque.posicion_y)
-            Escribir.escribir_texto(pantalla=pantalla, texto="Velocidad Inicial: " + str(jugador_2.tanque.velocidad_disparo), color_fuente=(255, 255, 255), color_fondo=jugador_2.tanque.color, x=jugador_2.tanque.posicion_x + 30, y=jugador_2.tanque.posicion_y + 20)
+            Escribir.escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_1.tanque.angulo_n), color_fuente=(255, 255, 255), fuente="Consolas", size_fuente=20,color_fondo=jugador_1.tanque.color, x=jugador_1.tanque.posicion_x + 30, y=jugador_1.tanque.posicion_y)
+            Escribir.escribir_texto(pantalla=pantalla, texto="Velocidad Inicial: " + str(jugador_1.tanque.velocidad_disparo), fuente="Consolas", color_fuente=(255, 255, 255), size_fuente=20,color_fondo=jugador_1.tanque.color, x=jugador_1.tanque.posicion_x + 30, y=jugador_1.tanque.posicion_y + 20)
+        elif jugador_2.puede_jugar == True:
+            Escribir.escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_2.tanque.angulo_n), color_fuente=(255, 255, 255), fuente="Consolas", size_fuente=20, color_fondo=jugador_2.tanque.color, x=jugador_2.tanque.posicion_x + 30, y=jugador_2.tanque.posicion_y)
+            Escribir.escribir_texto(pantalla=pantalla, texto="Velocidad Inicial: " + str(jugador_2.tanque.velocidad_disparo), fuente="Consolas", color_fuente=(255, 255, 255), size_fuente=20, color_fondo=jugador_2.tanque.color, x=jugador_2.tanque.posicion_x + 30, y=jugador_2.tanque.posicion_y + 20)
+
+
+        # Texto con el jugador ganador
+
+        if game.ganador != None:
+            if game.ganador == jugador_1:
+                Escribir.escribir_texto(pantalla=pantalla, texto="Ganador: Jugador 1", fuente="Arial", size_fuente=35, color_fuente=(255, 255, 255), color_fondo=jugador_1.tanque.color, x=ANCHO_VENTANA // 2, y=ALTO_VENTANA // 2)
+            else:
+                Escribir.escribir_texto(pantalla=pantalla, texto="Ganador: Jugador 2", fuente="Arial", size_fuente=35, color_fuente=(255, 255, 255), color_fondo=jugador_2.tanque.color, x=ANCHO_VENTANA // 2, y=ALTO_VENTANA // 2)
+            
+            pygame.display.update()
+
+            # Esperar 5 segundos antes de cerrar la ventana
+            tiempo_inicial = pygame.time.get_ticks()
+            tiempo_espera = 5000   
+            while pygame.time.get_ticks() - tiempo_inicial < tiempo_espera:
+                running = False
 
         jugador_1.tanque.draw_tank(pantalla)
         jugador_2.tanque.draw_tank(pantalla)
+
         pygame.display.flip()
+
         # Limita los FPS a 60
         reloj.tick(60)
 
     pygame.quit()
 
 main()
+
+'''
+Para que gane el tanque rojo:
+ÁNGULO: 70°
+VELOCIDAD: 130
+Para que gane el tanque azul:
+ÁNGULO: 130°
+VELOCIDAD: 90
+'''
