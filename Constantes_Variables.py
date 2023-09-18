@@ -1,8 +1,6 @@
 from clases import *
 
 #Constantes
-ANCHO_VENTANA = 1280
-ALTO_VENTANA = 768
 NOMBRE_VENTANA = "Juego XD"
 limite_angulo_min = 0
 limite_angulo_max = 180
