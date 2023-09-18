@@ -5,6 +5,12 @@ from Constantes_Variables import *
 
 
 def main():
+    # Se inicia Pygame y se cambia el título de la ventana
+    pygame.init()
+    pygame.display.set_caption(NOMBRE_VENTANA)
+    info = pygame.display.Info()
+    ANCHO_VENTANA = info.current_w
+    ALTO_VENTANA = info.current_h
     pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA), pygame.RESIZABLE,pygame.OPENGL)
     game = clases.Partida()
     terreno = clases.Terreno()
@@ -15,23 +21,23 @@ def main():
     for x in range(ANCHO_VENTANA):
         altura_terreno[x] += terreno.generar_terreno(x, 200, ALTO_VENTANA)
 
-    # Se inicia Pygame y se cambia el título de la ventana
-    pygame.init()
-    pygame.display.set_caption(NOMBRE_VENTANA)
-
     while running:
-        # Captura todos los eventos dentro del juego
+        terreno.dibujar_terreno(pantalla, ANCHO_VENTANA, ALTO_VENTANA)
+        reloj = pygame.time.Clock()
+        teclas = pygame.key.get_pressed()
+        
         for event in pygame.event.get():
-            # Captura el cierre de la ventana
             if event.type == pygame.QUIT:
                 running = False
-            # Captura eventos de cambio de tamaño de ventana
-            if event.type == pygame.VIDEORESIZE:
+            elif event.type == pygame.VIDEORESIZE:
                 NUEVO_ANCHO, NUEVA_ALTURA = event.size
-                # Cambia el tamaño de la ventana
-                pantalla = pygame.display.set_mode((NUEVO_ANCHO, NUEVA_ALTURA), pygame.RESIZABLE,pygame.OPENGL)
-
-            teclas = pygame.key.get_pressed()
+                pantalla = pygame.display.set_mode((NUEVO_ANCHO, NUEVA_ALTURA), pygame.RESIZABLE, pygame.OPENGL)
+                ANCHO_VENTANA, ALTO_VENTANA = NUEVO_ANCHO, NUEVA_ALTURA
+            elif teclas[pygame.K_ESCAPE]:
+                # Cambia la resolución de la ventana y el juego a 1280x720 al presionar la tecla Escape
+                ANCHO_VENTANA = 1280
+                ALTO_VENTANA = 720
+                pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA), pygame.RESIZABLE, pygame.OPENGL)
 
             if jugador_1.puede_jugar:
                 # Verifica si la tecla 'A' se mantiene presionada
@@ -40,27 +46,39 @@ def main():
                     if jugador_1.tanque.angulo_n > limite_angulo_max:
                         jugador_1.tanque.angulo_n = limite_angulo_max
                     jugador_1.tanque.angulo_canon = math.radians(jugador_1.tanque.angulo_n)
+                if teclas[pygame.K_a] and teclas[pygame.K_LSHIFT]:
+                    jugador_1.tanque.angulo_n += 1.5
+                    if jugador_1.tanque.angulo_n > limite_angulo_max:
+                        jugador_1.tanque.angulo_n = limite_angulo_max
+                    jugador_1.tanque.angulo_canon = math.radians(jugador_1.tanque.angulo_n) 
                 # Verifica si la tecla 'D' se mantiene presionada
                 if teclas[pygame.K_d]:
                     jugador_1.tanque.angulo_n -= 0.5
                     if jugador_1.tanque.angulo_n < limite_angulo_min:
                         jugador_1.tanque.angulo_n = limite_angulo_min
                     jugador_1.tanque.angulo_canon = math.radians(jugador_1.tanque.angulo_n)
-                # Verifica si la tecla 'FLECHA DERECHA' se mantiene presionada
-                if teclas[pygame.K_RIGHT]:
+                if teclas[pygame.K_d] and teclas[pygame.K_LSHIFT]:
+                    jugador_1.tanque.angulo_n -= 1.5
+                    if jugador_1.tanque.angulo_n < limite_angulo_min:
+                        jugador_1.tanque.angulo_n = limite_angulo_min
+                    jugador_1.tanque.angulo_canon = math.radians(jugador_1.tanque.angulo_n)    
+                # Verifica si la tecla 'W' se mantiene presionada
+                if teclas[pygame.K_w]:
                     jugador_1.tanque.velocidad_disparo += 1.5
-                # Verifica si la tecla 'FLECHA IZQUIERDA' se mantiene presionada
-                if teclas[pygame.K_LEFT]:
+                if teclas[pygame.K_w] and teclas[pygame.K_LSHIFT]:
+                    jugador_1.tanque.velocidad_disparo += 3.0
+                # Verifica si la tecla 'S' se mantiene presionada
+                if teclas[pygame.K_s]:
                     jugador_1.tanque.velocidad_disparo -= 1.5
+                if teclas[pygame.K_s] and teclas[pygame.K_LSHIFT]:
+                    jugador_1.tanque.velocidad_disparo -= 3.0
                 # Verifica disparo del tanque y cambio de turnos
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE: #Disparo
                         #Se intancia el disparo
-                        disparo = clases.Disparo(jugador_1.tanque.angulo_n, jugador_1.tanque.velocidad_disparo)        
+                        disparo = clases.Disparo(jugador_1.tanque.angulo_n, jugador_1.tanque.velocidad_disparo, jugador_1.tanque.posicion_x, jugador_1.tanque.posicion_y - 10)        
                         if jugador_1.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=ANCHO_VENTANA, alto=ALTO_VENTANA,disparo=disparo, altura_terreno=altura_terreno, tanque_enemigo=jugador_2.tanque):
-                            Escribir.escribir_texto(pantalla=pantalla, texto="GANADOR JUGADOR 1", color_fuente=(255, 255, 255), color_fondo=jugador_1.tanque.color, x=ANCHO_VENTANA // 2, y=ALTO_VENTANA // 2)
-                            pygame.time.delay(3000)
-                            running = False
+                            print("GANADOR JUGADOR 1")
                         else:
                             #Cambia turnos
                             jugador_2.puede_jugar = True
@@ -80,18 +98,16 @@ def main():
                         jugador_2.tanque.angulo_n = limite_angulo_min
                     jugador_2.tanque.angulo_canon = math.radians(jugador_2.tanque.angulo_n)
                 # Verifica si la tecla 'FLECHA DERECHA' se mantiene presionada
-                if teclas[pygame.K_RIGHT]:
+                if teclas[pygame.K_w]:
                     jugador_2.tanque.velocidad_disparo += 1.5
                 # Verifica si la tecla 'FLECHA IZQUIERDA' se mantiene presionada
-                if teclas[pygame.K_LEFT]:
+                if teclas[pygame.K_s]:
                     jugador_2.tanque.velocidad_disparo -= 1.5
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
-                        disparo = clases.Disparo(jugador_2.tanque.angulo_n, jugador_2.tanque.velocidad_disparo)
+                        disparo = clases.Disparo(jugador_2.tanque.angulo_n, jugador_2.tanque.velocidad_disparo, jugador_2.tanque.posicion_x, jugador_2.tanque.posicion_y - 10)
                         if jugador_2.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=ANCHO_VENTANA, alto=ALTO_VENTANA,disparo=disparo, altura_terreno=altura_terreno, tanque_enemigo=jugador_1.tanque):
-                            Escribir.escribir_texto(pantalla=pantalla, texto="GANADOR JUGADOR 2", color_fuente=(255, 255, 255), color_fondo=jugador_2.tanque.color, x=ANCHO_VENTANA // 2, y=ALTO_VENTANA // 2)
-                            pygame.time.delay(3000)
-                            running = False
+                            print("GANADOR JUGADOR 2")
                         else:
                             jugador_2.puede_jugar = False
                             jugador_1.puede_jugar = True
