@@ -17,7 +17,6 @@ class Disparo:
     impacto_terreno = None
     impacto_tanque = None
 
-
     def __init__(self, angulo_grados, velocidad_inicial):
         self.angulo_grados = angulo_grados
         self.velocidad_inicial = velocidad_inicial

@@ -1,11 +1,11 @@
 import pygame
 import math
 import clases
-from Constantes_Variables import *
+from variables_constantes import *
 
 
 def main():
-    # Se inicia Pygame y se cambia el título de la ventana
+    # Se inicia Pygame y variables importantes dentro de la ejecución
     pygame.init()
     pygame.display.set_caption(NOMBRE_VENTANA)
     info = pygame.display.Info()
@@ -70,8 +70,12 @@ def main():
                 # Verifica si la tecla 'S' se mantiene presionada
                 if teclas[pygame.K_s]:
                     jugador_1.tanque.velocidad_disparo -= 1.5
+                    if jugador_1.tanque.velocidad_disparo < limite_velocidad_min:
+                        jugador_1.tanque.velocidad_disparo = limite_velocidad_min
                 if teclas[pygame.K_s] and teclas[pygame.K_LSHIFT]:
                     jugador_1.tanque.velocidad_disparo -= 3.0
+                    if jugador_1.tanque.velocidad_disparo < limite_velocidad_min:
+                        jugador_1.tanque.velocidad_disparo = limite_velocidad_min
                 # Verifica disparo del tanque y cambio de turnos
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE: #Disparo
@@ -118,8 +122,12 @@ def main():
                 # Verifica si la tecla 'S' se mantiene presionada
                 if teclas[pygame.K_s]:
                     jugador_2.tanque.velocidad_disparo -= 1.5
+                    if jugador_1.tanque.velocidad_disparo < limite_velocidad_min:
+                        jugador_1.tanque.velocidad_disparo = limite_velocidad_min
                 if teclas[pygame.K_s] and teclas[pygame.K_LSHIFT]:
                     jugador_2.tanque.velocidad_disparo -= 3.0
+                    if jugador_2.tanque.velocidad_disparo < limite_velocidad_min:
+                        jugador_2.tanque.velocidad_disparo = limite_velocidad_min
                 # Verifica disparo del tanque y cambio de turnos
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE: #Disparo
@@ -149,28 +157,29 @@ def main():
         # Se escribe en pantalla la información del disparo de cada jugador
 
         if jugador_1.puede_jugar == True:
-            Escribir.escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_1.tanque.angulo_n), color_fuente=(255, 255, 255), fuente="Consolas", size_fuente=20,color_fondo=jugador_1.tanque.color, x=jugador_1.tanque.posicion_x + 30, y=jugador_1.tanque.posicion_y)
-            Escribir.escribir_texto(pantalla=pantalla, texto="Velocidad Inicial: " + str(jugador_1.tanque.velocidad_disparo), fuente="Consolas", color_fuente=(255, 255, 255), size_fuente=20,color_fondo=jugador_1.tanque.color, x=jugador_1.tanque.posicion_x + 30, y=jugador_1.tanque.posicion_y + 20)
+            Escribir.escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_1.tanque.angulo_n) + "°", color_fuente=(255, 255, 255), fuente="Consolas", size_fuente=20,color_fondo=jugador_1.tanque.color, x=jugador_1.tanque.posicion_x + 30, y=jugador_1.tanque.posicion_y)
+            Escribir.escribir_texto(pantalla=pantalla, texto="Velocidad Inicial: " + str(jugador_1.tanque.velocidad_disparo) + " m/s", fuente="Consolas", color_fuente=(255, 255, 255), size_fuente=20,color_fondo=jugador_1.tanque.color, x=jugador_1.tanque.posicion_x + 30, y=jugador_1.tanque.posicion_y + 20)
         elif jugador_2.puede_jugar == True:
-            Escribir.escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_2.tanque.angulo_n), color_fuente=(255, 255, 255), fuente="Consolas", size_fuente=20, color_fondo=jugador_2.tanque.color, x=jugador_2.tanque.posicion_x + 30, y=jugador_2.tanque.posicion_y)
-            Escribir.escribir_texto(pantalla=pantalla, texto="Velocidad Inicial: " + str(jugador_2.tanque.velocidad_disparo), fuente="Consolas", color_fuente=(255, 255, 255), size_fuente=20, color_fondo=jugador_2.tanque.color, x=jugador_2.tanque.posicion_x + 30, y=jugador_2.tanque.posicion_y + 20)
+            Escribir.escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_2.tanque.angulo_n) + "°", color_fuente=(255, 255, 255), fuente="Consolas", size_fuente=20, color_fondo=jugador_2.tanque.color, x=jugador_2.tanque.posicion_x + 30, y=jugador_2.tanque.posicion_y)
+            Escribir.escribir_texto(pantalla=pantalla, texto="Velocidad Inicial: " + str(jugador_2.tanque.velocidad_disparo) + " m/s", fuente="Consolas", color_fuente=(255, 255, 255), size_fuente=20, color_fondo=jugador_2.tanque.color, x=jugador_2.tanque.posicion_x + 30, y=jugador_2.tanque.posicion_y + 20)
 
 
         # Texto con el jugador ganador
 
         if game.ganador != None:
             if game.ganador == jugador_1:
-                Escribir.escribir_texto(pantalla=pantalla, texto="Ganador: Jugador 1", fuente="Arial", size_fuente=35, color_fuente=(255, 255, 255), color_fondo=jugador_1.tanque.color, x=ANCHO_VENTANA // 2, y=ALTO_VENTANA // 2)
+                Escribir.escribir_texto(pantalla=pantalla, texto="Ganador: Jugador 1", fuente="Arial", size_fuente=35, color_fuente=(255, 255, 255), color_fondo=jugador_1.tanque.color, x=ANCHO_VENTANA // 2.5, y=ALTO_VENTANA // 2)
             else:
-                Escribir.escribir_texto(pantalla=pantalla, texto="Ganador: Jugador 2", fuente="Arial", size_fuente=35, color_fuente=(255, 255, 255), color_fondo=jugador_2.tanque.color, x=ANCHO_VENTANA // 2, y=ALTO_VENTANA // 2)
+                Escribir.escribir_texto(pantalla=pantalla, texto="Ganador: Jugador 2", fuente="Arial", size_fuente=35, color_fuente=(255, 255, 255), color_fondo=jugador_2.tanque.color, x=ANCHO_VENTANA // 2.5, y=ALTO_VENTANA // 2)
             
             pygame.display.update()
 
             # Esperar 5 segundos antes de cerrar la ventana
             tiempo_inicial = pygame.time.get_ticks()
-            tiempo_espera = 5000   
+            tiempo_espera = 5000
             while pygame.time.get_ticks() - tiempo_inicial < tiempo_espera:
-                running = False
+                None
+            running = False
 
         jugador_1.tanque.draw_tank(pantalla)
         jugador_2.tanque.draw_tank(pantalla)
