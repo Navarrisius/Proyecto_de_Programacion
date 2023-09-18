@@ -8,7 +8,7 @@ class Disparo:
     velocidad_inicial = None
     altura_maxima = 0
     distancia_maxima = 0
-    radio_bala = 3
+    radio_bala = 5
     x_bala = None
     y_bala = None
     x_inicial = None

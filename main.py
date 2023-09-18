@@ -210,18 +210,3 @@ Para que gane el tanque azul:
 ÁNGULO: 130°
 VELOCIDAD: 90
 '''
-
-
-'''
-         # Se escribe en pantalla la información del post-disparo
-        if altura_maxima_disparo != None:
-            Escribir.escribir_texto(pantalla=pantalla, texto="Altura máxima: " + str(altura_maxima_disparo) + " m.", color_fuente=(255, 255, 255), fuente="Arial", size_fuente=35,color_fondo=(0,0,0), x=ANCHO_VENTANA // 2.5, y=ALTO_VENTANA // 2.5)
-
-            pygame.display.update()
-            
-            # Esperar 3 segundos
-            tiempo_inicial = pygame.time.get_ticks()
-            tiempo_espera = 3000
-            while pygame.time.get_ticks() - tiempo_inicial < tiempo_espera:
-                None
-'''
