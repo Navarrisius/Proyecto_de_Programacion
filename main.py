@@ -81,7 +81,7 @@ def main():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE: #Disparo
                         #Se intancia el disparo
-                        disparo = clases.Disparo(jugador_1.tanque.angulo_n, jugador_1.tanque.velocidad_disparo)
+                        disparo = clases.Disparo(jugador_1.tanque.angulo_n, jugador_1.tanque.velocidad_disparo, jugador_1.tanque)
                         if jugador_1.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=ANCHO_VENTANA, alto=ALTO_VENTANA,disparo=disparo, altura_terreno=altura_terreno, tanque_enemigo=jugador_2.tanque):
                             game.ganador = jugador_1
                             jugador_2.puede_jugar = False
@@ -90,7 +90,6 @@ def main():
                             #Cambia turnos
                             jugador_2.puede_jugar = True
                             jugador_1.puede_jugar = False
-                        print(f"DISTANCIA MAXIMA: {disparo.distancia_maxima}")
                         break
 
             if jugador_2.puede_jugar:
@@ -134,7 +133,7 @@ def main():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE: #Disparo
                         #Se intancia el disparo
-                        disparo = clases.Disparo(jugador_2.tanque.angulo_n, jugador_2.tanque.velocidad_disparo)        
+                        disparo = clases.Disparo(jugador_2.tanque.angulo_n, jugador_2.tanque.velocidad_disparo, jugador_2.tanque)        
                         if jugador_2.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=ANCHO_VENTANA, alto=ALTO_VENTANA,disparo=disparo, altura_terreno=altura_terreno, tanque_enemigo=jugador_1.tanque):
                             game.ganador = jugador_2
                             jugador_2.puede_jugar = False
@@ -180,18 +179,26 @@ def main():
             tiempo_espera = 5000
             while pygame.time.get_ticks() - tiempo_inicial < tiempo_espera:
                 None
-            running = False         
-
-        jugador_1.tanque.draw_tank(pantalla)
-        jugador_2.tanque.draw_tank(pantalla)
+            running = False
+            disparo = None         
+        else:
+            jugador_1.tanque.draw_tank(pantalla)
+            jugador_2.tanque.draw_tank(pantalla)
 
         if disparo != None:
-            Escribir.escribir_texto(pantalla=pantalla, texto="Altura máxima: " + str(int(disparo.altura_maxima)) + " m.", color_fuente=(255, 255, 255), fuente="Arial", size_fuente=25,color_fondo=(0,0,0), x=ANCHO_VENTANA // 2.5, y=ALTO_VENTANA // 2.5)
+            Escribir.escribir_texto(pantalla=pantalla, texto="Altura máxima: " + str(int(disparo.altura_maxima)) + " m.", color_fuente=(255, 255, 255), fuente="Arial", size_fuente=25,color_fondo=(0,0,0), x=ANCHO_VENTANA // 2, y=ALTO_VENTANA // 3)
             if disparo.distancia_maxima != -1:
-                Escribir.escribir_texto(pantalla=pantalla, texto="Distancia máxima: " + str(int(disparo.distancia_maxima)) + " m.", color_fuente=(255, 255, 255), fuente="Arial", size_fuente=25,color_fondo=(0,0,0), x=ANCHO_VENTANA // 1.5, y=ALTO_VENTANA // 2.5)
+                Escribir.escribir_texto(pantalla=pantalla, texto="Distancia máxima: " + str(int(disparo.distancia_maxima)) + " m.", color_fuente=(255, 255, 255), fuente="Arial", size_fuente=25,color_fondo=(0,0,0), x=ANCHO_VENTANA // 2, y=ALTO_VENTANA // 3 + 28)
             else:
-                Escribir.escribir_texto(pantalla=pantalla, texto="Disparo fuera del mapa", color_fuente=(255, 255, 255), fuente="Arial", size_fuente=25,color_fondo=(0,0,0), x=ANCHO_VENTANA // 1.5, y=ALTO_VENTANA // 2.5)
+                Escribir.escribir_texto(pantalla=pantalla, texto="Disparo fuera del mapa", color_fuente=(255, 255, 255), fuente="Arial", size_fuente=25,color_fondo=(0,0,0), x=ANCHO_VENTANA // 2, y=ALTO_VENTANA // 3 + 28)
             pygame.display.update()
+
+            # Esperar 2 segundos
+            tiempo_inicial = pygame.time.get_ticks()
+            tiempo_espera = 2000
+            while pygame.time.get_ticks() - tiempo_inicial < tiempo_espera:
+                None
+            disparo = None
 
         pygame.display.flip()
 

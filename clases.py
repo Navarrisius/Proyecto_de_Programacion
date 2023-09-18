@@ -17,13 +17,15 @@ class Disparo:
     tiempo = 0.1
     impacto_terreno = None
     impacto_tanque = None
+    autor = None
 
-    def __init__(self, angulo_grados, velocidad_inicial):
+    def __init__(self, angulo_grados, velocidad_inicial, autor):
         self.angulo_grados = angulo_grados
         self.velocidad_inicial = velocidad_inicial
         self.angulo_radianes = math.radians(angulo_grados)
         self.velocidad_x = velocidad_inicial * math.cos(self.angulo_radianes)
         self.velocidad_y = -velocidad_inicial * math.sin(self.angulo_radianes)
+        self.autor = autor
 
     def actualizar(self):
         self.x_bala += self.velocidad_x * self.tiempo
@@ -33,9 +35,8 @@ class Disparo:
     def dibujar(self, pantalla, color):
         pygame.draw.circle(pantalla, color, (int(self.x_bala), int(self.y_bala)), self.radio_bala)
     
-    # Este altura se refiere a la altura desde el borde inferior de la pantalla hasta el punto mas alto del disparo (sujeto a cambios)
     def calcular_altura_maxima(self, tanque_posicion_y):
-        self.altura_maxima = (self.velocidad_inicial ** 2 * (math.sin(self.angulo_radianes)**2)) / (2 * 9.81) + tanque_posicion_y
+        self.altura_maxima = abs((self.velocidad_inicial ** 2 * (math.sin(self.angulo_radianes)**2)) / (2 * 9.81))
     
     def calcular_distancia_maxima(self, tanque_posicion_x):
         self.distancia_maxima = abs(self.x_bala - self.distancia_maxima - tanque_posicion_x)
