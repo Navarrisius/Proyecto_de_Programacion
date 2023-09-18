@@ -1,7 +1,7 @@
 import pygame
 import math
 import clases
-from variables_constantes import *
+from constantes import *
 
 
 def main():
@@ -17,6 +17,7 @@ def main():
     fondo = clases.Fondo()
     running = game.en_partida
     reloj = pygame.time.Clock()
+    disparo = None
     altura_terreno = [0] * ANCHO_VENTANA
     for x in range(ANCHO_VENTANA):
         altura_terreno[x] += terreno.generar_terreno(x, 200, ALTO_VENTANA)
@@ -80,7 +81,7 @@ def main():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE: #Disparo
                         #Se intancia el disparo
-                        disparo = clases.Disparo(jugador_1.tanque.angulo_n, jugador_1.tanque.velocidad_disparo)        
+                        disparo = clases.Disparo(jugador_1.tanque.angulo_n, jugador_1.tanque.velocidad_disparo)
                         if jugador_1.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=ANCHO_VENTANA, alto=ALTO_VENTANA,disparo=disparo, altura_terreno=altura_terreno, tanque_enemigo=jugador_2.tanque):
                             game.ganador = jugador_1
                             jugador_2.puede_jugar = False
@@ -89,6 +90,7 @@ def main():
                             #Cambia turnos
                             jugador_2.puede_jugar = True
                             jugador_1.puede_jugar = False
+                        print(f"DISTANCIA MAXIMA: {disparo.distancia_maxima}")
                         break
 
             if jugador_2.puede_jugar:
@@ -122,8 +124,8 @@ def main():
                 # Verifica si la tecla 'S' se mantiene presionada
                 if teclas[pygame.K_s]:
                     jugador_2.tanque.velocidad_disparo -= 1.5
-                    if jugador_1.tanque.velocidad_disparo < limite_velocidad_min:
-                        jugador_1.tanque.velocidad_disparo = limite_velocidad_min
+                    if jugador_2.tanque.velocidad_disparo < limite_velocidad_min:
+                        jugador_2.tanque.velocidad_disparo = limite_velocidad_min
                 if teclas[pygame.K_s] and teclas[pygame.K_LSHIFT]:
                     jugador_2.tanque.velocidad_disparo -= 3.0
                     if jugador_2.tanque.velocidad_disparo < limite_velocidad_min:
@@ -146,6 +148,7 @@ def main():
         #VACIA PANTALLA
         fondo.cargar_fondo(pantalla)
 
+
         # Mantener el tanque en el terreno
         jugador_1.tanque.posicion_y = ALTO_VENTANA - altura_terreno[jugador_1.tanque.posicion_x]
         jugador_2.tanque.posicion_y = ALTO_VENTANA - altura_terreno[jugador_2.tanque.posicion_x]
@@ -154,8 +157,8 @@ def main():
         #Terreno
         terreno.dibujar_terreno(pantalla=pantalla, ancho=ANCHO_VENTANA, alto=ALTO_VENTANA)
 
-        # Se escribe en pantalla la información del disparo de cada jugador
 
+        # Se escribe en pantalla la información del pre-disparo de cada jugador
         if jugador_1.puede_jugar == True:
             Escribir.escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_1.tanque.angulo_n) + "°", color_fuente=(255, 255, 255), fuente="Consolas", size_fuente=20,color_fondo=jugador_1.tanque.color, x=jugador_1.tanque.posicion_x + 30, y=jugador_1.tanque.posicion_y)
             Escribir.escribir_texto(pantalla=pantalla, texto="Velocidad Inicial: " + str(jugador_1.tanque.velocidad_disparo) + " m/s", fuente="Consolas", color_fuente=(255, 255, 255), size_fuente=20,color_fondo=jugador_1.tanque.color, x=jugador_1.tanque.posicion_x + 30, y=jugador_1.tanque.posicion_y + 20)
@@ -163,9 +166,7 @@ def main():
             Escribir.escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_2.tanque.angulo_n) + "°", color_fuente=(255, 255, 255), fuente="Consolas", size_fuente=20, color_fondo=jugador_2.tanque.color, x=jugador_2.tanque.posicion_x + 30, y=jugador_2.tanque.posicion_y)
             Escribir.escribir_texto(pantalla=pantalla, texto="Velocidad Inicial: " + str(jugador_2.tanque.velocidad_disparo) + " m/s", fuente="Consolas", color_fuente=(255, 255, 255), size_fuente=20, color_fondo=jugador_2.tanque.color, x=jugador_2.tanque.posicion_x + 30, y=jugador_2.tanque.posicion_y + 20)
 
-
         # Texto con el jugador ganador
-
         if game.ganador != None:
             if game.ganador == jugador_1:
                 Escribir.escribir_texto(pantalla=pantalla, texto="Ganador: Jugador 1", fuente="Arial", size_fuente=35, color_fuente=(255, 255, 255), color_fondo=jugador_1.tanque.color, x=ANCHO_VENTANA // 2.5, y=ALTO_VENTANA // 2)
@@ -179,10 +180,18 @@ def main():
             tiempo_espera = 5000
             while pygame.time.get_ticks() - tiempo_inicial < tiempo_espera:
                 None
-            running = False
+            running = False         
 
         jugador_1.tanque.draw_tank(pantalla)
         jugador_2.tanque.draw_tank(pantalla)
+
+        if disparo != None:
+            Escribir.escribir_texto(pantalla=pantalla, texto="Altura máxima: " + str(int(disparo.altura_maxima)) + " m.", color_fuente=(255, 255, 255), fuente="Arial", size_fuente=25,color_fondo=(0,0,0), x=ANCHO_VENTANA // 2.5, y=ALTO_VENTANA // 2.5)
+            if disparo.distancia_maxima != -1:
+                Escribir.escribir_texto(pantalla=pantalla, texto="Distancia máxima: " + str(int(disparo.distancia_maxima)) + " m.", color_fuente=(255, 255, 255), fuente="Arial", size_fuente=25,color_fondo=(0,0,0), x=ANCHO_VENTANA // 1.5, y=ALTO_VENTANA // 2.5)
+            else:
+                Escribir.escribir_texto(pantalla=pantalla, texto="Disparo fuera del mapa", color_fuente=(255, 255, 255), fuente="Arial", size_fuente=25,color_fondo=(0,0,0), x=ANCHO_VENTANA // 1.5, y=ALTO_VENTANA // 2.5)
+            pygame.display.update()
 
         pygame.display.flip()
 
@@ -200,4 +209,19 @@ VELOCIDAD: 130
 Para que gane el tanque azul:
 ÁNGULO: 130°
 VELOCIDAD: 90
+'''
+
+
+'''
+         # Se escribe en pantalla la información del post-disparo
+        if altura_maxima_disparo != None:
+            Escribir.escribir_texto(pantalla=pantalla, texto="Altura máxima: " + str(altura_maxima_disparo) + " m.", color_fuente=(255, 255, 255), fuente="Arial", size_fuente=35,color_fondo=(0,0,0), x=ANCHO_VENTANA // 2.5, y=ALTO_VENTANA // 2.5)
+
+            pygame.display.update()
+            
+            # Esperar 3 segundos
+            tiempo_inicial = pygame.time.get_ticks()
+            tiempo_espera = 3000
+            while pygame.time.get_ticks() - tiempo_inicial < tiempo_espera:
+                None
 '''
