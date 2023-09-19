@@ -18,6 +18,8 @@ class Disparo:
     impacto_terreno = None
     impacto_tanque = None
     autor = None
+    eje_x = []
+    eje_y = []
 
     def __init__(self, angulo_grados, velocidad_inicial, autor):
         self.angulo_grados = angulo_grados
@@ -31,7 +33,8 @@ class Disparo:
         self.x_bala += self.velocidad_x * self.tiempo
         self.y_bala += (self.velocidad_y * self.tiempo) + (0.5 * 9.81 * (self.tiempo ** 2))
         self.velocidad_y += 9.81 * self.tiempo
-
+        self.eje_x.append(self.x_bala)
+        self.eje_y.append(self.y_bala)
     def dibujar(self, pantalla, color):
         pygame.draw.circle(pantalla, color, (int(self.x_bala), int(self.y_bala)), self.radio_bala)
     
@@ -40,6 +43,10 @@ class Disparo:
     
     def calcular_distancia_maxima(self, tanque_posicion_x):
         self.distancia_maxima = abs(self.x_bala - self.distancia_maxima - tanque_posicion_x)
+
+    def recorrido(self, pantalla):
+        for i in range(len(self.eje_x)):
+            pygame.draw.circle(pantalla, (0, 0, 0), (int(self.eje_x[i]), int(self.eje_y[i])), 2)
 
 
 class Jugador:
@@ -58,6 +65,8 @@ class Partida:
 
     def __init__(self):
         self.en_partida = True
+
+    
 
 
 class Terreno:

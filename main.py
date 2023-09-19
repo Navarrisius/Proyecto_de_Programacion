@@ -26,7 +26,7 @@ def main():
         terreno.dibujar_terreno(pantalla, ANCHO_VENTANA, ALTO_VENTANA)
         reloj = pygame.time.Clock()
         teclas = pygame.key.get_pressed()
-        
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -186,6 +186,7 @@ def main():
             jugador_2.tanque.draw_tank(pantalla)
 
         if disparo != None:
+            disparo.recorrido(pantalla)
             Escribir.escribir_texto(pantalla=pantalla, texto="Altura máxima: " + str(int(disparo.altura_maxima)) + " m.", color_fuente=(255, 255, 255), fuente="Arial", size_fuente=25,color_fondo=(0,0,0), x=ANCHO_VENTANA // 2, y=ALTO_VENTANA // 3)
             if disparo.distancia_maxima != -1:
                 Escribir.escribir_texto(pantalla=pantalla, texto="Distancia máxima: " + str(int(disparo.distancia_maxima)) + " m.", color_fuente=(255, 255, 255), fuente="Arial", size_fuente=25,color_fondo=(0,0,0), x=ANCHO_VENTANA // 2, y=ALTO_VENTANA // 3 + 28)
