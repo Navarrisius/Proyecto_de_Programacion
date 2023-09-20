@@ -153,7 +153,7 @@ class Tanque:
             disparo.dibujar(pantalla, ancho, alto, self.color)
             try:
                 # IMPACTO CON TERRENO
-                if disparo.y_bala > alto - altura_terreno[int(disparo.x_bala)]:
+                if disparo.y_bala > alto - altura_terreno[int(disparo.x_bala)] - 5:
                     disparo.impacto_terreno = True
                     disparo.calcular_distancia_maxima(self.posicion_x)
                     return 0

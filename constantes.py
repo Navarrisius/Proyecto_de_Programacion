@@ -20,7 +20,7 @@ jugador_1.tanque.angulo_canon = (math.radians(jugador_1.tanque.angulo_n))
 
 #Jugador 2
 jugador_2 = Jugador(None, Tanque("blue"))
-jugador_2.tanque.posicion_x = 1050
+jugador_2.tanque.posicion_x = 1700
 jugador_2.tanque.posicion_y = 30
 jugador_2.tanque.angulo_n = 0
 jugador_2.tanque.angulo_canon = (math.radians(jugador_2.tanque.angulo_n))

@@ -39,7 +39,6 @@ def main():
                 ANCHO_VENTANA = 1280
                 ALTO_VENTANA = 720
                 pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA), pygame.RESIZABLE, pygame.OPENGL)
-
             if jugador_1.puede_jugar:
                 # Verifica si la tecla 'A' se mantiene presionada
                 if teclas[pygame.K_a]:
@@ -162,8 +161,8 @@ def main():
             Escribir.escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_1.tanque.angulo_n) + "°", color_fuente=(255, 255, 255), fuente="Consolas", size_fuente=20,color_fondo=jugador_1.tanque.color, x=jugador_1.tanque.posicion_x + 30, y=jugador_1.tanque.posicion_y)
             Escribir.escribir_texto(pantalla=pantalla, texto="Velocidad Inicial: " + str(jugador_1.tanque.velocidad_disparo) + " m/s", fuente="Consolas", color_fuente=(255, 255, 255), size_fuente=20,color_fondo=jugador_1.tanque.color, x=jugador_1.tanque.posicion_x + 30, y=jugador_1.tanque.posicion_y + 20)
         elif jugador_2.puede_jugar == True:
-            Escribir.escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_2.tanque.angulo_n) + "°", color_fuente=(255, 255, 255), fuente="Consolas", size_fuente=20, color_fondo=jugador_2.tanque.color, x=jugador_2.tanque.posicion_x + 30, y=jugador_2.tanque.posicion_y)
-            Escribir.escribir_texto(pantalla=pantalla, texto="Velocidad Inicial: " + str(jugador_2.tanque.velocidad_disparo) + " m/s", fuente="Consolas", color_fuente=(255, 255, 255), size_fuente=20, color_fondo=jugador_2.tanque.color, x=jugador_2.tanque.posicion_x + 30, y=jugador_2.tanque.posicion_y + 20)
+            Escribir.escribir_texto(pantalla=pantalla, texto="Ángulo: " + str(jugador_2.tanque.angulo_n) + "°", color_fuente=(255, 255, 255), fuente="Consolas", size_fuente=20, color_fondo=jugador_2.tanque.color, x=jugador_2.tanque.posicion_x - 180, y=jugador_2.tanque.posicion_y)
+            Escribir.escribir_texto(pantalla=pantalla, texto="Velocidad Inicial: " + str(jugador_2.tanque.velocidad_disparo) + " m/s", fuente="Consolas", color_fuente=(255, 255, 255), size_fuente=20, color_fondo=jugador_2.tanque.color, x=jugador_2.tanque.posicion_x - 180, y=jugador_2.tanque.posicion_y + 20)
 
         # Texto con el jugador ganador
         if game.ganador != None:
@@ -211,12 +210,3 @@ def main():
     pygame.quit()
 
 main()
-
-'''
-Para que gane el tanque rojo:
-ÁNGULO: 70°
-VELOCIDAD: 130
-Para que gane el tanque azul:
-ÁNGULO: 130°
-VELOCIDAD: 90
-'''
