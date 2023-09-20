@@ -76,7 +76,8 @@ class Partida:
     def cargar_fondo(self, screen):
         mountain_png = pygame.image.load("img/Background/mountain.png").convert_alpha()
         screen.blit(mountain_png, (0, 0))
-
+        
+class Terreno:
     def generar_terreno(self, x, altura_maxima, width):
         return altura_maxima * math.e ** (-((x - width) ** 2) / (2 * (width / 2) ** 2)) * math.cos(0.01 * (x - width)) + 200
     

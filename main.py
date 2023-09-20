@@ -187,11 +187,11 @@ def main():
 
         if disparo != None:
             disparo.recorrido(pantalla)
-            Escribir.escribir_texto(pantalla=pantalla, texto="Altura máxima: " + str(int(disparo.altura_maxima)) + " m.", color_fuente=(255, 255, 255), fuente="Arial", size_fuente=25,color_fondo=(0,0,0), x=ANCHO_VENTANA // 2, y=ALTO_VENTANA // 3)
+            Escribir.escribir_texto(pantalla=pantalla, texto="Altura máxima: " + str(int(disparo.altura_maxima)) + " m.", color_fuente=(255, 255, 255), fuente="Arial", size_fuente=25,color_fondo=(0,0,0), x=ANCHO_VENTANA // 2, y=ALTO_VENTANA // 6)
             if disparo.distancia_maxima != -1:
-                Escribir.escribir_texto(pantalla=pantalla, texto="Distancia máxima: " + str(int(disparo.distancia_maxima)) + " m.", color_fuente=(255, 255, 255), fuente="Arial", size_fuente=25,color_fondo=(0,0,0), x=ANCHO_VENTANA // 2, y=ALTO_VENTANA // 3 + 28)
+                Escribir.escribir_texto(pantalla=pantalla, texto="Distancia máxima: " + str(int(disparo.distancia_maxima)) + " m.", color_fuente=(255, 255, 255), fuente="Arial", size_fuente=25,color_fondo=(0,0,0), x=ANCHO_VENTANA // 2, y=ALTO_VENTANA // 6 + 28)
             else:
-                Escribir.escribir_texto(pantalla=pantalla, texto="Disparo fuera del mapa", color_fuente=(255, 255, 255), fuente="Arial", size_fuente=25,color_fondo=(0,0,0), x=ANCHO_VENTANA // 2, y=ALTO_VENTANA // 3 + 28)
+                Escribir.escribir_texto(pantalla=pantalla, texto="Disparo fuera del mapa", color_fuente=(255, 255, 255), fuente="Arial", size_fuente=25,color_fondo=(0,0,0), x=ANCHO_VENTANA // 2, y=ALTO_VENTANA // 6 + 28)
             pygame.display.update()
 
             # Esperar 2 segundos
