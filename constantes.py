@@ -1,11 +1,11 @@
 from clases import *
+
 #Constantes
-ANCHO_VENTANA = 1280
-ALTO_VENTANA = 768
-NOMBRE_VENTANA = "Juego XD"
+NOMBRE_VENTANA = "Tanquesisius"
 limite_angulo_min = 0
 limite_angulo_max = 180
-gravedad = 1
+limite_velocidad_min = 30
+gravedad = 9.8
 
 #Colores
 
@@ -20,7 +20,7 @@ jugador_1.tanque.angulo_canon = (math.radians(jugador_1.tanque.angulo_n))
 
 #Jugador 2
 jugador_2 = Jugador(None, Tanque("blue"))
-jugador_2.tanque.posicion_x = 200*4
+jugador_2.tanque.posicion_x = 1700
 jugador_2.tanque.posicion_y = 30
 jugador_2.tanque.angulo_n = 0
 jugador_2.tanque.angulo_canon = (math.radians(jugador_2.tanque.angulo_n))
