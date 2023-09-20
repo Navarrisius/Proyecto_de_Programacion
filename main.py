@@ -167,6 +167,7 @@ def main():
 
         # Texto con el jugador ganador
         if game.ganador != None:
+            disparo.recorrido(pantalla)
             if game.ganador == jugador_1:
                 Escribir.escribir_texto(pantalla=pantalla, texto="Ganador: Jugador 1", fuente="Arial", size_fuente=35, color_fuente=(255, 255, 255), color_fondo=jugador_1.tanque.color, x=ANCHO_VENTANA // 2.5, y=ALTO_VENTANA // 2)
             else:
@@ -200,6 +201,7 @@ def main():
             while pygame.time.get_ticks() - tiempo_inicial < tiempo_espera:
                 None
             disparo = None
+
 
         pygame.display.flip()
 

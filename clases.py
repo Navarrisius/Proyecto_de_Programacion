@@ -6,6 +6,7 @@ class Disparo:
     angulo_grados = None
     angulo_radianes = 0
     velocidad_inicial = None
+    velocidad_actual = 0
     altura_maxima = 0
     distancia_maxima = 0
     radio_bala = 5
@@ -28,6 +29,8 @@ class Disparo:
         self.velocidad_x = velocidad_inicial * math.cos(self.angulo_radianes)
         self.velocidad_y = -velocidad_inicial * math.sin(self.angulo_radianes)
         self.autor = autor
+        self.eje_x = []
+        self.eje_y = []
 
     def actualizar(self):
         self.x_bala += self.velocidad_x * self.tiempo
@@ -35,11 +38,14 @@ class Disparo:
         self.velocidad_y += 9.81 * self.tiempo
         self.eje_x.append(self.x_bala)
         self.eje_y.append(self.y_bala)
-    def dibujar(self, pantalla, color):
-        pygame.draw.circle(pantalla, color, (int(self.x_bala), int(self.y_bala)), self.radio_bala)
+        self.velocidad_actual = math.sqrt(self.velocidad_x ** 2 + self.velocidad_y ** 2)
     
-    def calcular_altura_maxima(self, tanque_posicion_y):
-        self.altura_maxima = abs((self.velocidad_inicial ** 2 * (math.sin(self.angulo_radianes)**2)) / (2 * 9.81))
+    def dibujar(self, pantalla, ancho, alto, color):
+        pygame.draw.circle(pantalla, color, (int(self.x_bala), int(self.y_bala)), self.radio_bala)
+        Escribir.escribir_texto(pantalla=pantalla, texto="Velocidad actual de la bala: " + str(int(self.velocidad_actual)) + " m/s", fuente="Consolas", color_fuente=(255, 255, 255), size_fuente=25, color_fondo=(0,0,0), x=ancho // 2, y=alto // 3 + 56)
+    
+    def calcular_altura_maxima(self):
+        self.altura_maxima = abs((self.velocidad_inicial ** 2 * (math.sin(self.angulo_radianes) ** 2)) / (2 * 9.81))
     
     def calcular_distancia_maxima(self, tanque_posicion_x):
         self.distancia_maxima = abs(self.x_bala - self.distancia_maxima - tanque_posicion_x)
@@ -130,18 +136,21 @@ class Tanque:
         disparo.x_bala = self.turret_end[0]
         disparo.y_bala = self.turret_end[1]
         disparo.x_inicial = self.turret_end[0]
-        disparo.calcular_altura_maxima(alto - self.posicion_y)
+        disparo.calcular_altura_maxima()
         fondo = Fondo()
         while True:
             fondo.cargar_fondo(pantalla)
+
+            # Si la bala sale de los limites laterales de la pantalla
             if disparo.x_bala >= ancho:
                 disparo.distancia_maxima = -1
                 return 0
             if disparo.x_bala <= 0:
                 disparo.distancia_maxima = -1
                 return 0
+            
             disparo.actualizar()
-            disparo.dibujar(pantalla, self.color)
+            disparo.dibujar(pantalla, ancho, alto, self.color)
             try:
                 # IMPACTO CON TERRENO
                 if disparo.y_bala > alto - altura_terreno[int(disparo.x_bala)]:
@@ -149,9 +158,9 @@ class Tanque:
                     disparo.calcular_distancia_maxima(self.posicion_x)
                     return 0
             # BALA FUERA DEL MAPA
-            except IndexError as e:
+            except IndexError:
                 None
-            #IMPACTO CON TANQUE ENEMIGO
+            # IMPACTO CON TANQUE ENEMIGO
             if self.verificar_impacto_tanque_enemigo(disparo, tanque_enemigo):
                 disparo.impacto_tanque = True
                 disparo.calcular_distancia_maxima(self.posicion_x)
