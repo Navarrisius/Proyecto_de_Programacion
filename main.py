@@ -151,8 +151,12 @@ def main():
             # Verifica si la tecla 'LT' se mantiene presionada
             if mando.get_axis(4) != -1:
                 turno.tanque.velocidad_disparo -= 1.0
+                if turno.tanque.velocidad_disparo < limite_velocidad_min:
+                    turno.tanque.velocidad_disparo = limite_velocidad_min
             if mando.get_axis(4) != -1 and mando.get_button(0):
                 turno.tanque.velocidad_disparo -= 3.0
+                if turno.tanque.velocidad_disparo < limite_velocidad_min:
+                    turno.tanque.velocidad_disparo = limite_velocidad_min
             if mando.get_button(0):
                 # Se intancia el disparo
                 disparo = clases.Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque)

@@ -42,7 +42,7 @@ class Disparo:
     
     def dibujar(self, pantalla, ancho, alto, color):
         pygame.draw.circle(pantalla, color, (int(self.x_bala), int(self.y_bala)), self.radio_bala)
-        Escribir.escribir_texto(pantalla=pantalla, texto="Velocidad actual de la bala: " + str(int(self.velocidad_actual)) + " m/s", fuente="Consolas", color_fuente=(255, 255, 255), size_fuente=25, color_fondo=(0,0,0), x=ancho // 2, y=alto // 3 + 56)
+        Escribir.escribir_texto(pantalla=pantalla, texto="Velocidad actual de la bala: " + str(int(self.velocidad_actual)) + " m/s", fuente="Consolas", color_fuente=(255, 255, 255), size_fuente=25, color_fondo=(0,0,0), x=ancho // 2, y=alto // 6 + 56)
     
     def calcular_altura_maxima(self):
         self.altura_maxima = abs((self.velocidad_inicial ** 2 * (math.sin(self.angulo_radianes) ** 2)) / (2 * 9.81))
