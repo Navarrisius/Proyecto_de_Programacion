@@ -9,5 +9,3 @@ gravedad = 9.8
 
 #Colores
 
-#  ----------------Seting tanque-------------
-

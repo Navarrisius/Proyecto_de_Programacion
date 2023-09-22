@@ -13,13 +13,16 @@ def main():
     ALTO_VENTANA = info.current_h
     pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA), pygame.RESIZABLE,pygame.OPENGL)
     game = clases.Partida()
+    # joystick
+    pygame.joystick.init()
+    mandos = []
     terreno = clases.Terreno()
     fondo = clases.Fondo()
     running = game.en_partida
     reloj = pygame.time.Clock()
     disparo = None
     altura_terreno = [0] * ANCHO_VENTANA
-
+    #  ----------------Seting tanque-------------
     # Jugador 1
     jugador_1 = Jugador(None, Tanque("red"))
     jugador_1.tanque.posicion_x = 30
@@ -43,10 +46,18 @@ def main():
         terreno.dibujar_terreno(pantalla, ANCHO_VENTANA, ALTO_VENTANA)
         reloj = pygame.time.Clock()
         teclas = pygame.key.get_pressed()
-
+        if jugador_1.puede_jugar:
+            turno = jugador_1
+            enemigo = jugador_2.tanque
+        else:
+            turno = jugador_2
+            enemigo = jugador_1.tanque
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            elif event.type == pygame.JOYDEVICEADDED:
+                joy = pygame.joystick.Joystick(event.device_index)
+                mandos.append(joy)
             elif event.type == pygame.VIDEORESIZE:
                 NUEVO_ANCHO, NUEVA_ALTURA = event.size
                 pantalla = pygame.display.set_mode((NUEVO_ANCHO, NUEVA_ALTURA), pygame.RESIZABLE, pygame.OPENGL)
@@ -56,118 +67,116 @@ def main():
                 ANCHO_VENTANA = 1280
                 ALTO_VENTANA = 720
                 pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA), pygame.RESIZABLE, pygame.OPENGL)
-            if jugador_1.puede_jugar:
-                # Verifica si la tecla 'A' se mantiene presionada
-                if teclas[pygame.K_a]:
-                    jugador_1.tanque.angulo_n += 0.5
-                    if jugador_1.tanque.angulo_n > limite_angulo_max:
-                        jugador_1.tanque.angulo_n = limite_angulo_max
-                    jugador_1.tanque.angulo_canon = math.radians(jugador_1.tanque.angulo_n)
-                if teclas[pygame.K_a] and teclas[pygame.K_LSHIFT]:
-                    jugador_1.tanque.angulo_n += 1.5
-                    if jugador_1.tanque.angulo_n > limite_angulo_max:
-                        jugador_1.tanque.angulo_n = limite_angulo_max
-                    jugador_1.tanque.angulo_canon = math.radians(jugador_1.tanque.angulo_n) 
-                # Verifica si la tecla 'D' se mantiene presionada
-                if teclas[pygame.K_d]:
-                    jugador_1.tanque.angulo_n -= 0.5
-                    if jugador_1.tanque.angulo_n < limite_angulo_min:
-                        jugador_1.tanque.angulo_n = limite_angulo_min
-                    jugador_1.tanque.angulo_canon = math.radians(jugador_1.tanque.angulo_n)
-                if teclas[pygame.K_d] and teclas[pygame.K_LSHIFT]:
-                    jugador_1.tanque.angulo_n -= 1.5
-                    if jugador_1.tanque.angulo_n < limite_angulo_min:
-                        jugador_1.tanque.angulo_n = limite_angulo_min
-                    jugador_1.tanque.angulo_canon = math.radians(jugador_1.tanque.angulo_n)    
-                # Verifica si la tecla 'W' se mantiene presionada
-                if teclas[pygame.K_w]:
-                    jugador_1.tanque.velocidad_disparo += 1.5
-                if teclas[pygame.K_w] and teclas[pygame.K_LSHIFT]:
-                    jugador_1.tanque.velocidad_disparo += 3.0
-                # Verifica si la tecla 'S' se mantiene presionada
-                if teclas[pygame.K_s]:
-                    jugador_1.tanque.velocidad_disparo -= 1.5
-                    if jugador_1.tanque.velocidad_disparo < limite_velocidad_min:
-                        jugador_1.tanque.velocidad_disparo = limite_velocidad_min
-                if teclas[pygame.K_s] and teclas[pygame.K_LSHIFT]:
-                    jugador_1.tanque.velocidad_disparo -= 3.0
-                    if jugador_1.tanque.velocidad_disparo < limite_velocidad_min:
-                        jugador_1.tanque.velocidad_disparo = limite_velocidad_min
-                # Verifica disparo del tanque y cambio de turnos
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE: #Disparo
-                        #Se intancia el disparo
-                        disparo = clases.Disparo(jugador_1.tanque.angulo_n, jugador_1.tanque.velocidad_disparo, jugador_1.tanque)
-                        if jugador_1.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=ANCHO_VENTANA, alto=ALTO_VENTANA,disparo=disparo, altura_terreno=altura_terreno, tanque_enemigo=jugador_2.tanque):
-                            game.ganador = jugador_1
-                            jugador_2.puede_jugar = False
-                            jugador_1.puede_jugar = False
-                        else:
-                            #Cambia turnos
+            if teclas[pygame.K_a]:
+                turno.tanque.angulo_n += 0.5
+                if turno.tanque.angulo_n > limite_angulo_max:
+                    turno.tanque.angulo_n = limite_angulo_max
+                turno.tanque.angulo_canon = math.radians(turno.tanque.angulo_n)
+            if teclas[pygame.K_a] and teclas[pygame.K_LSHIFT]:
+                turno.tanque.angulo_n += 1.5
+                if turno.tanque.angulo_n > limite_angulo_max:
+                    turno.tanque.angulo_n = limite_angulo_max
+                turno.tanque.angulo_canon = math.radians(turno.tanque.angulo_n)
+            # Verifica si la tecla 'D' se mantiene presionada
+            if teclas[pygame.K_d]:
+                turno.tanque.angulo_n -= 0.5
+                if turno.tanque.angulo_n < limite_angulo_min:
+                    turno.tanque.angulo_n = limite_angulo_min
+                turno.tanque.angulo_canon = math.radians(turno.tanque.angulo_n)
+            if teclas[pygame.K_d] and teclas[pygame.K_LSHIFT]:
+                turno.tanque.angulo_n -= 1.5
+                if turno.tanque.angulo_n < limite_angulo_min:
+                    turno.tanque.angulo_n = limite_angulo_min
+                turno.tanque.angulo_canon = math.radians(turno.tanque.angulo_n)
+            # Verifica si la tecla 'W' se mantiene presionada
+            if teclas[pygame.K_w]:
+                turno.tanque.velocidad_disparo += 1.5
+            if teclas[pygame.K_w] and teclas[pygame.K_LSHIFT]:
+                turno.tanque.velocidad_disparo += 3.0
+            # Verifica si la tecla 'S' se mantiene presionada
+            if teclas[pygame.K_s]:
+                turno.tanque.velocidad_disparo -= 1.5
+                if turno.tanque.velocidad_disparo < limite_velocidad_min:
+                    turno.tanque.velocidad_disparo = limite_velocidad_min
+            if teclas[pygame.K_s] and teclas[pygame.K_LSHIFT]:
+                turno.tanque.velocidad_disparo -= 3.0
+                if turno.tanque.velocidad_disparo < limite_velocidad_min:
+                    turno.tanque.velocidad_disparo = limite_velocidad_min
+            # Verifica disparo del tanque y cambio de turnos
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:  # Disparo
+                    # Se intancia el disparo
+                    disparo = clases.Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque)
+                    if turno.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=ANCHO_VENTANA, alto=ALTO_VENTANA,disparo=disparo, altura_terreno=altura_terreno,tanque_enemigo=enemigo):
+                        game.ganador = turno
+                        jugador_2.puede_jugar = False
+                        jugador_1.puede_jugar = False
+                    else:
+                        # Cambia turnos
+                        if jugador_1.puede_jugar:
+                            jugador_1 = turno
                             jugador_2.puede_jugar = True
                             jugador_1.puede_jugar = False
-                        break
-
-            if jugador_2.puede_jugar:
-                # Verifica si la tecla 'A' se mantiene presionada
-                if teclas[pygame.K_a]:
-                    jugador_2.tanque.angulo_n += 0.5
-                    if jugador_2.tanque.angulo_n > limite_angulo_max:
-                        jugador_2.tanque.angulo_n = limite_angulo_max
-                    jugador_2.tanque.angulo_canon = math.radians(jugador_2.tanque.angulo_n)
-                if teclas[pygame.K_a] and teclas[pygame.K_LSHIFT]:
-                    jugador_2.tanque.angulo_n += 1.5
-                    if jugador_2.tanque.angulo_n > limite_angulo_max:
-                        jugador_2.tanque.angulo_n = limite_angulo_max
-                    jugador_2.tanque.angulo_canon = math.radians(jugador_2.tanque.angulo_n) 
-                # Verifica si la tecla 'D' se mantiene presionada
-                if teclas[pygame.K_d]:
-                    jugador_2.tanque.angulo_n -= 0.5
-                    if jugador_2.tanque.angulo_n < limite_angulo_min:
-                        jugador_2.tanque.angulo_n = limite_angulo_min
-                    jugador_2.tanque.angulo_canon = math.radians(jugador_2.tanque.angulo_n)
-                if teclas[pygame.K_d] and teclas[pygame.K_LSHIFT]:
-                    jugador_2.tanque.angulo_n -= 1.5
-                    if jugador_2.tanque.angulo_n < limite_angulo_min:
-                        jugador_2.tanque.angulo_n = limite_angulo_min
-                    jugador_2.tanque.angulo_canon = math.radians(jugador_2.tanque.angulo_n)    
-                # Verifica si la tecla 'W' se mantiene presionada
-                if teclas[pygame.K_w]:
-                    jugador_2.tanque.velocidad_disparo += 1.5
-                if teclas[pygame.K_w] and teclas[pygame.K_LSHIFT]:
-                    jugador_2.tanque.velocidad_disparo += 3.0
-                # Verifica si la tecla 'S' se mantiene presionada
-                if teclas[pygame.K_s]:
-                    jugador_2.tanque.velocidad_disparo -= 1.5
-                    if jugador_2.tanque.velocidad_disparo < limite_velocidad_min:
-                        jugador_2.tanque.velocidad_disparo = limite_velocidad_min
-                if teclas[pygame.K_s] and teclas[pygame.K_LSHIFT]:
-                    jugador_2.tanque.velocidad_disparo -= 3.0
-                    if jugador_2.tanque.velocidad_disparo < limite_velocidad_min:
-                        jugador_2.tanque.velocidad_disparo = limite_velocidad_min
-                # Verifica disparo del tanque y cambio de turnos
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE: #Disparo
-                        #Se intancia el disparo
-                        disparo = clases.Disparo(jugador_2.tanque.angulo_n, jugador_2.tanque.velocidad_disparo, jugador_2.tanque)        
-                        if jugador_2.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=ANCHO_VENTANA, alto=ALTO_VENTANA,disparo=disparo, altura_terreno=altura_terreno, tanque_enemigo=jugador_1.tanque):
-                            game.ganador = jugador_2
-                            jugador_2.puede_jugar = False
-                            jugador_1.puede_jugar = False
                         else:
-                            #Cambia turnos
-                            jugador_2.puede_jugar = False
+                            jugador_2 = turno
                             jugador_1.puede_jugar = True
-                        break
+                            jugador_2.puede_jugar = False
+
+        for mando in mandos:
+            if mando.get_button(4):  # LB
+                turno.tanque.angulo_n += 0.5
+                if turno.tanque.angulo_n > limite_angulo_max:
+                    turno.tanque.angulo_n = limite_angulo_max
+                turno.tanque.angulo_canon = math.radians(turno.tanque.angulo_n)
+            if mando.get_button(4) and mando.get_button(1):  # LB + X
+                turno.tanque.angulo_n += 1.5
+                if turno.tanque.angulo_n > limite_angulo_max:
+                    turno.tanque.angulo_n = limite_angulo_max
+                turno.tanque.angulo_canon = math.radians(turno.tanque.angulo_n)
+            if mando.get_button(5):  # RB
+                turno.tanque.angulo_n -= 0.5
+                if turno.tanque.angulo_n < limite_angulo_min:
+                    turno.tanque.angulo_n = limite_angulo_min
+                turno.tanque.angulo_canon = math.radians(turno.tanque.angulo_n)
+            if mando.get_button(5) and mando.get_button(1):  # RB + X
+                turno.tanque.angulo_n -= 1.5
+                if turno.tanque.angulo_n < limite_angulo_min:
+                    turno.tanque.angulo_n = limite_angulo_min
+                turno.tanque.angulo_canon = math.radians(turno.tanque.angulo_n)
+            # Verifica si la tecla 'RT' se mantiene presionada
+            if mando.get_axis(5) != -1:
+                turno.tanque.velocidad_disparo += 1.0
+            if mando.get_axis(5) != -1 and mando.get_button(0):
+                turno.tanque.velocidad_disparo += 3.0
+            # Verifica si la tecla 'LT' se mantiene presionada
+            if mando.get_axis(4) != -1:
+                turno.tanque.velocidad_disparo -= 1.0
+            if mando.get_axis(4) != -1 and mando.get_button(0):
+                turno.tanque.velocidad_disparo -= 3.0
+            if mando.get_button(0):
+                # Se intancia el disparo
+                disparo = clases.Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque)
+                if turno.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=ANCHO_VENTANA, alto=ALTO_VENTANA,disparo=disparo, altura_terreno=altura_terreno,tanque_enemigo=enemigo):
+                    game.ganador = turno
+                    jugador_2.puede_jugar = False
+                    jugador_1.puede_jugar = False
+                else:
+                    # Cambia turnos
+                    if jugador_1.puede_jugar:
+                        jugador_1 = turno
+                        jugador_2.puede_jugar = True
+                        jugador_1.puede_jugar = False
+                    else:
+                        jugador_2 = turno
+                        jugador_1.puede_jugar = True
+                        jugador_2.puede_jugar = False
 
         #VACIA PANTALLA
         fondo.cargar_fondo(pantalla)
 
-
         # Mantener el tanque en el terreno
         jugador_1.tanque.posicion_y = ALTO_VENTANA - altura_terreno[jugador_1.tanque.posicion_x]
         jugador_2.tanque.posicion_y = ALTO_VENTANA - altura_terreno[jugador_2.tanque.posicion_x]
-
 
         #Terreno
         terreno.dibujar_terreno(pantalla=pantalla, ancho=ANCHO_VENTANA, alto=ALTO_VENTANA)
@@ -188,7 +197,7 @@ def main():
                 Escribir.escribir_texto(pantalla=pantalla, texto="Ganador: Jugador 1", fuente="Arial", size_fuente=35, color_fuente=(255, 255, 255), color_fondo=jugador_1.tanque.color, x=ANCHO_VENTANA // 2.5, y=ALTO_VENTANA // 2)
             else:
                 Escribir.escribir_texto(pantalla=pantalla, texto="Ganador: Jugador 2", fuente="Arial", size_fuente=35, color_fuente=(255, 255, 255), color_fondo=jugador_2.tanque.color, x=ANCHO_VENTANA // 2.5, y=ALTO_VENTANA // 2)
-            
+
             pygame.display.update()
 
             # Esperar 5 segundos antes de cerrar la ventana
@@ -197,7 +206,7 @@ def main():
             while pygame.time.get_ticks() - tiempo_inicial < tiempo_espera:
                 None
             running = False
-            disparo = None         
+            disparo = None
         else:
             jugador_1.tanque.draw_tank(pantalla)
             jugador_2.tanque.draw_tank(pantalla)
