@@ -19,6 +19,23 @@ def main():
     reloj = pygame.time.Clock()
     disparo = None
     altura_terreno = [0] * ANCHO_VENTANA
+
+    # Jugador 1
+    jugador_1 = Jugador(None, Tanque("red"))
+    jugador_1.tanque.posicion_x = 30
+    jugador_1.tanque.posicion_y = 30
+    jugador_1.tanque.angulo_n = 0
+    jugador_1.puede_jugar = False
+    jugador_1.tanque.angulo_canon = (math.radians(jugador_1.tanque.angulo_n))
+
+    # Jugador 2
+    jugador_2 = Jugador(None, Tanque("blue"))
+    jugador_2.tanque.posicion_x = ANCHO_VENTANA - 100
+    jugador_2.tanque.posicion_y = 30
+    jugador_2.tanque.angulo_n = 0
+    jugador_2.tanque.angulo_canon = (math.radians(jugador_2.tanque.angulo_n))
+    jugador_2.puede_jugar = True
+
     for x in range(ANCHO_VENTANA):
         altura_terreno[x] += terreno.generar_terreno(x, 200, ALTO_VENTANA)
 
