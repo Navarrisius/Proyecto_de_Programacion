@@ -31,21 +31,21 @@ def menu(pantalla, mandos, game):
             break
         fondo.cargar_fondo(pantalla)
         # boton jugar
-        clases.Escribir.escribir_texto(pantalla, "Tank Game", "More Sugar", 200, constantes.negro, None,
+        clases.Escribir.escribir_texto(pantalla, "Tank Game", "More Sugar", 200, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA / 2 - 400, constantes.ALTO_VENTANA / 2 - 300)
-        pygame.draw.rect(pantalla, constantes.blanco,
+        pygame.draw.rect(pantalla, constantes.BLANCO,
                          (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 - 60, 470, 120), 60, 50)
-        clases.Escribir.escribir_texto(pantalla, "Jugar", "More Sugar", 150, constantes.negro, None,
+        clases.Escribir.escribir_texto(pantalla, "Jugar", "More Sugar", 150, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA / 2 - 150, constantes.ALTO_VENTANA / 2 - 55)
         # boton configuracion
-        pygame.draw.rect(pantalla, constantes.blanco,
+        pygame.draw.rect(pantalla, constantes.BLANCO,
                          (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 90, 470, 120), 60, 50)
-        clases.Escribir.escribir_texto(pantalla, "Controles", "More Sugar", 130, constantes.negro, None,
+        clases.Escribir.escribir_texto(pantalla, "Controles", "More Sugar", 130, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA / 2 - 210, constantes.ALTO_VENTANA / 2 + 100)
         # boton salir
-        pygame.draw.rect(pantalla, constantes.blanco,
+        pygame.draw.rect(pantalla, constantes.BLANCO,
                          (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 245, 470, 120), 60, 50)
-        clases.Escribir.escribir_texto(pantalla, "Salir", "More Sugar", 150, constantes.negro, None,
+        clases.Escribir.escribir_texto(pantalla, "Salir", "More Sugar", 150, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA / 2 - 125, constantes.ALTO_VENTANA / 2 + 255)
 
         pygame.display.flip()
@@ -65,7 +65,7 @@ def crear_jugadores():
         "rojo": (255, 0, 0),
         "azul": (0, 0, 255),
         "verde_musgo": (47, 69, 56),
-        "negro": (0, 0, 0)
+        "NEGRO": (0, 0, 0)
     }
     colores_disponibles = list(colores_rgb.values())
     primer_color = random.choice(colores_disponibles)
@@ -267,7 +267,7 @@ def partida(pantalla, mandos, game):
                                 angulo=jugador_2.tanque.angulo_n, velocidad=jugador_2.tanque.velocidad_disparo)
         # Texto con el jugador ganador
         if game.ganador is not None:
-            disparo.recorrido(pantalla)
+            disparo.recorrido(pantalla, turno.tanque.color)
             if game.ganador == jugador_1:
                 clases.Escribir.escribir_texto(pantalla=pantalla, texto="Gana el jugador 1", fuente="Arial",
                                                size_fuente=35, color_fuente=(
@@ -292,7 +292,7 @@ def partida(pantalla, mandos, game):
             jugador_1.tanque.draw_tank(pantalla)
             jugador_2.tanque.draw_tank(pantalla)
         if disparo is not None:
-            disparo.recorrido(pantalla)
+            disparo.recorrido(pantalla, turno.tanque.color)
             UI.info_post_disparo(pantalla=pantalla, color_jugador=turno.tanque.color, ancho=constantes.ANCHO_VENTANA,
                                  alto=constantes.ALTO_VENTANA, altura=disparo.altura_maxima,
                                  distancia=disparo.distancia_maxima)

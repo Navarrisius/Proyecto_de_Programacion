@@ -17,7 +17,7 @@ def crear_jugadores():
         "rojo": (255, 0, 0),
         "azul": (0, 0, 255),
         "verde_musgo": (47, 69, 56),
-        "negro": (0, 0, 0)
+        "NEGRO": (0, 0, 0)
     }
     colores_disponibles = list(colores_rgb.values())
     primer_color = random.choice(colores_disponibles)
@@ -228,7 +228,7 @@ def main():
                                 angulo=jugador_2.tanque.angulo_n, velocidad=jugador_2.tanque.velocidad_disparo)
         # Texto con el jugador ganador
         if game.ganador is not None:
-            disparo.recorrido(pantalla)
+            disparo.recorrido(pantalla, turno.tanque.color)
             if game.ganador == jugador_1:
                 clases.Escribir.escribir_texto(pantalla=pantalla, texto="Gana el jugador 1", fuente="Arial",
                                                size_fuente=35, color_fuente=(
@@ -253,7 +253,7 @@ def main():
             jugador_1.tanque.draw_tank(pantalla)
             jugador_2.tanque.draw_tank(pantalla)
         if disparo is not None:
-            disparo.recorrido(pantalla)
+            disparo.recorrido(pantalla, turno.tanque.color)
             UI.info_post_disparo(pantalla=pantalla, color_jugador=turno.tanque.color, ancho=constantes.ANCHO_VENTANA,
                                  alto=constantes.ALTO_VENTANA, altura=disparo.altura_maxima,
                                  distancia=disparo.distancia_maxima)

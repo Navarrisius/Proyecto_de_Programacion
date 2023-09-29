@@ -61,9 +61,9 @@ class Disparo:
         else:
             return 0
 
-    def recorrido(self, pantalla):
+    def recorrido(self, pantalla, color):
         for i in range(len(self.eje_x)):
-            pygame.draw.circle(pantalla, (0, 0, 0), (int(self.eje_x[i]), int(self.eje_y[i])), 2)
+            pygame.draw.circle(pantalla, color, (int(self.eje_x[i]), int(self.eje_y[i])), 2)
 
 
 class Jugador:

@@ -9,5 +9,5 @@ GRAVEDAD = 9.8
 ANCHO_VENTANA = None
 ALTO_VENTANA = None
 JUGADORES = []
-negro = (0, 0, 0)
-blanco = (255, 255, 255)
+NEGRO = (0, 0, 0)
+BLANCO = (255, 255, 255)
