@@ -19,7 +19,7 @@ def menu(pantalla, mandos, game):
                 if ((constantes.ANCHO_VENTANA / 2 - 235 <= mouse[0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and
                         (constantes.ALTO_VENTANA / 2 - 60 <= mouse[1] <= constantes.ALTO_VENTANA / 2 - 60 + 120)):
                     partida(pantalla, mandos, game)
-                    pygame.quit()
+                    en_menu = False
                 if ((mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
                     0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
                         mouse[1] >= constantes.ALTO_VENTANA / 2 + 90 and mouse[
@@ -27,7 +27,8 @@ def menu(pantalla, mandos, game):
                     print("entro")
                 if (544 <= mouse[0] <= 1000) and (677 <= mouse[1] <= 790):
                     en_menu = False
-
+        if not en_menu:
+            break
         fondo.cargar_fondo(pantalla)
         # boton jugar
         clases.Escribir.escribir_texto(pantalla, "Tank Game", "More Sugar", 200, constantes.negro, None,
@@ -308,7 +309,6 @@ def partida(pantalla, mandos, game):
         # Limita los FPS a 60
         reloj.tick(60)
 
-    pygame.quit()
 
 
 def main():
