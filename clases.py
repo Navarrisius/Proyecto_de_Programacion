@@ -130,18 +130,15 @@ class Tanque:
         self.color = color
         self.vivo = True
         if color == (99, 11, 87):
-            self.cargar_imagen("img/tanque_morado.png")
+            self.imagen = pygame.image.load("img/tanque_morado.png").convert_alpha()
         elif color == (0, 0, 255):
-            self.cargar_imagen("img/tanque_azul.png")
-        elif color == (255, 0, 255):
-            self.cargar_imagen("img/tanque_rojo.png")
+            self.imagen = pygame.image.load("img/tanque_azul.png").convert_alpha()
+        elif color == (255, 0, 0):
+            self.imagen = pygame.image.load("img/tanque_rojo.png").convert_alpha()
         elif color == (47, 69, 56):
-            self.cargar_imagen("img/tanque_verde_musgo.png")
+            self.imagen = pygame.image.load("img/tanque_verde_musgo.png").convert_alpha()
         elif color == (0, 0, 0):
-            self.cargar_imagen("img/tanque_negro.png")
-
-    def cargar_imagen(self, ruta_imagen):
-        self.imagen = pygame.image.load(ruta_imagen).convert_alpha()
+            self.imagen = pygame.image.load("img/tanque_negro.png").convert_alpha()
 
     def draw_tank(self, pantalla):
         turret_length = 30

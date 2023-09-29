@@ -5,43 +5,53 @@ import constantes
 import random
 
 
-def menu(pantalla,mandos,game):
+def menu(pantalla, mandos, game):
     en_menu = True
     reloj = pygame.time.Clock()
     fondo = clases.Fondo()
     while en_menu:
-        mause = pygame.mouse.get_pos()
+        mouse = pygame.mouse.get_pos()
         teclas = pygame.key.get_pressed()
         for event in pygame.event.get():
             if teclas[pygame.K_ESCAPE]:
                 en_menu = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if ((mause[0] >= constantes.ANCHO_VENTANA/2 - 235 and mause[0] <= constantes.ANCHO_VENTANA/2 - 235 + 470) and (mause[1] >= constantes.ALTO_VENTANA/2-60 and mause[1] <= constantes.ALTO_VENTANA/2-60 + 120)):
+                if ((constantes.ANCHO_VENTANA / 2 - 235 <= mouse[0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and
+                        (constantes.ALTO_VENTANA / 2 - 60 <= mouse[1] <= constantes.ALTO_VENTANA / 2 - 60 + 120)):
                     partida(pantalla, mandos, game)
                     pygame.quit()
-                if((mause[0] >= constantes.ANCHO_VENTANA/2 - 235 and mause[0] <= constantes.ANCHO_VENTANA/2 -235 + 470) and (mause[1] >= constantes.ALTO_VENTANA/2 + 90 and mause[1] <= constantes.ALTO_VENTANA/2+60 + 120)):
+                if ((mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
+                    0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
+                        mouse[1] >= constantes.ALTO_VENTANA / 2 + 90 and mouse[
+                    1] <= constantes.ALTO_VENTANA / 2 + 60 + 120)):
                     print("entro")
-                if ((mause[0] >= 544 and mause[0] <= 1000) and (mause[1] >= 677 and mause[1] <= 790)):
+                if (544 <= mouse[0] <= 1000) and (677 <= mouse[1] <= 790):
                     en_menu = False
 
-
         fondo.cargar_fondo(pantalla)
-        #boton jugar
-        clases.Escribir.escribir_texto(pantalla, "Tank Game", "More Sugar", 200, constantes.negro, None, constantes.ANCHO_VENTANA / 2 - 400 , constantes.ALTO_VENTANA / 2 - 300)
-        pygame.draw.rect(pantalla, constantes.blanco, (constantes.ANCHO_VENTANA/2 - 235, constantes.ALTO_VENTANA/2-60, 470, 120), 60, 50)
-        clases.Escribir.escribir_texto(pantalla, "Jugar", "More Sugar", 150, constantes.negro, None, constantes.ANCHO_VENTANA / 2 - 150, constantes.ALTO_VENTANA / 2 - 55)
-        #boton configuracion
-        pygame.draw.rect(pantalla, constantes.blanco, (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 90, 470, 120), 60, 50)
-        clases.Escribir.escribir_texto(pantalla, "Controles", "More Sugar", 130, constantes.negro, None, constantes.ANCHO_VENTANA / 2 - 210, constantes.ALTO_VENTANA / 2 + 100)
-        #boton salir
-        pygame.draw.rect(pantalla, constantes.blanco, (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 245, 470, 120), 60, 50)
-        clases.Escribir.escribir_texto(pantalla, "Salir", "More Sugar", 150, constantes.negro, None, constantes.ANCHO_VENTANA / 2 - 125, constantes.ALTO_VENTANA / 2 + 255)
-
-
+        # boton jugar
+        clases.Escribir.escribir_texto(pantalla, "Tank Game", "More Sugar", 200, constantes.negro, None,
+                                       constantes.ANCHO_VENTANA / 2 - 400, constantes.ALTO_VENTANA / 2 - 300)
+        pygame.draw.rect(pantalla, constantes.blanco,
+                         (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 - 60, 470, 120), 60, 50)
+        clases.Escribir.escribir_texto(pantalla, "Jugar", "More Sugar", 150, constantes.negro, None,
+                                       constantes.ANCHO_VENTANA / 2 - 150, constantes.ALTO_VENTANA / 2 - 55)
+        # boton configuracion
+        pygame.draw.rect(pantalla, constantes.blanco,
+                         (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 90, 470, 120), 60, 50)
+        clases.Escribir.escribir_texto(pantalla, "Controles", "More Sugar", 130, constantes.negro, None,
+                                       constantes.ANCHO_VENTANA / 2 - 210, constantes.ALTO_VENTANA / 2 + 100)
+        # boton salir
+        pygame.draw.rect(pantalla, constantes.blanco,
+                         (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 245, 470, 120), 60, 50)
+        clases.Escribir.escribir_texto(pantalla, "Salir", "More Sugar", 150, constantes.negro, None,
+                                       constantes.ANCHO_VENTANA / 2 - 125, constantes.ALTO_VENTANA / 2 + 255)
 
         pygame.display.flip()
         # Limita los FPS a 60
         reloj.tick(60)
+
+
 def actualizar_info_pantalla():
     info = pygame.display.Info()
     constantes.ANCHO_VENTANA = info.current_w
@@ -97,7 +107,9 @@ def cambiar_turnos(jugador1, jugador2):
 def terminar_turnos(jugadores):
     for jugador in jugadores:
         jugador.puede_jugar = False
-def partida(pantalla,mandos,game):
+
+
+def partida(pantalla, mandos, game):
     crear_jugadores()
     jugador_1 = constantes.JUGADORES[0]
     jugador_2 = constantes.JUGADORES[1]
@@ -310,10 +322,7 @@ def main():
     # Joystick
     pygame.joystick.init()
     mandos = []
-
-    menu(pantalla,mandos,game)
-
-
+    menu(pantalla, mandos, game)
     pygame.quit()
 
 
