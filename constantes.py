@@ -2,9 +2,10 @@ from clases import *
 
 #Constantes
 NOMBRE_VENTANA = "Tanquesisius"
-limite_angulo_min = 0
-limite_angulo_max = 180
-limite_velocidad_min = 30
-gravedad = 9.8
-
-
+LIMITE_ANGULO_MIN = 0
+LIMITE_ANGULO_MAX = 180
+LIMITE_VELOCIDAD_MIN = 30
+GRAVEDAD = 9.8
+ANCHO_VENTANA = None
+ALTO_VENTANA = None
+JUGADORES = []
