@@ -56,7 +56,7 @@ class Disparo:
 
     def verificar_impacto_tanque_enemigo(self, tanque_enemigo):
         if (self.y_bala >= tanque_enemigo.posicion_y - 20) and (
-                tanque_enemigo.posicion_x - 27 <= self.x_bala <= tanque_enemigo.posicion_x + 27):
+                tanque_enemigo.posicion_x - 45<= self.x_bala <= tanque_enemigo.posicion_x + 45):
             return 1
         else:
             return 0
