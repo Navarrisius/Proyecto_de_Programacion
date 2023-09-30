@@ -20,12 +20,9 @@ def menu(pantalla, mandos, game):
                         (constantes.ALTO_VENTANA / 2 - 60 <= mouse[1] <= constantes.ALTO_VENTANA / 2 - 60 + 120)):
                     partida(pantalla, mandos, game)
                     en_menu = False
-                if ((mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
-                    0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
-                        mouse[1] >= constantes.ALTO_VENTANA / 2 + 90 and mouse[
-                    1] <= constantes.ALTO_VENTANA / 2 + 60 + 120)):
-                    print("entro")
-                if (544 <= mouse[0] <= 1000) and (677 <= mouse[1] <= 790):
+                if ((mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (mouse[1] >= constantes.ALTO_VENTANA / 2 + 90 and mouse[1] <= constantes.ALTO_VENTANA / 2 + 60 + 120)):
+                    pass
+                if (mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (mouse[1] >= constantes.ALTO_VENTANA / 2 + 245 and mouse[1] <= constantes.ALTO_VENTANA / 2 + 245 +120):
                     en_menu = False
         if not en_menu:
             break
