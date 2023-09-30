@@ -105,12 +105,32 @@ def cambiar_turnos(jugador1, jugador2):
 def terminar_turnos(jugadores):
     for jugador in jugadores:
         jugador.puede_jugar = False
+        
+#prueba
+def barras_de_salud(salud_del_jugador, salud_del_otro_jugador,pantalla):
+    if salud_del_jugador > 75:
+        color_de_salud_del_jugador = (0, 143, 57)
+    elif salud_del_jugador > 50:
+        color_de_salud_del_jugador = (255, 255, 0)
+    else:
+        color_de_salud_del_jugador = (255, 0, 0)
 
+    if salud_del_otro_jugador > 75:
+        color_de_salud_del_otro_jugador = (0, 143, 57)
+    elif salud_del_otro_jugador > 50:
+        color_de_salud_del_otro_jugador = (255, 255, 0)
+    else:
+        color_de_salud_del_otro_jugador = (255, 0, 0)
+    print(constantes.ALTO_VENTANA)
+    pygame.draw.rect(pantalla, color_de_salud_del_jugador, (constantes.ANCHO_VENTANA-200, constantes.ALTO_VENTANA-1060, salud_del_jugador, 25))
+    pygame.draw.rect(pantalla, color_de_salud_del_otro_jugador, (constantes.ANCHO_VENTANA-1820, constantes.ALTO_VENTANA-1060, salud_del_otro_jugador, 25))
 
 def partida(pantalla, mandos, game):
     crear_jugadores()
     jugador_1 = constantes.JUGADORES[0]
     jugador_2 = constantes.JUGADORES[1]
+    salud1=constantes.SALUD_JUGADOR
+    salud2=constantes.SALUD_JUGADOR
     terreno = clases.Terreno()
     fondo = clases.Fondo()
     running = game.en_partida
@@ -188,7 +208,8 @@ def partida(pantalla, mandos, game):
                     if turno.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=constantes.ANCHO_VENTANA,
                                              alto=constantes.ALTO_VENTANA, disparo=disparo,
                                              altura_terreno=altura_terreno, tanque_enemigo=enemigo):
-                        game.ganador = turno
+                        
+                        #game.ganador = turno
                         terminar_turnos(constantes.JUGADORES)
                     else:
                         cambiar_turnos(jugador_1, jugador_2)
@@ -252,7 +273,7 @@ def partida(pantalla, mandos, game):
         # Terreno
         terreno.dibujar_terreno(
             pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA)
-
+        barras_de_salud(salud1,salud2, pantalla)
         # Se escribe en pantalla la información del pre-disparo de cada jugador
         if jugador_1.puede_jugar:
             UI.info_pre_disparo(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA,
