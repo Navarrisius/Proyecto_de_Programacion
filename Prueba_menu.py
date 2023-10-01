@@ -121,11 +121,50 @@ def barras_de_salud(salud_del_jugador, salud_del_otro_jugador,pantalla):
         color_de_salud_del_otro_jugador = (255, 255, 0)
     else:
         color_de_salud_del_otro_jugador = (255, 0, 0)
-    print(constantes.ALTO_VENTANA)
     pygame.draw.rect(pantalla, color_de_salud_del_jugador, (constantes.ANCHO_VENTANA-200, constantes.ALTO_VENTANA-1060, salud_del_jugador, 25))
     pygame.draw.rect(pantalla, color_de_salud_del_otro_jugador, (constantes.ANCHO_VENTANA-1820, constantes.ALTO_VENTANA-1060, salud_del_otro_jugador, 25))
 
+
+def objetos_de_texto(text, color, size="small"):
+    # Diccionario de fuentes y tamaños
+    fuentes = {
+    "small": pygame.font.SysFont("comicsansms", 25),
+    "medium": pygame.font.SysFont("comicsansms", 50),
+    "large": pygame.font.SysFont("Yu Mincho Demibold", 85),
+    "vsmall": pygame.font.SysFont("Yu Mincho Demibold", 25)
+}
+    if size in fuentes:
+        textSurface = fuentes[size].render(text, True, color)
+        return textSurface, textSurface.get_rect()
+    else:
+        raise ValueError("Tamaño de fuente no válido: " + size)
+
+
+def mensaje_a_pantalla(msg, color, y_desplazamiento=0, tamaño="small"):
+    superficie_texto, rectángulo_texto = objetos_de_texto(msg, color, tamaño)
+    rectángulo_texto.center = (int(constantes.ANCHO_VENTANA / 2), int(constantes.ALTO_VENTANA / 2) + y_desplazamiento)
+    pantalla.blit(superficie_texto, rectángulo_texto)
+def pausar():
+    pausado = True
+    mensaje_a_pantalla("Pausado", constantes.BLANCO, -100, tamaño="large")
+    mensaje_a_pantalla("Presiona C para continuar jugando o Q para salir", (245,222,179), 25)
+    pygame.display.update()
+    while pausado:
+        for evento in pygame.event.get():
+
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                quit()()
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_c:
+                    pausado = False
+                elif evento.key == pygame.K_q:
+                    pygame.quit()
+                    quit()()
+
+        reloj.tick(5)
 def partida(pantalla, mandos, game):
+    global reloj
     crear_jugadores()
     jugador_1 = constantes.JUGADORES[0]
     jugador_2 = constantes.JUGADORES[1]
@@ -163,7 +202,7 @@ def partida(pantalla, mandos, game):
                 pantalla = pygame.display.set_mode((NUEVO_ANCHO, NUEVA_ALTURA), pygame.RESIZABLE, pygame.OPENGL)
                 constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA = NUEVO_ANCHO, NUEVA_ALTURA
             elif teclas[pygame.K_ESCAPE]:
-                running = False
+                pausar()
             if teclas[pygame.K_a]:
                 turno.tanque.angulo_n += 0.5
                 if turno.tanque.angulo_n > constantes.LIMITE_ANGULO_MAX:
@@ -330,6 +369,7 @@ def partida(pantalla, mandos, game):
 
 
 def main():
+    global pantalla
     # Se inicia Pygame y variables importantes dentro de la ejecución
     pygame.init()
     pygame.display.set_caption(constantes.NOMBRE_VENTANA)
