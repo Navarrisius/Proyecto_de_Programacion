@@ -2,15 +2,34 @@ import pygame
 import math
 import random
 
+class Bala:
+    tipo_bala = None
+    dano = None
+    radio_bala = None
+    unidades = None
+
+    def __init__(self, tipo):
+        if tipo == 0:
+            self.radio_bala = 6
+            self.dano = 30
+            self.unidades = 3
+        elif tipo == 1:
+            self.radio_bala = 8
+            self.dano = 40
+            self.unidades = 10
+        elif tipo == 2:
+            self.radio_bala = 10
+            self.dano = 50
+            self.unidades = 3
 
 class Disparo:
+    proyectil = None
     angulo_grados = None
     angulo_radianes = 0
     velocidad_inicial = None
     velocidad_actual = 0
     altura_maxima = 0
     distancia_maxima = 0
-    radio_bala = 5
     x_bala = None
     y_bala = None
     x_inicial = None
@@ -23,7 +42,8 @@ class Disparo:
     eje_x = []
     eje_y = []
 
-    def __init__(self, angulo_grados, velocidad_inicial, autor):
+    def __init__(self, angulo_grados, velocidad_inicial, autor, bala):
+        self.proyectil = bala
         self.angulo_grados = angulo_grados
         self.velocidad_inicial = velocidad_inicial
         self.angulo_radianes = math.radians(angulo_grados)
@@ -42,7 +62,7 @@ class Disparo:
         self.velocidad_actual = math.sqrt(self.velocidad_x ** 2 + self.velocidad_y ** 2)
 
     def dibujar(self, pantalla, ancho, alto, color):
-        pygame.draw.circle(pantalla, color, (int(self.x_bala), int(self.y_bala)), self.radio_bala)
+        pygame.draw.circle(pantalla, color, (int(self.x_bala), int(self.y_bala)), self.proyectil.radio_bala)
         Escribir.escribir_texto(pantalla=pantalla,
                                 texto="Velocidad actual de la bala: " + str(int(self.velocidad_actual)) + " m/s",
                                 fuente="Consolas", color_fuente=(255, 255, 255), size_fuente=25, color_fondo=(0, 0, 0),
@@ -116,6 +136,9 @@ class Fondo:
 
 
 class Tanque:
+    municion = [Bala(0), Bala(1), Bala(2)]
+    tipo_bala = 0
+    salud = 100
     color = None
     posicion_x = None
     posicion_y = None
@@ -125,7 +148,7 @@ class Tanque:
     velocidad_disparo = 50
     turret_end = None
     imagen = None
-
+    
     def __init__(self, color):
         self.color = color
         self.vivo = True
