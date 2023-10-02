@@ -190,8 +190,6 @@ def partida(pantalla, mandos, game):
     crear_jugadores()
     jugador_1 = constantes.JUGADORES[0]
     jugador_2 = constantes.JUGADORES[1]
-    salud1=constantes.SALUD_JUGADOR
-    salud2=constantes.SALUD_JUGADOR
     terreno = clases.Terreno()
     fondo = clases.Fondo()
     running = game.en_partida
@@ -260,20 +258,30 @@ def partida(pantalla, mandos, game):
                 turno.tanque.velocidad_disparo -= 3.0
                 if turno.tanque.velocidad_disparo < constantes.LIMITE_VELOCIDAD_MIN:
                     turno.tanque.velocidad_disparo = constantes.LIMITE_VELOCIDAD_MIN
+            # Cambio de tipo de municion al apretar la tecla 'B' estas rotan en un ciclo
+            if teclas[pygame.K_b]:
+                if turno.tanque.tipo_bala < 2:
+                    turno.tanque.tipo_bala += 1
+                else:
+                    turno.tanque.tipo_bala = 0
             # Verifica disparo del tanque y cambio de turnos
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:  # Disparo
                     # Se intancia el disparo
-                    disparo = clases.Disparo(
-                        turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque)
-                    if turno.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=constantes.ANCHO_VENTANA,
-                                             alto=constantes.ALTO_VENTANA, disparo=disparo,
-                                             altura_terreno=altura_terreno, tanque_enemigo=enemigo):
-                        
-                        game.ganador = turno
-                        terminar_turnos(constantes.JUGADORES)
+                    disparo = clases.Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque, clases.Bala(turno.tanque.tipo_bala))
+                    if turno.tanque.municion[turno.tanque.tipo_bala].unidades > 0:
+                        if turno.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA, disparo=disparo, altura_terreno=altura_terreno, tanque_enemigo=enemigo):
+                            enemigo.salud -= disparo.proyectil.dano
+                            if enemigo.salud <= 0:
+                                game.ganador = turno
+                                terminar_turnos(constantes.JUGADORES)
+                            else:
+                                cambiar_turnos(jugador_1, jugador_2)
+                        else:
+                            cambiar_turnos(jugador_1, jugador_2)
+                        turno.tanque.municion[turno.tanque.tipo_bala].unidades -= 1
                     else:
-                        cambiar_turnos(jugador_1, jugador_2)
+                        print("No hay municion")
 
         for mando in mandos:
             if mando.get_button(4):  # LB
@@ -312,15 +320,20 @@ def partida(pantalla, mandos, game):
                     turno.tanque.velocidad_disparo = constantes.LIMITE_VELOCIDAD_MIN
             if mando.get_button(0):
                 # Se intancia el disparo
-                disparo = clases.Disparo(
-                    turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque)
-                if turno.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=constantes.ANCHO_VENTANA,
-                                         alto=constantes.ALTO_VENTANA, disparo=disparo, altura_terreno=altura_terreno,
-                                         tanque_enemigo=enemigo):
-                    game.ganador = turno
-                    terminar_turnos(constantes.JUGADORES)
+                disparo = clases.Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque, clases.Bala(turno.tanque.tipo_bala))
+                if turno.tanque.municion[turno.tanque.tipo_bala].unidades > 0:
+                    if turno.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA, disparo=disparo, altura_terreno=altura_terreno, tanque_enemigo=enemigo):
+                        enemigo.salud -= disparo.proyectil.dano
+                        if enemigo.salud <= 0:
+                            game.ganador = turno
+                            terminar_turnos(constantes.JUGADORES)
+                        else:
+                            cambiar_turnos(jugador_1, jugador_2)
+                    else:
+                        cambiar_turnos(jugador_1, jugador_2)
+                    turno.tanque.municion[turno.tanque.tipo_bala].unidades -= 1
                 else:
-                    cambiar_turnos(jugador_1, jugador_2)
+                    print("No hay municion")
 
         # VACIA PANTALLA
         fondo.cargar_fondo(pantalla)
@@ -334,7 +347,7 @@ def partida(pantalla, mandos, game):
         # Terreno
         terreno.dibujar_terreno(
             pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA)
-        barras_de_salud(salud1,salud2, pantalla)
+        barras_de_salud(turno.tanque.salud ,enemigo.salud, pantalla)
         # Se escribe en pantalla la información del pre-disparo de cada jugador
         if jugador_1.puede_jugar:
             UI.info_pre_disparo(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA,

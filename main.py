@@ -147,8 +147,7 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:  # Disparo
                     # Se intancia el disparo
-                    disparo = clases.Disparo(
-                        turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque)
+                    disparo = clases.Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque)
                     if turno.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=constantes.ANCHO_VENTANA,
                                              alto=constantes.ALTO_VENTANA, disparo=disparo,
                                              altura_terreno=altura_terreno, tanque_enemigo=enemigo):
