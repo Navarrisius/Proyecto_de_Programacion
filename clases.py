@@ -55,7 +55,7 @@ class Disparo:
         self.distancia_maxima = abs(self.x_bala - self.distancia_maxima - tanque_posicion_x)
 
     def verificar_impacto_tanque_enemigo(self, tanque_enemigo):
-        if (self.y_bala >= tanque_enemigo.posicion_y - 20) and (
+        if (self.y_bala >= tanque_enemigo.posicion_y - 23) and (
                 tanque_enemigo.posicion_x - 45<= self.x_bala <= tanque_enemigo.posicion_x + 45):
             return 1
         else:

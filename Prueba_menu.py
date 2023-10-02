@@ -130,7 +130,7 @@ def objetos_de_texto(text, color, size="small"):
     fuentes = {
     "small": pygame.font.SysFont("comicsansms", 25),
     "medium": pygame.font.SysFont("comicsansms", 50),
-    "large": pygame.font.SysFont("Yu Mincho Demibold", 85),
+    "large": pygame.font.SysFont("Yu Mincho Demibold", 100),
     "vsmall": pygame.font.SysFont("Yu Mincho Demibold", 25)
 }
     if size in fuentes:
@@ -140,7 +140,7 @@ def objetos_de_texto(text, color, size="small"):
         raise ValueError("Tamaño de fuente no válido: " + size)
 
 
-def mensaje_a_pantalla(msg, color, y_desplazamiento=0, tamaño="small"):
+def mensaje_a_pantalla(msg, color, y_desplazamiento=0, tamaño="medium"):
     superficie_texto, rectángulo_texto = objetos_de_texto(msg, color, tamaño)
     rectángulo_texto.center = (int(constantes.ANCHO_VENTANA / 2), int(constantes.ALTO_VENTANA / 2) + y_desplazamiento)
     pantalla.blit(superficie_texto, rectángulo_texto)
@@ -159,6 +159,28 @@ def pausar():
                 if evento.key == pygame.K_c:
                     pausado = False
                 elif evento.key == pygame.K_q:
+                    pygame.quit()
+                    quit()()
+
+        reloj.tick(5)
+def terminar_de_juego():
+    termino = True
+    mensaje_a_pantalla("Juego terminado", constantes.BLANCO, -100, tamaño="large")
+    mensaje_a_pantalla("Presiona C para reiniciar partida o Q para salir", (34,113,179), 25)
+    pygame.display.update()
+    while termino:
+        for evento in pygame.event.get():
+
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                quit()()
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_c:
+                    termino = False
+                    main()
+                elif evento.key == pygame.K_q:
+                    running = False
+                    disparo = None
                     pygame.quit()
                     quit()()
 
@@ -248,7 +270,7 @@ def partida(pantalla, mandos, game):
                                              alto=constantes.ALTO_VENTANA, disparo=disparo,
                                              altura_terreno=altura_terreno, tanque_enemigo=enemigo):
                         
-                        #game.ganador = turno
+                        game.ganador = turno
                         terminar_turnos(constantes.JUGADORES)
                     else:
                         cambiar_turnos(jugador_1, jugador_2)
@@ -329,12 +351,12 @@ def partida(pantalla, mandos, game):
                 clases.Escribir.escribir_texto(pantalla=pantalla, texto="Gana el jugador 1", fuente="Arial",
                                                size_fuente=35, color_fuente=(
                         255, 255, 255), color_fondo=jugador_1.tanque.color, x=constantes.ANCHO_VENTANA // 2.5,
-                                               y=constantes.ALTO_VENTANA // 2)
+                                               y=constantes.ALTO_VENTANA // 2-40)
             else:
                 clases.Escribir.escribir_texto(pantalla=pantalla, texto="Gana el jugador 2", fuente="Arial",
                                                size_fuente=35, color_fuente=(
                         255, 255, 255), color_fondo=jugador_2.tanque.color, x=constantes.ANCHO_VENTANA // 2.5,
-                                               y=constantes.ALTO_VENTANA // 2)
+                                               y=constantes.ALTO_VENTANA // 2-40)
 
             pygame.display.update()
 
@@ -342,9 +364,10 @@ def partida(pantalla, mandos, game):
             tiempo_inicial = pygame.time.get_ticks()
             tiempo_espera = 5000
             while pygame.time.get_ticks() - tiempo_inicial < tiempo_espera:
-                pass
-            running = False
-            disparo = None
+                pygame.display.update()
+                terminar_de_juego()
+                #pass
+
         else:
             jugador_1.tanque.draw_tank(pantalla)
             jugador_2.tanque.draw_tank(pantalla)
