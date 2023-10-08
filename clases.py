@@ -136,7 +136,7 @@ class Fondo:
 
 
 class Tanque:
-    municion = [Bala(0), Bala(1), Bala(2)]
+    municion = None
     tipo_bala = 0
     salud = 100
     color = None
@@ -150,6 +150,7 @@ class Tanque:
     imagen = None
     
     def __init__(self, color):
+        self.municion = [Bala(0), Bala(1), Bala(2)]
         self.color = color
         self.vivo = True
         if color == (99, 11, 87):
