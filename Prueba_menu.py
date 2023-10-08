@@ -20,9 +20,15 @@ def menu(pantalla, mandos, game):
                         (constantes.ALTO_VENTANA / 2 - 60 <= mouse[1] <= constantes.ALTO_VENTANA / 2 - 60 + 120)):
                     partida(pantalla, mandos, game)
                     en_menu = False
-                if ((mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (mouse[1] >= constantes.ALTO_VENTANA / 2 + 90 and mouse[1] <= constantes.ALTO_VENTANA / 2 + 60 + 120)):
+                if ((mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
+                    0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
+                        mouse[1] >= constantes.ALTO_VENTANA / 2 + 90 and mouse[
+                    1] <= constantes.ALTO_VENTANA / 2 + 60 + 120)):
                     pass
-                if (mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (mouse[1] >= constantes.ALTO_VENTANA / 2 + 245 and mouse[1] <= constantes.ALTO_VENTANA / 2 + 245 +120):
+                if (mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
+                    0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
+                        mouse[1] >= constantes.ALTO_VENTANA / 2 + 245 and mouse[
+                    1] <= constantes.ALTO_VENTANA / 2 + 245 + 120):
                     en_menu = False
         if not en_menu:
             break
@@ -93,6 +99,12 @@ def crear_jugadores():
     constantes.JUGADORES = [jugador_1, jugador_2]
 
 
+def calcular_y(matriz, tanque):
+    for y in range(len(matriz)):
+        if (matriz[y][tanque.posicion_x] == "x"):
+            return y - 1
+
+
 def cambiar_turnos(jugador1, jugador2):
     if jugador1.puede_jugar:
         jugador1.puede_jugar = False
@@ -105,9 +117,10 @@ def cambiar_turnos(jugador1, jugador2):
 def terminar_turnos(jugadores):
     for jugador in jugadores:
         jugador.puede_jugar = False
-        
-#prueba
-def barras_de_salud(salud_del_jugador, salud_del_otro_jugador,pantalla):
+
+
+# prueba
+def barras_de_salud(salud_del_jugador, salud_del_otro_jugador, pantalla):
     if salud_del_jugador > 75:
         color_de_salud_del_jugador = (0, 143, 57)
     elif salud_del_jugador > 50:
@@ -121,18 +134,20 @@ def barras_de_salud(salud_del_jugador, salud_del_otro_jugador,pantalla):
         color_de_salud_del_otro_jugador = (255, 255, 0)
     else:
         color_de_salud_del_otro_jugador = (255, 0, 0)
-    pygame.draw.rect(pantalla, color_de_salud_del_jugador, (constantes.ANCHO_VENTANA-200, constantes.ALTO_VENTANA-1060, salud_del_jugador, 25))
-    pygame.draw.rect(pantalla, color_de_salud_del_otro_jugador, (constantes.ANCHO_VENTANA-1820, constantes.ALTO_VENTANA-1060, salud_del_otro_jugador, 25))
+    pygame.draw.rect(pantalla, color_de_salud_del_jugador,
+                     (constantes.ANCHO_VENTANA - 200, constantes.ALTO_VENTANA - 1060, salud_del_jugador, 25))
+    pygame.draw.rect(pantalla, color_de_salud_del_otro_jugador,
+                     (constantes.ANCHO_VENTANA - 1820, constantes.ALTO_VENTANA - 1060, salud_del_otro_jugador, 25))
 
 
 def objetos_de_texto(text, color, size="small"):
     # Diccionario de fuentes y tamaños
     fuentes = {
-    "small": pygame.font.SysFont("comicsansms", 25),
-    "medium": pygame.font.SysFont("comicsansms", 50),
-    "large": pygame.font.SysFont("Yu Mincho Demibold", 100),
-    "vsmall": pygame.font.SysFont("Yu Mincho Demibold", 25)
-}
+        "small": pygame.font.SysFont("comicsansms", 25),
+        "medium": pygame.font.SysFont("comicsansms", 50),
+        "large": pygame.font.SysFont("Yu Mincho Demibold", 100),
+        "vsmall": pygame.font.SysFont("Yu Mincho Demibold", 25)
+    }
     if size in fuentes:
         textSurface = fuentes[size].render(text, True, color)
         return textSurface, textSurface.get_rect()
@@ -144,10 +159,12 @@ def mensaje_a_pantalla(msg, color, y_desplazamiento=0, tamaño="medium"):
     superficie_texto, rectángulo_texto = objetos_de_texto(msg, color, tamaño)
     rectángulo_texto.center = (int(constantes.ANCHO_VENTANA / 2), int(constantes.ALTO_VENTANA / 2) + y_desplazamiento)
     pantalla.blit(superficie_texto, rectángulo_texto)
+
+
 def pausar():
     pausado = True
     mensaje_a_pantalla("Pausado", constantes.BLANCO, -100, tamaño="large")
-    mensaje_a_pantalla("Presiona C para continuar jugando o Q para salir", (245,222,179), 25)
+    mensaje_a_pantalla("Presiona C para continuar jugando o Q para salir", (245, 222, 179), 25)
     pygame.display.update()
     while pausado:
         for evento in pygame.event.get():
@@ -163,10 +180,12 @@ def pausar():
                     quit()()
 
         reloj.tick(5)
+
+
 def terminar_de_juego():
     termino = True
     mensaje_a_pantalla("Juego terminado", constantes.BLANCO, -100, tamaño="large")
-    mensaje_a_pantalla("Presiona C para reiniciar partida o Q para salir", (34,113,179), 25)
+    mensaje_a_pantalla("Presiona C para reiniciar partida o Q para salir", (34, 113, 179), 25)
     pygame.display.update()
     while termino:
         for evento in pygame.event.get():
@@ -185,6 +204,8 @@ def terminar_de_juego():
                     quit()()
 
         reloj.tick(5)
+
+
 def partida(pantalla, mandos, game):
     global reloj
     crear_jugadores()
@@ -200,11 +221,12 @@ def partida(pantalla, mandos, game):
 
     for x in range(constantes.ANCHO_VENTANA):
         altura_terreno[x] += terreno.generar_terreno(x, 200, constantes.ALTO_VENTANA)
-
+    terreno.generar_matriz(constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA, altura_terreno)
+    terreno.generar_arreglo_m()
     while running:
-        terreno.dibujar_terreno(pantalla, constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA)
         reloj = pygame.time.Clock()
         teclas = pygame.key.get_pressed()
+        mouse = pygame.mouse.get_pos()
         if jugador_1.puede_jugar:
             turno = jugador_1
             enemigo = jugador_2.tanque
@@ -223,6 +245,9 @@ def partida(pantalla, mandos, game):
                 constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA = NUEVO_ANCHO, NUEVA_ALTURA
             elif teclas[pygame.K_ESCAPE]:
                 pausar()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                terreno.destruir_terreno(mouse[0], mouse[1], constantes.ALTO_VENTANA, constantes.ANCHO_VENTANA)
+                terreno.generar_arreglo_m()
             if teclas[pygame.K_a]:
                 turno.tanque.angulo_n += 0.5
                 if turno.tanque.angulo_n > constantes.LIMITE_ANGULO_MAX:
@@ -268,9 +293,13 @@ def partida(pantalla, mandos, game):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:  # Disparo
                     # Se intancia el disparo
-                    disparo = clases.Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque, clases.Bala(turno.tanque.tipo_bala))
+                    disparo = clases.Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque,
+                                             clases.Bala(turno.tanque.tipo_bala))
                     if turno.tanque.municion[turno.tanque.tipo_bala].unidades > 0:
-                        if turno.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA, disparo=disparo, altura_terreno=altura_terreno, tanque_enemigo=enemigo):
+                        if turno.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=constantes.ANCHO_VENTANA,
+                                                 alto=constantes.ALTO_VENTANA, disparo=disparo,
+                                                 altura_terreno=terreno.matriz, tanque_enemigo=enemigo):
+                            print("impacto enemigo")
                             enemigo.salud -= disparo.proyectil.dano
                             if enemigo.salud <= 0:
                                 game.ganador = turno
@@ -278,76 +307,24 @@ def partida(pantalla, mandos, game):
                             else:
                                 cambiar_turnos(jugador_1, jugador_2)
                         else:
+                            terreno.destruir_terreno(int(disparo.x_bala), int(disparo.y_bala), constantes.ALTO_VENTANA,
+                                                     constantes.ANCHO_VENTANA)
+                            terreno.generar_arreglo_m()
                             cambiar_turnos(jugador_1, jugador_2)
                         turno.tanque.municion[turno.tanque.tipo_bala].unidades -= 1
                     else:
                         print("No hay municion")
 
-        for mando in mandos:
-            if mando.get_button(4):  # LB
-                turno.tanque.angulo_n += 0.5
-                if turno.tanque.angulo_n > constantes.LIMITE_ANGULO_MAX:
-                    turno.tanque.angulo_n = constantes.LIMITE_ANGULO_MAX
-                turno.tanque.angulo_canon = math.radians(turno.tanque.angulo_n)
-            if mando.get_button(4) and mando.get_button(1):  # LB + X
-                turno.tanque.angulo_n += 1.5
-                if turno.tanque.angulo_n > constantes.LIMITE_ANGULO_MAX:
-                    turno.tanque.angulo_n = constantes.LIMITE_ANGULO_MAX
-                turno.tanque.angulo_canon = math.radians(turno.tanque.angulo_n)
-            if mando.get_button(5):  # RB
-                turno.tanque.angulo_n -= 0.5
-                if turno.tanque.angulo_n < constantes.LIMITE_ANGULO_MIN:
-                    turno.tanque.angulo_n = constantes.LIMITE_ANGULO_MIN
-                turno.tanque.angulo_canon = math.radians(turno.tanque.angulo_n)
-            if mando.get_button(5) and mando.get_button(1):  # RB + X
-                turno.tanque.angulo_n -= 1.5
-                if turno.tanque.angulo_n < constantes.LIMITE_ANGULO_MIN:
-                    turno.tanque.angulo_n = constantes.LIMITE_ANGULO_MIN
-                turno.tanque.angulo_canon = math.radians(turno.tanque.angulo_n)
-            # Verifica si la tecla 'RT' se mantiene presionada
-            if mando.get_axis(5) != -1:
-                turno.tanque.velocidad_disparo += 1.0
-            if mando.get_axis(5) != -1 and mando.get_button(0):
-                turno.tanque.velocidad_disparo += 3.0
-            # Verifica si la tecla 'LT' se mantiene presionada
-            if mando.get_axis(4) != -1:
-                turno.tanque.velocidad_disparo -= 1.0
-                if turno.tanque.velocidad_disparo < constantes.LIMITE_VELOCIDAD_MIN:
-                    turno.tanque.velocidad_disparo = constantes.LIMITE_VELOCIDAD_MIN
-            if mando.get_axis(4) != -1 and mando.get_button(0):
-                turno.tanque.velocidad_disparo -= 3.0
-                if turno.tanque.velocidad_disparo < constantes.LIMITE_VELOCIDAD_MIN:
-                    turno.tanque.velocidad_disparo = constantes.LIMITE_VELOCIDAD_MIN
-            if mando.get_button(0):
-                # Se intancia el disparo
-                disparo = clases.Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque, clases.Bala(turno.tanque.tipo_bala))
-                if turno.tanque.municion[turno.tanque.tipo_bala].unidades > 0:
-                    if turno.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA, disparo=disparo, altura_terreno=altura_terreno, tanque_enemigo=enemigo):
-                        enemigo.salud -= disparo.proyectil.dano
-                        if enemigo.salud <= 0:
-                            game.ganador = turno
-                            terminar_turnos(constantes.JUGADORES)
-                        else:
-                            cambiar_turnos(jugador_1, jugador_2)
-                    else:
-                        cambiar_turnos(jugador_1, jugador_2)
-                    turno.tanque.municion[turno.tanque.tipo_bala].unidades -= 1
-                else:
-                    print("No hay municion")
-
         # VACIA PANTALLA
         fondo.cargar_fondo(pantalla)
 
         # Mantener el tanque en el terreno
-        jugador_1.tanque.posicion_y = constantes.ALTO_VENTANA - \
-                                      altura_terreno[jugador_1.tanque.posicion_x]
-        jugador_2.tanque.posicion_y = constantes.ALTO_VENTANA - \
-                                      altura_terreno[jugador_2.tanque.posicion_x]
+        jugador_1.tanque.posicion_y = calcular_y(terreno.matriz, jugador_1.tanque)
+        jugador_2.tanque.posicion_y = calcular_y(terreno.matriz, jugador_2.tanque)
 
         # Terreno
-        terreno.dibujar_terreno(
-            pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA)
-        barras_de_salud(turno.tanque.salud ,enemigo.salud, pantalla)
+        terreno.dibujar_terreno(pantalla)
+        barras_de_salud(turno.tanque.salud, enemigo.salud, pantalla)
         # Se escribe en pantalla la información del pre-disparo de cada jugador
         if jugador_1.puede_jugar:
             UI.info_pre_disparo(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA,
@@ -364,12 +341,12 @@ def partida(pantalla, mandos, game):
                 clases.Escribir.escribir_texto(pantalla=pantalla, texto="Gana el jugador 1", fuente="Arial",
                                                size_fuente=35, color_fuente=(
                         255, 255, 255), color_fondo=jugador_1.tanque.color, x=constantes.ANCHO_VENTANA // 2.5,
-                                               y=constantes.ALTO_VENTANA // 2-40)
+                                               y=constantes.ALTO_VENTANA // 2 - 40)
             else:
                 clases.Escribir.escribir_texto(pantalla=pantalla, texto="Gana el jugador 2", fuente="Arial",
                                                size_fuente=35, color_fuente=(
                         255, 255, 255), color_fondo=jugador_2.tanque.color, x=constantes.ANCHO_VENTANA // 2.5,
-                                               y=constantes.ALTO_VENTANA // 2-40)
+                                               y=constantes.ALTO_VENTANA // 2 - 40)
 
             pygame.display.update()
 
@@ -379,7 +356,7 @@ def partida(pantalla, mandos, game):
             while pygame.time.get_ticks() - tiempo_inicial < tiempo_espera:
                 pygame.display.update()
                 terminar_de_juego()
-                #pass
+                # pass
 
         else:
             jugador_1.tanque.draw_tank(pantalla)
@@ -401,7 +378,6 @@ def partida(pantalla, mandos, game):
 
         # Limita los FPS a 60
         reloj.tick(60)
-
 
 
 def main():

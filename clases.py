@@ -106,23 +106,54 @@ class Partida:
 
 class Terreno:
     constante_oscilacion = random.uniform(0.01, 0.0135)
+    matriz = []
+    arreglo = []
 
     def generar_terreno(self, x, altura_maxima, width):
         return altura_maxima * math.e ** (-((x - width) ** 2) / (2 * (width / 2) ** 2)) * math.cos(
-            self.constante_oscilacion * (x - width)) + 200
+            self.constante_oscilacion * (x - width)) + 600
 
-    def dibujar_terreno(self, pantalla, ancho, alto):
-        altura_terreno = [0] * ancho
-        for x in range(ancho):
-            altura_terreno[x] += self.generar_terreno(x, 200, alto)
-        for x in range(ancho):
-            pygame.draw.rect(pantalla, (220, 220, 220), (x, alto - altura_terreno[x], 1, altura_terreno[x]))
-        for x in range(ancho):
-            pygame.draw.rect(pantalla, (173, 204, 246), (x, alto - altura_terreno[x] + 10, 1, altura_terreno[x]))
-        for x in range(ancho):
-            pygame.draw.rect(pantalla, (175, 209, 249), (x, alto - altura_terreno[x] + 150, 1, altura_terreno[x]))
-        for x in range(ancho):
-            pygame.draw.rect(pantalla, (178, 214, 250), (x, alto - altura_terreno[x] + 300, 1, altura_terreno[x]))
+    def dibujar_terreno(self,pantalla):
+        for pos in range(len(self.arreglo)):
+            if pos % 2 == 0:
+                pygame.draw.line(pantalla, (173, 204, 246), self.arreglo[pos], self.arreglo[pos + 1])
+
+    def generar_matriz (self, ancho_ventana, alto_ventana, arreglo_terreno):
+        for x in range(alto_ventana):
+            self.matriz.append([])
+            for y in range(ancho_ventana):
+                if x >= arreglo_terreno[y]:
+                    self.matriz[x].append("x")
+                else:
+                    self.matriz[x].append("o")
+
+    def destruir_terreno(self,centro_x,centro_y, alto, ancho):
+        radio = 40
+        for y in range(alto):
+            for x in range(ancho):
+                distancia = ((x - centro_x) ** 2 + (y - centro_y) ** 2) ** 0.5
+                if distancia <= radio:
+                    self.matriz[y][x] = "o"
+
+
+    def generar_arreglo_m(self):
+        len_x = len(self.matriz)
+        len_y = len(self.matriz[0])
+        pos_inicial = None
+        pos_final = None
+        self.arreglo = []
+        for y in range(len_y):
+            for x in range(len_x):
+                if self.matriz[x][y] == 'x' and pos_inicial == None:
+                    pos_inicial = (y, x)
+                elif (self.matriz[x][y] == 'x' and x == len_x - 1) or (
+                        self.matriz[x][y] == 'x' and self.matriz[x + 1][y] == 'o'):
+                    pos_final = (y, x)
+                elif pos_final != None and pos_inicial != None:
+                    self.arreglo.append(pos_inicial)
+                    self.arreglo.append(pos_final)
+                    pos_inicial = None
+                    pos_final = None
 
 
 class Fondo:
@@ -194,7 +225,7 @@ class Tanque:
             disparo.dibujar(pantalla, ancho, alto, self.color)
             try:
                 # IMPACTO CON TERRENO
-                if disparo.y_bala > alto - altura_terreno[int(disparo.x_bala)] - 5:
+                if altura_terreno[int(disparo.y_bala)][int(disparo.x_bala)] == "x":
                     disparo.impacto_terreno = True
                     disparo.calcular_distancia_maxima(self.posicion_x)
                     return 0
@@ -206,7 +237,7 @@ class Tanque:
                 disparo.impacto_tanque = True
                 disparo.calcular_distancia_maxima(self.posicion_x)
                 return 1
-            terreno.dibujar_terreno(pantalla, ancho, alto)
+            terreno.dibujar_terreno(pantalla)
             self.draw_tank(pantalla)
             tanque_enemigo.draw_tank(pantalla)
             pygame.display.flip()
