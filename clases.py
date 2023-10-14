@@ -105,57 +105,46 @@ class Partida:
 
 
 class Terreno:
-    constante_oscilacion = random.uniform(0.01, 0.0135)
-    matriz = []
-    arreglo = []
+    def __init__(self):
+        self.constante_oscilacion = random.uniform(0.01, 0.0135)
+        self.matriz = []
+        self.arreglo = []
 
     def generar_terreno(self, x, altura_maxima, width):
-        return altura_maxima * math.e ** (-((x - width) ** 2) / (2 * (width / 2) ** 2)) * math.cos(
-            self.constante_oscilacion * (x - width)) + 600
+            factor = math.e ** (-((x - width) ** 2) / (2 * (width / 2) ** 2))
+            return altura_maxima * factor * math.cos(self.constante_oscilacion * (x - width)) + 800
+
 
     def dibujar_terreno(self,pantalla):
         for pos in range(len(self.arreglo)):
             if pos % 2 == 0:
                 pygame.draw.line(pantalla, (173, 204, 246), self.arreglo[pos], self.arreglo[pos + 1])
 
-    def generar_matriz (self, ancho_ventana, alto_ventana, arreglo_terreno):
-        for x in range(alto_ventana):
-            self.matriz.append([])
-            for y in range(ancho_ventana):
-                if x >= arreglo_terreno[y]:
-                    self.matriz[x].append("x")
-                else:
-                    self.matriz[x].append("o")
+    def generar_matriz(self, ancho_ventana, alto_ventana, arreglo_terreno):
+            self.matriz = [['x' if x >= arreglo_terreno[y] else 'o' for y in range(ancho_ventana)] for x in range(alto_ventana)]
 
-    def destruir_terreno(self,centro_x,centro_y, alto, ancho):
+    def destruir_terreno(self, centro_x, centro_y, alto, ancho):
         radio = 40
-        for y in range(alto):
-            for x in range(ancho):
+        for y in range(max(0, centro_y - radio), min(alto, centro_y + radio)):
+            for x in range(max(0, centro_x - radio), min(ancho, centro_x + radio)):
                 distancia = ((x - centro_x) ** 2 + (y - centro_y) ** 2) ** 0.5
                 if distancia <= radio:
-                    """for event in pygame.event.get():
-                        if event.type != pygame.MOUSEBUTTONDOWN:"""
                     self.matriz[y][x] = "o"
 
 
     def generar_arreglo_m(self):
-        len_x = len(self.matriz)
-        len_y = len(self.matriz[0])
-        pos_inicial = None
-        pos_final = None
         self.arreglo = []
-        for y in range(len_y):
-            for x in range(len_x):
-                if self.matriz[x][y] == 'x' and pos_inicial == None:
+        
+        for y in range(len(self.matriz[0])):
+            x = 0
+            while x < len(self.matriz):
+                if self.matriz[x][y] == 'x':
                     pos_inicial = (y, x)
-                elif (self.matriz[x][y] == 'x' and x == len_x - 1) or (
-                        self.matriz[x][y] == 'x' and self.matriz[x + 1][y] == 'o'):
-                    pos_final = (y, x)
-                elif pos_final != None and pos_inicial != None:
-                    self.arreglo.append(pos_inicial)
-                    self.arreglo.append(pos_final)
-                    pos_inicial = None
-                    pos_final = None
+                    while x < len(self.matriz) and self.matriz[x][y] == 'x':
+                        x += 1
+                    pos_final = (y, x - 1)
+                    self.arreglo.extend((pos_inicial, pos_final))
+                x += 1
 
 
 class Fondo:
@@ -281,7 +270,6 @@ class UI:
         alto_rectangulo = 120
         png_altura = pygame.image.load("img/altura.png").convert_alpha()
         png_distancia = pygame.image.load("img/distancia.png").convert_alpha()
-        png_bala = pygame.image.load("img/60mm.png").convert_alpha()
         pygame.draw.rect(surface=pantalla, color=color_jugador, rect=(
             ancho // 2 - ancho_rectangulo // 2, alto  - alto_rectangulo, ancho_rectangulo, alto_rectangulo),
                          border_radius=20)
@@ -297,4 +285,3 @@ class UI:
         else:
             Escribir.escribir_texto(pantalla, f"Bala fuera del mapa :(", "Verdana", 30, [255, 255, 255], color_jugador,
                                     ancho // 2 - ancho_rectangulo // 2 + 520, alto  - 65)
-        pantalla.blit(png_bala, (ancho // 2 - ancho_rectangulo // 2 + 550, alto  - 90))
