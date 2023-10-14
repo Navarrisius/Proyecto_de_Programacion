@@ -78,14 +78,14 @@ def crear_jugadores():
 
     # Se crea el jugador 1
     jugador_1 = clases.Jugador(None, clases.Tanque(primer_color))
-    jugador_1.tanque.posicion_x = random.randint(30, constantes.ANCHO_VENTANA // 2 - 100)
+    jugador_1.tanque.posicion_x = random.randint(30, constantes.ANCHO_VENTANA // 2 - 200)
     jugador_1.tanque.posicion_y = 30
     jugador_1.tanque.angulo_n = 0
     jugador_1.tanque.angulo_canon = (math.radians(jugador_1.tanque.angulo_n))
 
     # Se crea el jugador 2
     jugador_2 = clases.Jugador(None, clases.Tanque(segundo_color))
-    jugador_2.tanque.posicion_x = random.randint(constantes.ANCHO_VENTANA // 2 + 100, constantes.ANCHO_VENTANA - 50)
+    jugador_2.tanque.posicion_x = random.randint(constantes.ANCHO_VENTANA // 2 + 200, constantes.ANCHO_VENTANA - 60)
     jugador_2.tanque.posicion_y = 30
     jugador_2.tanque.angulo_n = 0
     jugador_2.tanque.angulo_canon = (math.radians(jugador_2.tanque.angulo_n))
@@ -119,7 +119,6 @@ def terminar_turnos(jugadores):
         jugador.puede_jugar = False
 
 
-# prueba
 def barras_de_salud(salud_del_jugador, salud_del_otro_jugador, pantalla):
     if salud_del_jugador > 75:
         color_de_salud_del_jugador = (0, 143, 57)
@@ -220,7 +219,7 @@ def partida(pantalla, mandos, game):
     UI = clases.UI()
 
     for x in range(constantes.ANCHO_VENTANA):
-        altura_terreno[x] += terreno.generar_terreno(x, 200, constantes.ALTO_VENTANA)
+        altura_terreno[x] += terreno.generar_terreno(x, 250, constantes.ALTO_VENTANA-100)
     terreno.generar_matriz(constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA, altura_terreno)
     terreno.generar_arreglo_m()
     while running:
@@ -324,7 +323,7 @@ def partida(pantalla, mandos, game):
 
         # Terreno
         terreno.dibujar_terreno(pantalla)
-        barras_de_salud(turno.tanque.salud, enemigo.salud, pantalla)
+        barras_de_salud(jugador_2.tanque.salud, jugador_1.tanque.salud, pantalla)
         # Se escribe en pantalla la información del pre-disparo de cada jugador
         if jugador_1.puede_jugar:
             UI.info_pre_disparo(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA,

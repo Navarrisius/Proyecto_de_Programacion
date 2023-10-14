@@ -76,7 +76,7 @@ class Disparo:
 
     def verificar_impacto_tanque_enemigo(self, tanque_enemigo):
         if (self.y_bala >= tanque_enemigo.posicion_y - 23) and (
-                tanque_enemigo.posicion_x - 45<= self.x_bala <= tanque_enemigo.posicion_x + 45):
+                tanque_enemigo.posicion_x - 35<= self.x_bala <= tanque_enemigo.posicion_x + 35):
             return 1
         else:
             return 0
@@ -133,6 +133,8 @@ class Terreno:
             for x in range(ancho):
                 distancia = ((x - centro_x) ** 2 + (y - centro_y) ** 2) ** 0.5
                 if distancia <= radio:
+                    """for event in pygame.event.get():
+                        if event.type != pygame.MOUSEBUTTONDOWN:"""
                     self.matriz[y][x] = "o"
 
 
@@ -256,39 +258,43 @@ class UI:
         pass
 
     def info_pre_disparo(self, pantalla, ancho, alto, color_jugador, texto_jugador, angulo, velocidad):
-        ancho_rectangulo = 500
-        alto_rectangulo = 300
+        ancho_rectangulo = 800
+        alto_rectangulo = 120
         png_angulo = pygame.image.load("img/angulo.png").convert_alpha()
         png_velocidad = pygame.image.load("img/velocidad.png").convert_alpha()
+        png_bala = pygame.image.load("img/60mm.png").convert_alpha()
         pygame.draw.rect(surface=pantalla, color=color_jugador,
-                         rect=(ancho // 2 - ancho_rectangulo // 2, alto // 2 - alto_rectangulo,
+                         rect=(ancho // 2 - ancho_rectangulo // 2, alto - alto_rectangulo,
                                ancho_rectangulo, alto_rectangulo), border_radius=20)
         Escribir.escribir_texto(pantalla, f"Turno del {texto_jugador}", "Verdana", 30, [255, 255, 255], color_jugador,
-                                ancho // 2 - 150, alto // 2 - alto_rectangulo)
-        pantalla.blit(png_angulo, (ancho // 2 - ancho_rectangulo // 2 + 30, alto // 2 - 200))
-        pantalla.blit(png_velocidad, (ancho // 2 - ancho_rectangulo // 2 + 30, alto // 2 - 100))
+                                ancho // 2 - 150, alto  - alto_rectangulo)
+        pantalla.blit(png_angulo, (ancho // 2 - ancho_rectangulo // 2 + 30, alto  - 75))
+        pantalla.blit(png_velocidad, (ancho // 2 - ancho_rectangulo // 2 + 250, alto  - 75))
+        pantalla.blit(png_bala, (ancho // 2 - ancho_rectangulo // 2 + 550, alto  - 90))
         Escribir.escribir_texto(pantalla, f"{angulo}°", "Verdana", 30, [255, 255, 255], color_jugador,
-                                ancho // 2 - ancho_rectangulo // 2 + 120, alto // 2 - 190)
+                                ancho // 2 - ancho_rectangulo // 2 + 120, alto  - 70)
         Escribir.escribir_texto(pantalla, f"{velocidad} m/s", "Verdana", 30, [255, 255, 255], color_jugador,
-                                ancho // 2 - ancho_rectangulo // 2 + 120, alto // 2 - 90)
+                                ancho // 2 - ancho_rectangulo // 2 + 320, alto  - 70)
 
     def info_post_disparo(self, pantalla, ancho, alto, color_jugador, altura, distancia):
-        ancho_rectangulo = 500
-        alto_rectangulo = 300
+        ancho_rectangulo = 800
+        alto_rectangulo = 120
         png_altura = pygame.image.load("img/altura.png").convert_alpha()
         png_distancia = pygame.image.load("img/distancia.png").convert_alpha()
+        png_bala = pygame.image.load("img/60mm.png").convert_alpha()
         pygame.draw.rect(surface=pantalla, color=color_jugador, rect=(
-            ancho // 2 - ancho_rectangulo // 2, alto // 2 - alto_rectangulo, ancho_rectangulo, alto_rectangulo),
+            ancho // 2 - ancho_rectangulo // 2, alto  - alto_rectangulo, ancho_rectangulo, alto_rectangulo),
                          border_radius=20)
         Escribir.escribir_texto(pantalla, f"Información del disparo", "Verdana", 30, [255, 255, 255], color_jugador,
-                                ancho // 2 - 180, alto // 2 - alto_rectangulo)
-        pantalla.blit(png_altura, (ancho // 2 - ancho_rectangulo // 2 + 30, alto // 2 - 200))
-        pantalla.blit(png_distancia, (ancho // 2 - ancho_rectangulo // 2 + 30, alto // 2 - 100))
+                                ancho // 2 - 180, alto  - alto_rectangulo)
+        pantalla.blit(png_altura, (ancho // 2 - ancho_rectangulo // 2 + 30, alto - 75))
+        pantalla.blit(png_distancia, (ancho // 2 - ancho_rectangulo // 2 + 450, alto  - 75))
         Escribir.escribir_texto(pantalla, f"{int(altura)} metros", "Verdana", 30, [255, 255, 255], color_jugador,
-                                ancho // 2 - ancho_rectangulo // 2 + 120, alto // 2 - 190)
+                                ancho // 2 - ancho_rectangulo // 2 + 120, alto  - 70)
         if distancia != -1:
             Escribir.escribir_texto(pantalla, f"{int(distancia)} metros", "Verdana", 30, [255, 255, 255], color_jugador,
-                                    ancho // 2 - ancho_rectangulo // 2 + 120, alto // 2 - 90)
+                                    ancho // 2 - ancho_rectangulo // 2 + 520, alto  - 70)
         else:
             Escribir.escribir_texto(pantalla, f"Bala fuera del mapa :(", "Verdana", 30, [255, 255, 255], color_jugador,
-                                    ancho // 2 - ancho_rectangulo // 2 + 120, alto // 2 - 90)
+                                    ancho // 2 - ancho_rectangulo // 2 + 520, alto  - 65)
+        pantalla.blit(png_bala, (ancho // 2 - ancho_rectangulo // 2 + 550, alto  - 90))
