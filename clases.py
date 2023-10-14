@@ -7,20 +7,24 @@ class Bala:
     dano = None
     radio_bala = None
     unidades = None
+    radio_impacto = None
 
     def __init__(self, tipo):
         if tipo == 0:
             self.radio_bala = 6
             self.dano = 30
             self.unidades = 3
+            self.radio_impacto = 12
         elif tipo == 1:
             self.radio_bala = 8
             self.dano = 40
             self.unidades = 10
+            self.radio_impacto = 23
         elif tipo == 2:
             self.radio_bala = 10
             self.dano = 50
             self.unidades = 3
+            self.radio_impacto = 40
 
 class Disparo:
     proyectil = None
@@ -112,7 +116,7 @@ class Terreno:
 
     def generar_terreno(self, x, altura_maxima, width):
             factor = math.e ** (-((x - width) ** 2) / (2 * (width / 2) ** 2))
-            return altura_maxima * factor * math.cos(self.constante_oscilacion * (x - width)) + 800
+            return altura_maxima * factor * math.cos(self.constante_oscilacion * (x - width)) + 600
 
 
     def dibujar_terreno(self,pantalla):
@@ -123,8 +127,7 @@ class Terreno:
     def generar_matriz(self, ancho_ventana, alto_ventana, arreglo_terreno):
             self.matriz = [['x' if x >= arreglo_terreno[y] else 'o' for y in range(ancho_ventana)] for x in range(alto_ventana)]
 
-    def destruir_terreno(self, centro_x, centro_y, alto, ancho):
-        radio = 40
+    def destruir_terreno(self, centro_x, centro_y, alto, ancho, radio):
         for y in range(max(0, centro_y - radio), min(alto, centro_y + radio)):
             for x in range(max(0, centro_x - radio), min(ancho, centro_x + radio)):
                 distancia = ((x - centro_x) ** 2 + (y - centro_y) ** 2) ** 0.5
@@ -216,7 +219,7 @@ class Tanque:
             disparo.dibujar(pantalla, ancho, alto, self.color)
             try:
                 # IMPACTO CON TERRENO
-                if altura_terreno[int(disparo.y_bala)][int(disparo.x_bala)] == "x":
+                if disparo.y_bala > 0 and altura_terreno[int(disparo.y_bala)][int(disparo.x_bala)] == "x":
                     disparo.impacto_terreno = True
                     disparo.calcular_distancia_maxima(self.posicion_x)
                     return 0

@@ -307,7 +307,7 @@ def partida(pantalla, mandos, game):
                                 cambiar_turnos(jugador_1, jugador_2)
                         else:
                             terreno.destruir_terreno(int(disparo.x_bala), int(disparo.y_bala), constantes.ALTO_VENTANA,
-                                                     constantes.ANCHO_VENTANA)
+                                                     constantes.ANCHO_VENTANA, turno.tanque.municion[turno.tanque.tipo_bala].radio_impacto)
                             terreno.generar_arreglo_m()
                             cambiar_turnos(jugador_1, jugador_2)
                         turno.tanque.municion[turno.tanque.tipo_bala].unidades -= 1
