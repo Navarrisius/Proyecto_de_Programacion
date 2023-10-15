@@ -1,7 +1,7 @@
 from clases import *
 
 #Constantes
-NOMBRE_VENTANA = "Tanquesisius"
+NOMBRE_VENTANA = "PessiTank"
 LIMITE_ANGULO_MIN = 0
 LIMITE_ANGULO_MAX = 180
 LIMITE_VELOCIDAD_MIN = 30

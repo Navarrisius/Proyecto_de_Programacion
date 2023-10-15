@@ -34,8 +34,14 @@ def menu(pantalla, mandos, game):
             break
         fondo.cargar_fondo(pantalla)
         # boton jugar
-        clases.Escribir.escribir_texto(pantalla, "Tank Game", "More Sugar", 200, constantes.NEGRO, None,
-                                       constantes.ANCHO_VENTANA / 2 - 400, constantes.ALTO_VENTANA / 2 - 300)
+        clases.Escribir.escribir_texto(pantalla, "PessiTank", "timesnewroman", 180, constantes.NEGRO, None,
+                                       constantes.ANCHO_VENTANA / 2 - 410, constantes.ALTO_VENTANA / 2 - 300)
+        clases.Escribir.escribir_texto(pantalla, "PessiTank", "timesnewroman", 180, (114,158,188), None,
+                                       constantes.ANCHO_VENTANA / 2 - 415, constantes.ALTO_VENTANA / 2 - 301)
+        png_hielo = pygame.image.load("img/hielo.png").convert_alpha()
+        png_hielo = pygame.transform.scale(png_hielo, (320, 220))
+        pantalla.blit(png_hielo, (constantes.ANCHO_VENTANA / 2 + 235, constantes.ALTO_VENTANA / 2 - 300))
+
         pygame.draw.rect(pantalla, constantes.BLANCO,
                          (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 - 60, 470, 120), 60, 50)
         clases.Escribir.escribir_texto(pantalla, "Jugar", "More Sugar", 150, constantes.NEGRO, None,
@@ -50,7 +56,28 @@ def menu(pantalla, mandos, game):
                          (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 245, 470, 120), 60, 50)
         clases.Escribir.escribir_texto(pantalla, "Salir", "More Sugar", 150, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA / 2 - 125, constantes.ALTO_VENTANA / 2 + 255)
-
+        if ((constantes.ANCHO_VENTANA / 2 - 235 <= mouse[0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and
+                (constantes.ALTO_VENTANA / 2 - 60 <= mouse[1] <= constantes.ALTO_VENTANA / 2 - 60 + 120)):
+            pygame.draw.rect(pantalla, (114,158,188),
+                            (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 - 60, 470, 120), 60, 50)
+            clases.Escribir.escribir_texto(pantalla, "Jugar", "More Sugar", 150, constantes.BLANCO, None,
+                                        constantes.ANCHO_VENTANA / 2 - 150, constantes.ALTO_VENTANA / 2 - 55)
+        if ((mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
+            0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
+                mouse[1] >= constantes.ALTO_VENTANA / 2 + 90 and mouse[
+            1] <= constantes.ALTO_VENTANA / 2 + 60 + 120)):
+                    pygame.draw.rect(pantalla, (114,158,188),
+                         (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 90, 470, 120), 60, 50)
+                    clases.Escribir.escribir_texto(pantalla, "Controles", "More Sugar", 130, constantes.BLANCO, None,
+                                                constantes.ANCHO_VENTANA / 2 - 210, constantes.ALTO_VENTANA / 2 + 100)
+        if (mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
+            0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
+                mouse[1] >= constantes.ALTO_VENTANA / 2 + 245 and mouse[
+            1] <= constantes.ALTO_VENTANA / 2 + 245 + 120):
+            pygame.draw.rect(pantalla, (114,158,188),
+                            (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 245, 470, 120), 60, 50)
+            clases.Escribir.escribir_texto(pantalla, "Salir", "More Sugar", 150, constantes.BLANCO, None,
+                                        constantes.ANCHO_VENTANA / 2 - 125, constantes.ALTO_VENTANA / 2 + 255)
         pygame.display.flip()
         # Limita los FPS a 60
         reloj.tick(60)
@@ -127,7 +154,7 @@ def barras_de_salud(tanque, pantalla):
     else:
         color_de_salud_del_jugador = (255, 0, 0)
 
-    pygame.draw.rect(pantalla, (0, 0, 0), (tanque.posicion_x - 57, tanque.posicion_y + 15, 100, 25))
+    pygame.draw.rect(pantalla, (0, 0, 0), (tanque.posicion_x - 55, tanque.posicion_y + 17, 102, 27))
     pygame.draw.rect(pantalla, color_de_salud_del_jugador, (tanque.posicion_x - 57, tanque.posicion_y + 15, tanque.salud, 25))
 
 
@@ -378,6 +405,8 @@ def main():
     global pantalla
     # Se inicia Pygame y variables importantes dentro de la ejecución
     pygame.init()
+    img_ventana = pygame.image.load('img/pessi.png')
+    pygame.display.set_icon(img_ventana)
     pygame.display.set_caption(constantes.NOMBRE_VENTANA)
     actualizar_info_pantalla()
     pantalla = pygame.display.set_mode((constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA), pygame.RESIZABLE,
