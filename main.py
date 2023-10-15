@@ -319,6 +319,10 @@ def terminar_de_juego(ganador, pantalla):
 
 def partida(pantalla, mandos, game):
     global reloj , jugador_1, jugador_2
+    pygame.mixer.init()
+    pygame.mixer.music.load('mp3/aria_math.mp3')
+    pygame.mixer.music.set_volume(0.02)
+    pygame.mixer.music.play(-1)
     crear_jugadores()
     jugador_1 = constantes.JUGADORES[0]
     jugador_2 = constantes.JUGADORES[1]
