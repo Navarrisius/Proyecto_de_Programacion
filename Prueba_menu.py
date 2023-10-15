@@ -3,7 +3,7 @@ import math
 import clases
 import constantes
 import random
-
+import sys
 
 def menu(pantalla, mandos, game):
     en_menu = True
@@ -162,8 +162,11 @@ def mensaje_a_pantalla(msg, color, y_desplazamiento=0, tamaño="medium"):
 
 def pausar():
     pausado = True
+    pygame.draw.rect(surface=pantalla, color=(208, 237, 250 ),
+                        rect=(constantes.ANCHO_VENTANA// 2 - 1200 // 2, constantes.ALTO_VENTANA//2 - 200,
+                            1200, 300), border_radius=20)
     mensaje_a_pantalla("Pausado", constantes.BLANCO, -100, tamaño="large")
-    mensaje_a_pantalla("Presiona C para continuar jugando o Q para salir", (245, 222, 179), 25)
+    mensaje_a_pantalla("Presiona C para continuar jugando o Q para salir", (246, 239, 2 ), 25)
     pygame.display.update()
     while pausado:
         for evento in pygame.event.get():
@@ -181,14 +184,27 @@ def pausar():
         reloj.tick(5)
 
 
-def terminar_de_juego():
+def terminar_de_juego(ganador, pantalla):
     termino = True
+    pygame.draw.rect(surface=pantalla, color=(255, 215, 0, 128),
+                         rect=(constantes.ANCHO_VENTANA// 2 - 1200 // 2, constantes.ALTO_VENTANA//2 - 250,
+                               1200, 400), border_radius=20)
     mensaje_a_pantalla("Juego terminado", constantes.BLANCO, -100, tamaño="large")
     mensaje_a_pantalla("Presiona C para reiniciar partida o Q para salir", (34, 113, 179), 25)
+    if ganador == jugador_1:
+        clases.Escribir.escribir_texto(pantalla=pantalla, texto="Gana el jugador 1", fuente="Arial",
+                                        size_fuente=35, color_fuente=(
+                255, 255, 255), color_fondo=jugador_1.tanque.color, x=constantes.ANCHO_VENTANA // 2,
+                                        y=constantes.ALTO_VENTANA // 2 - 40)
+    else:
+        clases.Escribir.escribir_texto(pantalla=pantalla, texto="Gana el jugador 2", fuente="Arial",
+                                        size_fuente=35, color_fuente=(
+                255, 255, 255), color_fondo=jugador_2.tanque.color, x=constantes.ANCHO_VENTANA // 2,
+                                        y=constantes.ALTO_VENTANA // 2 - 40)
+    pygame.display.flip()
     pygame.display.update()
     while termino:
         for evento in pygame.event.get():
-
             if evento.type == pygame.QUIT:
                 pygame.quit()
                 quit()()
@@ -206,7 +222,7 @@ def terminar_de_juego():
 
 
 def partida(pantalla, mandos, game):
-    global reloj
+    global reloj , jugador_1, jugador_2
     crear_jugadores()
     jugador_1 = constantes.JUGADORES[0]
     jugador_2 = constantes.JUGADORES[1]
@@ -245,7 +261,7 @@ def partida(pantalla, mandos, game):
             elif teclas[pygame.K_ESCAPE]:
                 pausar()
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                terreno.destruir_terreno(mouse[0], mouse[1], constantes.ALTO_VENTANA, constantes.ANCHO_VENTANA)
+                #terreno.destruir_terreno(mouse[0], mouse[1], constantes.ALTO_VENTANA, constantes.ANCHO_VENTANA)
                 terreno.generar_arreglo_m()
             if teclas[pygame.K_a]:
                 turno.tanque.angulo_n += 0.5
@@ -336,27 +352,15 @@ def partida(pantalla, mandos, game):
         # Texto con el jugador ganador
         if game.ganador is not None:
             disparo.recorrido(pantalla, turno.tanque.color)
-            if game.ganador == jugador_1:
-                clases.Escribir.escribir_texto(pantalla=pantalla, texto="Gana el jugador 1", fuente="Arial",
-                                               size_fuente=35, color_fuente=(
-                        255, 255, 255), color_fondo=jugador_1.tanque.color, x=constantes.ANCHO_VENTANA // 2.5,
-                                               y=constantes.ALTO_VENTANA // 2 - 40)
-            else:
-                clases.Escribir.escribir_texto(pantalla=pantalla, texto="Gana el jugador 2", fuente="Arial",
-                                               size_fuente=35, color_fuente=(
-                        255, 255, 255), color_fondo=jugador_2.tanque.color, x=constantes.ANCHO_VENTANA // 2.5,
-                                               y=constantes.ALTO_VENTANA // 2 - 40)
-
-            pygame.display.update()
-
             # Esperar 5 segundos antes de cerrar la ventana
             tiempo_inicial = pygame.time.get_ticks()
             tiempo_espera = 5000
             while pygame.time.get_ticks() - tiempo_inicial < tiempo_espera:
                 pygame.display.update()
-                terminar_de_juego()
+                terminar_de_juego(game.ganador, pantalla)
                 # pass
-
+            pygame.display.update()
+            
         else:
             jugador_1.tanque.draw_tank(pantalla)
             jugador_2.tanque.draw_tank(pantalla)

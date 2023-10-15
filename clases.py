@@ -71,7 +71,6 @@ class Disparo:
                                 texto="Velocidad actual de la bala: " + str(int(self.velocidad_actual)) + " m/s",
                                 fuente="Consolas", color_fuente=(255, 255, 255), size_fuente=25, color_fondo=(0, 0, 0),
                                 x=ancho // 2, y=alto // 6 + 56)
-
     def calcular_altura_maxima(self):
         self.altura_maxima = abs((self.velocidad_inicial ** 2 * (math.sin(self.angulo_radianes) ** 2)) / (2 * 9.81))
 
@@ -279,12 +278,12 @@ class UI:
         Escribir.escribir_texto(pantalla, f"Información del disparo", "Verdana", 30, [255, 255, 255], color_jugador,
                                 ancho // 2 - 180, alto  - alto_rectangulo)
         pantalla.blit(png_altura, (ancho // 2 - ancho_rectangulo // 2 + 30, alto - 75))
-        pantalla.blit(png_distancia, (ancho // 2 - ancho_rectangulo // 2 + 450, alto  - 75))
+        pantalla.blit(png_distancia, (ancho // 2 - ancho_rectangulo // 2 + 350, alto  - 75))
         Escribir.escribir_texto(pantalla, f"{int(altura)} metros", "Verdana", 30, [255, 255, 255], color_jugador,
                                 ancho // 2 - ancho_rectangulo // 2 + 120, alto  - 70)
         if distancia != -1:
             Escribir.escribir_texto(pantalla, f"{int(distancia)} metros", "Verdana", 30, [255, 255, 255], color_jugador,
-                                    ancho // 2 - ancho_rectangulo // 2 + 520, alto  - 70)
+                                    ancho // 2 - ancho_rectangulo // 2 + 420, alto  - 70)
         else:
             Escribir.escribir_texto(pantalla, f"Bala fuera del mapa :(", "Verdana", 30, [255, 255, 255], color_jugador,
-                                    ancho // 2 - ancho_rectangulo // 2 + 520, alto  - 65)
+                                    ancho // 2 - ancho_rectangulo // 2 + 420, alto  - 65)
