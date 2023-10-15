@@ -132,11 +132,10 @@ class Terreno:
                 distancia = ((x - centro_x) ** 2 + (y - centro_y) ** 2) ** 0.5
                 if distancia <= radio:
                     self.matriz[y][x] = "o"
-
+        self.generar_arreglo_m() 
 
     def generar_arreglo_m(self):
         self.arreglo = []
-        
         for y in range(len(self.matriz[0])):
             x = 0
             while x < len(self.matriz):
@@ -147,6 +146,13 @@ class Terreno:
                     pos_final = (y, x - 1)
                     self.arreglo.extend((pos_inicial, pos_final))
                 x += 1
+
+    def mover_o_hacia_abajo(self):
+        for x in range(len(self.matriz[0])):
+            for y in range(len(self.matriz) - 1):
+                if self.matriz[y][x] == 'o' and self.matriz[y + 1][x] == 'x':
+                    # Intercambiar 'o' y 'x'
+                    self.matriz[y][x], self.matriz[y + 1][x] = self.matriz[y + 1][x], self.matriz[y][x]
 
 
 class Fondo:
@@ -248,12 +254,14 @@ class UI:
     def __init__(self):
         pass
 
-    def info_pre_disparo(self, pantalla, ancho, alto, color_jugador, texto_jugador, angulo, velocidad):
+    def info_pre_disparo(self, pantalla, ancho, alto, color_jugador, texto_jugador, angulo, velocidad, tanque_jugador):
         ancho_rectangulo = 800
         alto_rectangulo = 120
         png_angulo = pygame.image.load("img/angulo.png").convert_alpha()
         png_velocidad = pygame.image.load("img/velocidad.png").convert_alpha()
-        png_bala = pygame.image.load("img/60mm.png").convert_alpha()
+        png_bala60 = pygame.image.load("img/60mm.png").convert_alpha()
+        png_bala80 = pygame.image.load("img/80mm.png").convert_alpha()
+        png_bala105 = pygame.image.load("img/105mm.png").convert_alpha()
         pygame.draw.rect(surface=pantalla, color=color_jugador,
                          rect=(ancho // 2 - ancho_rectangulo // 2, alto - alto_rectangulo,
                                ancho_rectangulo, alto_rectangulo), border_radius=20)
@@ -261,7 +269,31 @@ class UI:
                                 ancho // 2 - 150, alto  - alto_rectangulo)
         pantalla.blit(png_angulo, (ancho // 2 - ancho_rectangulo // 2 + 30, alto  - 75))
         pantalla.blit(png_velocidad, (ancho // 2 - ancho_rectangulo // 2 + 250, alto  - 75))
-        pantalla.blit(png_bala, (ancho // 2 - ancho_rectangulo // 2 + 550, alto  - 90))
+
+        # Tanque con bala 60mm seleccionada
+        if tanque_jugador.tipo_bala == 0:
+            for i in range(tanque_jugador.municion[tanque_jugador.tipo_bala].unidades):
+                pantalla.blit(png_bala60, (ancho // 2 - ancho_rectangulo // 2 + 550 + i * 40, alto  - 90))
+
+        # Tanque con bala 80mm seleccionada
+        if tanque_jugador.tipo_bala == 1:
+            ancho_rectangulo = 1000
+            pygame.draw.rect(surface=pantalla, color=color_jugador,
+                    rect=(ancho // 2 - ancho_rectangulo // 2, alto - alto_rectangulo,
+                        ancho_rectangulo, alto_rectangulo), border_radius=20)
+            Escribir.escribir_texto(pantalla, f"Turno del {texto_jugador}", "Verdana", 30, [255, 255, 255], color_jugador,
+                                    ancho // 2 - 150, alto  - alto_rectangulo)
+            pantalla.blit(png_angulo, (ancho // 2 - ancho_rectangulo // 2 + 30, alto  - 75))
+            pantalla.blit(png_velocidad, (ancho // 2 - ancho_rectangulo // 2 + 250, alto  - 75))
+            for i in range(tanque_jugador.municion[tanque_jugador.tipo_bala].unidades):
+                pantalla.blit(png_bala80, (ancho // 2 - ancho_rectangulo // 2 + 550 + i * 40, alto  - 90))
+
+        # Tanque con bala 105mm seleccionada
+        if tanque_jugador.tipo_bala == 2:
+            for i in range(tanque_jugador.municion[tanque_jugador.tipo_bala].unidades):
+                pantalla.blit(png_bala105, (ancho // 2 - ancho_rectangulo // 2 + 550 + i * 40, alto  - 90))
+
+
         Escribir.escribir_texto(pantalla, f"{angulo}°", "Verdana", 30, [255, 255, 255], color_jugador,
                                 ancho // 2 - ancho_rectangulo // 2 + 120, alto  - 70)
         Escribir.escribir_texto(pantalla, f"{velocidad} m/s", "Verdana", 30, [255, 255, 255], color_jugador,
@@ -278,12 +310,12 @@ class UI:
         Escribir.escribir_texto(pantalla, f"Información del disparo", "Verdana", 30, [255, 255, 255], color_jugador,
                                 ancho // 2 - 180, alto  - alto_rectangulo)
         pantalla.blit(png_altura, (ancho // 2 - ancho_rectangulo // 2 + 30, alto - 75))
-        pantalla.blit(png_distancia, (ancho // 2 - ancho_rectangulo // 2 + 350, alto  - 75))
+        pantalla.blit(png_distancia, (ancho // 2 - ancho_rectangulo // 2 + 410, alto  - 75))
         Escribir.escribir_texto(pantalla, f"{int(altura)} metros", "Verdana", 30, [255, 255, 255], color_jugador,
                                 ancho // 2 - ancho_rectangulo // 2 + 120, alto  - 70)
         if distancia != -1:
             Escribir.escribir_texto(pantalla, f"{int(distancia)} metros", "Verdana", 30, [255, 255, 255], color_jugador,
-                                    ancho // 2 - ancho_rectangulo // 2 + 420, alto  - 70)
+                                    ancho // 2 - ancho_rectangulo // 2 + 520, alto  - 70)
         else:
-            Escribir.escribir_texto(pantalla, f"Bala fuera del mapa :(", "Verdana", 30, [255, 255, 255], color_jugador,
-                                    ancho // 2 - ancho_rectangulo // 2 + 420, alto  - 65)
+            Escribir.escribir_texto(pantalla, f"Bala fuera del mapa", "Verdana", 30, [255, 255, 255], color_jugador,
+                                    ancho // 2 - ancho_rectangulo // 2 + 490, alto  - 65)

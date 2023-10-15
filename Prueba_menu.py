@@ -337,11 +337,11 @@ def partida(pantalla, mandos, game):
         if jugador_1.puede_jugar:
             UI.info_pre_disparo(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA,
                                 texto_jugador="Jugador 1", color_jugador=jugador_1.tanque.color,
-                                angulo=jugador_1.tanque.angulo_n, velocidad=jugador_1.tanque.velocidad_disparo)
+                                angulo=jugador_1.tanque.angulo_n, velocidad=jugador_1.tanque.velocidad_disparo, tanque_jugador= jugador_1.tanque)
         elif jugador_2.puede_jugar:
             UI.info_pre_disparo(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA,
                                 texto_jugador="Jugador 2", color_jugador=jugador_2.tanque.color,
-                                angulo=jugador_2.tanque.angulo_n, velocidad=jugador_2.tanque.velocidad_disparo)
+                                angulo=jugador_2.tanque.angulo_n, velocidad=jugador_2.tanque.velocidad_disparo, tanque_jugador= jugador_2.tanque)
         # Texto con el jugador ganador
         if game.ganador is not None:
             disparo.recorrido(pantalla, turno.tanque.color)
