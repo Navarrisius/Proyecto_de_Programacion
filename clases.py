@@ -71,7 +71,6 @@ class Disparo:
                                 texto="Velocidad actual de la bala: " + str(int(self.velocidad_actual)) + " m/s",
                                 fuente="Consolas", color_fuente=(255, 255, 255), size_fuente=25, color_fondo=(0, 0, 0),
                                 x=ancho // 2, y=alto // 6 + 56)
-
     def calcular_altura_maxima(self):
         self.altura_maxima = abs((self.velocidad_inicial ** 2 * (math.sin(self.angulo_radianes) ** 2)) / (2 * 9.81))
 
@@ -133,7 +132,7 @@ class Terreno:
                 distancia = ((x - centro_x) ** 2 + (y - centro_y) ** 2) ** 0.5
                 if distancia <= radio:
                     self.matriz[y][x] = "o"
-        self.generar_arreglo_m()
+
 
     def generar_arreglo_m(self):
         self.arreglo = []
@@ -147,6 +146,13 @@ class Terreno:
                     pos_final = (y, x - 1)
                     self.arreglo.extend((pos_inicial, pos_final))
                 x += 1
+
+    def mover_o_hacia_abajo(self):
+        for x in range(len(self.matriz[0])):
+            for y in range(len(self.matriz) - 1):
+                if self.matriz[y][x] == 'o' and self.matriz[y + 1][x] == 'x':
+                    # Intercambiar 'o' y 'x'
+                    self.matriz[y][x], self.matriz[y + 1][x] = self.matriz[y + 1][x], self.matriz[y][x]
 
 
 class Fondo:
