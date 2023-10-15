@@ -119,24 +119,16 @@ def terminar_turnos(jugadores):
         jugador.puede_jugar = False
 
 
-def barras_de_salud(salud_del_jugador, salud_del_otro_jugador, pantalla):
-    if salud_del_jugador > 75:
+def barras_de_salud(tanque, pantalla):
+    if tanque.salud > 75:
         color_de_salud_del_jugador = (0, 143, 57)
-    elif salud_del_jugador > 50:
+    elif tanque.salud > 50:
         color_de_salud_del_jugador = (255, 255, 0)
     else:
         color_de_salud_del_jugador = (255, 0, 0)
 
-    if salud_del_otro_jugador > 75:
-        color_de_salud_del_otro_jugador = (0, 143, 57)
-    elif salud_del_otro_jugador > 50:
-        color_de_salud_del_otro_jugador = (255, 255, 0)
-    else:
-        color_de_salud_del_otro_jugador = (255, 0, 0)
-    pygame.draw.rect(pantalla, color_de_salud_del_jugador,
-                     (constantes.ANCHO_VENTANA - 200, constantes.ALTO_VENTANA - 1060, salud_del_jugador, 25))
-    pygame.draw.rect(pantalla, color_de_salud_del_otro_jugador,
-                     (constantes.ANCHO_VENTANA - 1820, constantes.ALTO_VENTANA - 1060, salud_del_otro_jugador, 25))
+    pygame.draw.rect(pantalla, (0, 0, 0), (tanque.posicion_x - 57, tanque.posicion_y + 15, 100, 25))
+    pygame.draw.rect(pantalla, color_de_salud_del_jugador, (tanque.posicion_x - 57, tanque.posicion_y + 15, tanque.salud, 25))
 
 
 def objetos_de_texto(text, color, size="small"):
@@ -339,7 +331,8 @@ def partida(pantalla, mandos, game):
 
         # Terreno
         terreno.dibujar_terreno(pantalla)
-        barras_de_salud(jugador_2.tanque.salud, jugador_1.tanque.salud, pantalla)
+        barras_de_salud(jugador_1.tanque, pantalla)
+        barras_de_salud(jugador_2.tanque, pantalla)
         # Se escribe en pantalla la información del pre-disparo de cada jugador
         if jugador_1.puede_jugar:
             UI.info_pre_disparo(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA,
