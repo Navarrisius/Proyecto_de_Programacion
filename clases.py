@@ -118,14 +118,14 @@ class Terreno:
             factor = math.e ** (-((x - width) ** 2) / (2 * (width / 2) ** 2))
             return altura_maxima * factor * math.cos(self.constante_oscilacion * (x - width)) + 600
 
-
-    def dibujar_terreno(self,pantalla):
+    def dibujar_terreno(self, pantalla):
         for pos in range(len(self.arreglo)):
             if pos % 2 == 0:
                 pygame.draw.line(pantalla, (173, 204, 246), self.arreglo[pos], self.arreglo[pos + 1])
 
     def generar_matriz(self, ancho_ventana, alto_ventana, arreglo_terreno):
             self.matriz = [['x' if x >= arreglo_terreno[y] else 'o' for y in range(ancho_ventana)] for x in range(alto_ventana)]
+            self.generar_arreglo_m()
 
     def destruir_terreno(self, centro_x, centro_y, alto, ancho, radio):
         for y in range(max(0, centro_y - radio), min(alto, centro_y + radio)):
@@ -133,7 +133,7 @@ class Terreno:
                 distancia = ((x - centro_x) ** 2 + (y - centro_y) ** 2) ** 0.5
                 if distancia <= radio:
                     self.matriz[y][x] = "o"
-        self.generar_arreglo_m() 
+        self.generar_arreglo_m()
 
     def generar_arreglo_m(self):
         self.arreglo = []
@@ -147,13 +147,6 @@ class Terreno:
                     pos_final = (y, x - 1)
                     self.arreglo.extend((pos_inicial, pos_final))
                 x += 1
-
-    def mover_o_hacia_abajo(self):
-        for x in range(len(self.matriz[0])):
-            for y in range(len(self.matriz) - 1):
-                if self.matriz[y][x] == 'o' and self.matriz[y + 1][x] == 'x':
-                    # Intercambiar 'o' y 'x'
-                    self.matriz[y][x], self.matriz[y + 1][x] = self.matriz[y + 1][x], self.matriz[y][x]
 
 
 class Fondo:

@@ -195,12 +195,11 @@ def terminar_de_juego():
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_c:
                     termino = False
-                    main()
+                    mandos = []
+                    game = clases.Partida()
+                    partida(pantalla, mandos, game)
                 elif evento.key == pygame.K_q:
-                    running = False
-                    disparo = None
                     pygame.quit()
-                    quit()()
 
         reloj.tick(5)
 
@@ -219,9 +218,10 @@ def partida(pantalla, mandos, game):
     UI = clases.UI()
 
     for x in range(constantes.ANCHO_VENTANA):
-        altura_terreno[x] += terreno.generar_terreno(x, 250, constantes.ALTO_VENTANA-100)
+        altura_terreno[x] += terreno.generar_terreno(x, 250, constantes.ALTO_VENTANA - 100)
+
     terreno.generar_matriz(constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA, altura_terreno)
-    terreno.generar_arreglo_m()
+
     while running:
         reloj = pygame.time.Clock()
         teclas = pygame.key.get_pressed()
