@@ -67,10 +67,7 @@ class Disparo:
 
     def dibujar(self, pantalla, ancho, alto, color):
         pygame.draw.circle(pantalla, color, (int(self.x_bala), int(self.y_bala)), self.proyectil.radio_bala)
-        Escribir.escribir_texto(pantalla=pantalla,
-                                texto="Velocidad actual de la bala: " + str(int(self.velocidad_actual)) + " m/s",
-                                fuente="Consolas", color_fuente=(255, 255, 255), size_fuente=25, color_fondo=(0, 0, 0),
-                                x=ancho // 2, y=alto // 6 + 56)
+
     def calcular_altura_maxima(self):
         self.altura_maxima = abs((self.velocidad_inicial ** 2 * (math.sin(self.angulo_radianes) ** 2)) / (2 * 9.81))
 
@@ -117,14 +114,14 @@ class Terreno:
             factor = math.e ** (-((x - width) ** 2) / (2 * (width / 2) ** 2))
             return altura_maxima * factor * math.cos(self.constante_oscilacion * (x - width)) + 600
 
-
-    def dibujar_terreno(self,pantalla):
+    def dibujar_terreno(self, pantalla):
         for pos in range(len(self.arreglo)):
             if pos % 2 == 0:
                 pygame.draw.line(pantalla, (173, 204, 246), self.arreglo[pos], self.arreglo[pos + 1])
 
     def generar_matriz(self, ancho_ventana, alto_ventana, arreglo_terreno):
             self.matriz = [['x' if x >= arreglo_terreno[y] else 'o' for y in range(ancho_ventana)] for x in range(alto_ventana)]
+            self.generar_arreglo_m()
 
     def destruir_terreno(self, centro_x, centro_y, alto, ancho, radio):
         for y in range(max(0, centro_y - radio), min(alto, centro_y + radio)):
@@ -132,7 +129,8 @@ class Terreno:
                 distancia = ((x - centro_x) ** 2 + (y - centro_y) ** 2) ** 0.5
                 if distancia <= radio:
                     self.matriz[y][x] = "o"
-        self.generar_arreglo_m() 
+        self.generar_arreglo_m()
+
 
     def generar_arreglo_m(self):
         self.arreglo = []
@@ -167,12 +165,11 @@ class Fondo:
 
 class Tanque:
     municion = None
-    tipo_bala = 0
+    tipo_bala = None
     salud = 100
     color = None
     posicion_x = None
     posicion_y = None
-    vivo = True
     angulo_n = None
     angulo_canon = None
     velocidad_disparo = 50
@@ -182,7 +179,7 @@ class Tanque:
     def __init__(self, color):
         self.municion = [Bala(0), Bala(1), Bala(2)]
         self.color = color
-        self.vivo = True
+        self.tipo_bala = 0
         if color == (99, 11, 87):
             self.imagen = pygame.image.load("img/tanque_morado.png").convert_alpha()
         elif color == (0, 0, 255):
@@ -237,6 +234,7 @@ class Tanque:
                 disparo.calcular_distancia_maxima(self.posicion_x)
                 return 1
             terreno.dibujar_terreno(pantalla)
+            UI.info_velocidad_bala(pantalla, ancho, alto, int(disparo.velocidad_actual))
             self.draw_tank(pantalla)
             tanque_enemigo.draw_tank(pantalla)
             pygame.display.flip()
@@ -256,16 +254,17 @@ class UI:
 
     def info_pre_disparo(self, pantalla, ancho, alto, color_jugador, texto_jugador, angulo, velocidad, tanque_jugador):
         ancho_rectangulo = 800
-        alto_rectangulo = 120
+        alto_rectangulo = 150
         png_angulo = pygame.image.load("img/angulo.png").convert_alpha()
         png_velocidad = pygame.image.load("img/velocidad.png").convert_alpha()
         png_bala60 = pygame.image.load("img/60mm.png").convert_alpha()
         png_bala80 = pygame.image.load("img/80mm.png").convert_alpha()
         png_bala105 = pygame.image.load("img/105mm.png").convert_alpha()
+        ancho_rectangulo = 1000
         pygame.draw.rect(surface=pantalla, color=color_jugador,
-                         rect=(ancho // 2 - ancho_rectangulo // 2, alto - alto_rectangulo,
-                               ancho_rectangulo, alto_rectangulo), border_radius=20)
-        Escribir.escribir_texto(pantalla, f"Turno del {texto_jugador}", "Verdana", 30, [255, 255, 255], color_jugador,
+                rect=(ancho // 2 - ancho_rectangulo // 2, alto - alto_rectangulo,
+                    ancho_rectangulo, alto_rectangulo), border_radius=20)
+        Escribir.escribir_texto(pantalla, texto_jugador, "Verdana", 30, [255, 255, 255], color_jugador,
                                 ancho // 2 - 150, alto  - alto_rectangulo)
         pantalla.blit(png_angulo, (ancho // 2 - ancho_rectangulo // 2 + 30, alto  - 75))
         pantalla.blit(png_velocidad, (ancho // 2 - ancho_rectangulo // 2 + 250, alto  - 75))
@@ -277,14 +276,7 @@ class UI:
 
         # Tanque con bala 80mm seleccionada
         if tanque_jugador.tipo_bala == 1:
-            ancho_rectangulo = 1000
-            pygame.draw.rect(surface=pantalla, color=color_jugador,
-                    rect=(ancho // 2 - ancho_rectangulo // 2, alto - alto_rectangulo,
-                        ancho_rectangulo, alto_rectangulo), border_radius=20)
-            Escribir.escribir_texto(pantalla, f"Turno del {texto_jugador}", "Verdana", 30, [255, 255, 255], color_jugador,
-                                    ancho // 2 - 150, alto  - alto_rectangulo)
-            pantalla.blit(png_angulo, (ancho // 2 - ancho_rectangulo // 2 + 30, alto  - 75))
-            pantalla.blit(png_velocidad, (ancho // 2 - ancho_rectangulo // 2 + 250, alto  - 75))
+            
             for i in range(tanque_jugador.municion[tanque_jugador.tipo_bala].unidades):
                 pantalla.blit(png_bala80, (ancho // 2 - ancho_rectangulo // 2 + 550 + i * 40, alto  - 90))
 
@@ -300,8 +292,8 @@ class UI:
                                 ancho // 2 - ancho_rectangulo // 2 + 320, alto  - 70)
 
     def info_post_disparo(self, pantalla, ancho, alto, color_jugador, altura, distancia):
-        ancho_rectangulo = 800
-        alto_rectangulo = 120
+        ancho_rectangulo = 1200
+        alto_rectangulo = 150
         png_altura = pygame.image.load("img/altura.png").convert_alpha()
         png_distancia = pygame.image.load("img/distancia.png").convert_alpha()
         pygame.draw.rect(surface=pantalla, color=color_jugador, rect=(
@@ -309,13 +301,23 @@ class UI:
                          border_radius=20)
         Escribir.escribir_texto(pantalla, f"Información del disparo", "Verdana", 30, [255, 255, 255], color_jugador,
                                 ancho // 2 - 180, alto  - alto_rectangulo)
-        pantalla.blit(png_altura, (ancho // 2 - ancho_rectangulo // 2 + 30, alto - 75))
-        pantalla.blit(png_distancia, (ancho // 2 - ancho_rectangulo // 2 + 410, alto  - 75))
+        pantalla.blit(png_altura, (ancho // 2 - ancho_rectangulo // 2 + 130, alto - 75))
+        pantalla.blit(png_distancia, (ancho // 2 - ancho_rectangulo // 2 + 640, alto  - 75))
         Escribir.escribir_texto(pantalla, f"{int(altura)} metros", "Verdana", 30, [255, 255, 255], color_jugador,
-                                ancho // 2 - ancho_rectangulo // 2 + 120, alto  - 70)
+                                ancho // 2 - ancho_rectangulo // 2 + 220, alto  - 70)
         if distancia != -1:
             Escribir.escribir_texto(pantalla, f"{int(distancia)} metros", "Verdana", 30, [255, 255, 255], color_jugador,
-                                    ancho // 2 - ancho_rectangulo // 2 + 520, alto  - 70)
+                                    ancho // 2 - ancho_rectangulo // 2 + 720, alto  - 70)
         else:
             Escribir.escribir_texto(pantalla, f"Bala fuera del mapa", "Verdana", 30, [255, 255, 255], color_jugador,
-                                    ancho // 2 - ancho_rectangulo // 2 + 490, alto  - 65)
+                                    ancho // 2 - ancho_rectangulo // 2 + 790, alto  - 65)
+    
+    def info_velocidad_bala(pantalla, ancho, alto, velocidad):
+        ancho_rectangulo = 550
+        alto_rectangulo = 100
+        pygame.draw.rect(surface=pantalla, color=(0, 0, 0), rect=(
+            ancho // 2 - ancho_rectangulo // 2, alto  - alto_rectangulo, ancho_rectangulo, alto_rectangulo),
+                         border_radius=20)
+        Escribir.escribir_texto(pantalla, f"Velocidad actual de la bala: {velocidad}m/s", "Verdana", 30, [255, 255, 255], (0, 0, 0),
+                    ancho // 2 - ancho_rectangulo // 2 + 10, alto  - 70)
+        
