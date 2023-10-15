@@ -77,6 +77,7 @@ class Disparo:
     def verificar_impacto_tanque_enemigo(self, tanque_enemigo):
         if (self.y_bala >= tanque_enemigo.posicion_y - 23) and (
                 tanque_enemigo.posicion_x - 35<= self.x_bala <= tanque_enemigo.posicion_x + 35):
+                tanque_enemigo.posicion_x - 35<= self.x_bala <= tanque_enemigo.posicion_x + 35):
             return 1
         else:
             return 0
@@ -109,6 +110,10 @@ class Terreno:
         self.constante_oscilacion = random.uniform(0.01, 0.0135)
         self.matriz = []
         self.arreglo = []
+    def __init__(self):
+        self.constante_oscilacion = random.uniform(0.01, 0.0135)
+        self.matriz = []
+        self.arreglo = []
 
     def generar_terreno(self, x, altura_maxima, width):
             factor = math.e ** (-((x - width) ** 2) / (2 * (width / 2) ** 2))
@@ -120,6 +125,8 @@ class Terreno:
             if pos % 2 == 0:
                 pygame.draw.line(pantalla, (173, 204, 246), self.arreglo[pos], self.arreglo[pos + 1])
 
+    def generar_matriz(self, ancho_ventana, alto_ventana, arreglo_terreno):
+            self.matriz = [['x' if x >= arreglo_terreno[y] else 'o' for y in range(ancho_ventana)] for x in range(alto_ventana)]
     def generar_matriz(self, ancho_ventana, alto_ventana, arreglo_terreno):
             self.matriz = [['x' if x >= arreglo_terreno[y] else 'o' for y in range(ancho_ventana)] for x in range(alto_ventana)]
 
