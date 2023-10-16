@@ -313,7 +313,7 @@ class UI:
                                     ancho // 2 - ancho_rectangulo // 2 + 790, alto  - 65)
     
     def info_velocidad_bala(pantalla, ancho, alto, velocidad):
-        ancho_rectangulo = 550
+        ancho_rectangulo = 600
         alto_rectangulo = 100
         pygame.draw.rect(surface=pantalla, color=(0, 0, 0), rect=(
             ancho // 2 - ancho_rectangulo // 2, alto  - alto_rectangulo, ancho_rectangulo, alto_rectangulo),

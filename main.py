@@ -210,9 +210,9 @@ def terminar_de_juego(ganador, pantalla):
                                1400, 400), border_radius=20)
     mensaje_a_pantalla("Presiona C para reiniciar partida o Q para salir", (34, 113, 179), 25)
     if ganador == jugador_1:
-        mensaje_a_pantalla(f"Juego terminado. Gana PESSI", constantes.BLANCO, -100, tamaño="large")
+        mensaje_a_pantalla(f"Juego terminado. Gana Jugador 1", constantes.BLANCO, -100, tamaño="large")
     else:
-        mensaje_a_pantalla(f"Juego terminado. Gana PENALDO", constantes.BLANCO, -100, tamaño="large")
+        mensaje_a_pantalla(f"Juego terminado. Gana Jugador 2", constantes.BLANCO, -100, tamaño="large")
     pygame.display.flip()
     pygame.display.update()
     while termino:
@@ -354,11 +354,11 @@ def partida(pantalla, mandos, game):
         # Se escribe en pantalla la información del pre-disparo de cada jugador
         if jugador_1.puede_jugar:
             UI.info_pre_disparo(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA,
-                                texto_jugador="Turno de Pessi", color_jugador=jugador_1.tanque.color,
+                                texto_jugador="Turno del Jugador 1", color_jugador=jugador_1.tanque.color,
                                 angulo=jugador_1.tanque.angulo_n, velocidad=jugador_1.tanque.velocidad_disparo, tanque_jugador= jugador_1.tanque)
         elif jugador_2.puede_jugar:
             UI.info_pre_disparo(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA,
-                                texto_jugador="Turno de Penaldo", color_jugador=jugador_2.tanque.color,
+                                texto_jugador="Turno del Jugador 2", color_jugador=jugador_2.tanque.color,
                                 angulo=jugador_2.tanque.angulo_n, velocidad=jugador_2.tanque.velocidad_disparo, tanque_jugador= jugador_2.tanque)
         # Texto con el jugador ganador
         if game.ganador is not None:
