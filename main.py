@@ -24,7 +24,7 @@ def menu(pantalla, mandos, game):
                     0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
                         mouse[1] >= constantes.ALTO_VENTANA / 2 + 90 and mouse[
                     1] <= constantes.ALTO_VENTANA / 2 + 60 + 120)):
-                    pass
+                    controles()
                 if (mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
                     0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
                         mouse[1] >= constantes.ALTO_VENTANA / 2 + 245 and mouse[
@@ -82,6 +82,91 @@ def menu(pantalla, mandos, game):
         # Limita los FPS a 60
         reloj.tick(60)
 
+
+def controles():
+    nuevo_ancho = 100
+    nuevo_alto = 100
+    while True:
+        mouse = pygame.mouse.get_pos()
+        pantalla.fill((219, 241, 243))
+        clases.Escribir.escribir_texto(pantalla, "Controles", "More Sugar", 150, constantes.NEGRO, None,
+                                       constantes.ANCHO_VENTANA / 2 - 250 , constantes.ALTO_VENTANA / 2 - 450)
+        png_bala60 = pygame.image.load("img/60mm.png").convert_alpha()
+        pantalla.blit(png_bala60, (constantes.ANCHO_VENTANA // 2 + 300 , constantes.ALTO_VENTANA  - 850))
+        clases.Escribir.escribir_texto(pantalla, "Bala del 60mm", "More Sugar", 50, constantes.NEGRO, None,
+                                       constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 330)
+        clases.Escribir.escribir_texto(pantalla, "3 unidades", "More Sugar", 50, constantes.NEGRO, None,
+                                       constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 290)
+        clases.Escribir.escribir_texto(pantalla, "30 de daño", "More Sugar", 50, constantes.NEGRO, None,
+                                       constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 250)
+        png_bala80 = pygame.image.load("img/80mm.png").convert_alpha()
+        pantalla.blit(png_bala80, (constantes.ANCHO_VENTANA // 2 + 300 , constantes.ALTO_VENTANA  - 650))
+        clases.Escribir.escribir_texto(pantalla, "Bala del 80mm", "More Sugar", 50, constantes.NEGRO, None,
+                                       constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 130)
+        clases.Escribir.escribir_texto(pantalla, "10 unidades", "More Sugar", 50, constantes.NEGRO, None,
+                                       constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 90)
+        clases.Escribir.escribir_texto(pantalla, "40 de daño", "More Sugar", 50, constantes.NEGRO, None,
+                                       constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 50)
+        png_bala105 = pygame.image.load("img/105mm.png").convert_alpha()
+        pantalla.blit(png_bala105, (constantes.ANCHO_VENTANA // 2 + 300, constantes.ALTO_VENTANA  - 450))
+        clases.Escribir.escribir_texto(pantalla, "Bala del 105mm", "More Sugar", 50, constantes.NEGRO, None,
+                                       constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 + 70)
+        clases.Escribir.escribir_texto(pantalla, "3 unidades", "More Sugar", 50, constantes.NEGRO, None,
+                                       constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 + 110)
+        clases.Escribir.escribir_texto(pantalla, "50 de daño", "More Sugar", 50, constantes.NEGRO, None,
+                                       constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 + 150)
+        
+        png_tecla_w = pygame.image.load("img/tecla_w_.png").convert_alpha()
+        png_tecla_w_ajustado = pygame.transform.scale(png_tecla_w, (nuevo_ancho, nuevo_alto))
+        pantalla.blit(png_tecla_w_ajustado, (constantes.ANCHO_VENTANA // 2 - 900 , constantes.ALTO_VENTANA  - 800))
+        png_tecla_s = pygame.image.load("img/tecla_s_.png").convert_alpha()
+        png_tecla_s_ajustado = pygame.transform.scale(png_tecla_s, (nuevo_ancho, nuevo_alto))
+        pantalla.blit(png_tecla_s_ajustado, (constantes.ANCHO_VENTANA // 2 - 900 , constantes.ALTO_VENTANA  - 680))
+        clases.Escribir.escribir_texto(pantalla, "Aumento o disminucion de la potencia", "More Sugar", 50, constantes.NEGRO, None,
+                                       constantes.ANCHO_VENTANA // 2 - 750 , constantes.ALTO_VENTANA // 2 - 170)
+        
+        png_tecla_a = pygame.image.load("img/tecla_a_.png").convert_alpha()
+        png_tecla_a_ajustado = pygame.transform.scale(png_tecla_a, (nuevo_ancho, nuevo_alto))
+        pantalla.blit(png_tecla_a_ajustado, (constantes.ANCHO_VENTANA // 2 - 900 , constantes.ALTO_VENTANA  - 550))
+        png_tecla_d = pygame.image.load("img/tecla_d_.png").convert_alpha()
+        png_tecla_d_ajustado = pygame.transform.scale(png_tecla_d, (nuevo_ancho, nuevo_alto))
+        pantalla.blit(png_tecla_d_ajustado, (constantes.ANCHO_VENTANA // 2 - 780, constantes.ALTO_VENTANA  - 550))
+        clases.Escribir.escribir_texto(pantalla, "Aumento o disminucion  del angulo", "More Sugar", 50, constantes.NEGRO, None,
+                                constantes.ANCHO_VENTANA // 2 - 600 , constantes.ALTO_VENTANA // 2 + 20)
+        
+        png_tecla_b = pygame.image.load("img/tecla_b.png").convert_alpha()
+        png_tecla_b_ajustado = pygame.transform.scale(png_tecla_b, (nuevo_ancho, nuevo_alto))
+        pantalla.blit(png_tecla_b_ajustado, (constantes.ANCHO_VENTANA // 2 - 900 , constantes.ALTO_VENTANA  - 400))
+        clases.Escribir.escribir_texto(pantalla, "Cambio de municion", "More Sugar", 50, constantes.NEGRO, None,
+                                constantes.ANCHO_VENTANA // 2 - 750 , constantes.ALTO_VENTANA // 2 + 175)
+        
+        png_tecla_espacio = pygame.image.load("img/tecla_espacio.png").convert_alpha()
+        png_tecla_espacio_ajustado = pygame.transform.scale(png_tecla_espacio, (200, 95))
+        pantalla.blit(png_tecla_espacio_ajustado, (constantes.ANCHO_VENTANA // 2 - 900, constantes.ALTO_VENTANA  - 280))
+        clases.Escribir.escribir_texto(pantalla, "Disparo", "More Sugar", 50, constantes.NEGRO, None,
+                                constantes.ANCHO_VENTANA // 2 - 650 , constantes.ALTO_VENTANA // 2 + 290)
+        
+        png_tecla_shift = pygame.image.load("img/tecla_shift.png").convert_alpha()
+        png_tecla_shift_ajustado = pygame.transform.scale(png_tecla_shift, (200, nuevo_alto))
+        pantalla.blit(png_tecla_shift_ajustado, (constantes.ANCHO_VENTANA // 2 - 900, constantes.ALTO_VENTANA  - 180))
+
+        clases.Escribir.escribir_texto(pantalla, "Aumento o dismunicion mas rapida ", "More Sugar", 50, constantes.NEGRO, None,
+                                constantes.ANCHO_VENTANA // 2 - 650 , constantes.ALTO_VENTANA // 2 + 400)
+        
+        pygame.draw.rect(pantalla, constantes.NEGRO,
+                         (constantes.ANCHO_VENTANA / 2 - 165, constantes.ALTO_VENTANA / 2 + 245, 350, 120), 60, 50)
+        clases.Escribir.escribir_texto(pantalla, "Atras", "More Sugar", 150, constantes.BLANCO, None,
+                                       constantes.ANCHO_VENTANA / 2 - 125, constantes.ALTO_VENTANA / 2 + 255)
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if (mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
+                    0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
+                        mouse[1] >= constantes.ALTO_VENTANA / 2 + 245 and mouse[
+                        1] <= constantes.ALTO_VENTANA / 2 + 245 + 120):
+                        main()
+
+        pygame.display.update()
 
 def actualizar_info_pantalla():
     info = pygame.display.Info()
@@ -234,6 +319,10 @@ def terminar_de_juego(ganador, pantalla):
 
 def partida(pantalla, mandos, game):
     global reloj , jugador_1, jugador_2
+    pygame.mixer.init()
+    pygame.mixer.music.load('mp3/aria_math.mp3')
+    pygame.mixer.music.set_volume(0.02)
+    pygame.mixer.music.play(-1)
     crear_jugadores()
     jugador_1 = constantes.JUGADORES[0]
     jugador_2 = constantes.JUGADORES[1]
