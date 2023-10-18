@@ -2,6 +2,9 @@ import pygame
 import math
 import random
 
+import constantes
+
+
 class Bala:
     tipo_bala = None
     dano = None
@@ -99,7 +102,6 @@ class Jugador:
 class Partida:
     en_partida = None
     ganador = None
-
     def __init__(self):
         self.en_partida = True
 
@@ -109,10 +111,27 @@ class Terreno:
         self.constante_oscilacion = random.uniform(0.01, 0.0135)
         self.matriz = []
         self.arreglo = []
+        self.tipo = random.randint(1,3)
 
-    def generar_terreno(self, x, altura_maxima, width):
-            factor = math.e ** (-((x - width) ** 2) / (2 * (width / 2) ** 2))
-            return altura_maxima * factor * math.cos(self.constante_oscilacion * (x - width)) + 600
+    def generar_terreno_perlin(self):
+        gradientes = [random.uniform(-1, 1) for _ in range(256)]
+        #Funcion para la atenuacion
+        def fade(t):
+            return (t**3) * (t * (t * 6 - 15) + 10)
+        #Funcion basica para ruido de perlin
+        def perlin(x):
+            X = int(x) & 255
+            x -= int(x)
+            u = fade(x)
+            a = gradientes[X]
+            b = gradientes[X + 1]
+            val1 = a * x
+            val2 = b * (x - 1)
+            return (1 - u) * val1 + u * val2
+        arr = []
+        for x in range(constantes.ANCHO_VENTANA):
+            arr.append(int(constantes.ALTO_VENTANA / 2 + perlin(x * 0.006) * 600))
+        return arr
 
     def dibujar_terreno(self, pantalla):
         for pos in range(len(self.arreglo)):
@@ -155,12 +174,14 @@ class Terreno:
 
 class Fondo:
     mountain_png = None
+    fondo_terreno = None
 
     def __init__(self):
         self.mountain_png = pygame.image.load("img/mountain.png").convert_alpha()
 
-    def cargar_fondo(self, screen):
-        screen.blit(self.mountain_png, (0, 0))
+    def cargar_fondo(self, screen, tipo):
+        if tipo == 1:
+            screen.blit(self.mountain_png, (0, 0))
 
 
 class Tanque:
@@ -207,7 +228,7 @@ class Tanque:
         disparo.calcular_altura_maxima()
         fondo = Fondo()
         while True:
-            fondo.cargar_fondo(pantalla)
+            fondo.cargar_fondo(pantalla, 1)
 
             # Si la bala sale de los limites laterales de la pantalla
             if disparo.x_bala >= ancho:

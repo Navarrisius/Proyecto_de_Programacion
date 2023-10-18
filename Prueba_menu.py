@@ -32,7 +32,7 @@ def menu(pantalla, mandos, game):
                     en_menu = False
         if not en_menu:
             break
-        fondo.cargar_fondo(pantalla)
+        fondo.cargar_fondo(pantalla,1)
         # boton jugar
         clases.Escribir.escribir_texto(pantalla, "Tank Game", "More Sugar", 200, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA / 2 - 400, constantes.ALTO_VENTANA / 2 - 300)
@@ -310,11 +310,11 @@ def partida(pantalla, mandos, game):
     running = game.en_partida
     pygame.time.Clock()
     disparo = None
-    altura_terreno = [0] * constantes.ANCHO_VENTANA
+    altura_terreno = []
     UI = clases.UI()
 
-    for x in range(constantes.ANCHO_VENTANA):
-        altura_terreno[x] += terreno.generar_terreno(x, 250, constantes.ALTO_VENTANA-100)
+
+    altura_terreno = terreno.generar_terreno_perlin()
     terreno.generar_matriz(constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA, altura_terreno)
     terreno.generar_arreglo_m()
     while running:
@@ -407,7 +407,7 @@ def partida(pantalla, mandos, game):
                         print("No hay municion")
 
         # VACIA PANTALLA
-        fondo.cargar_fondo(pantalla)
+        fondo.cargar_fondo(pantalla,1)
 
         # Mantener el tanque en el terreno
         jugador_1.tanque.posicion_y = calcular_y(terreno.matriz, jugador_1.tanque)
