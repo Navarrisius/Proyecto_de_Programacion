@@ -17,12 +17,12 @@ class Bala:
             self.radio_bala = 6
             self.dano = 30
             self.unidades = 3
-            self.radio_impacto = 12
+            self.radio_impacto = 20
         elif tipo == 1:
             self.radio_bala = 8
             self.dano = 40
             self.unidades = 10
-            self.radio_impacto = 23
+            self.radio_impacto = 30
         elif tipo == 2:
             self.radio_bala = 10
             self.dano = 50
@@ -68,7 +68,7 @@ class Disparo:
         self.eje_y.append(self.y_bala)
         self.velocidad_actual = math.sqrt(self.velocidad_x ** 2 + self.velocidad_y ** 2)
 
-    def dibujar(self, pantalla, ancho, alto, color):
+    def dibujar(self, pantalla, color):
         pygame.draw.circle(pantalla, color, (int(self.x_bala), int(self.y_bala)), self.proyectil.radio_bala)
 
     def calcular_altura_maxima(self):
@@ -83,10 +83,43 @@ class Disparo:
             return 1
         else:
             return 0
-
+    
+    def verificar_impacto_terreno(self, pos, altura_terreno):
+        if self.y_bala > 0 and altura_terreno[int(self.y_bala)][int(self.x_bala)] == "x":
+            return 0
+        else:
+            return 1
+    
     def recorrido(self, pantalla, color):
         for i in range(len(self.eje_x)):
             pygame.draw.circle(pantalla, color, (int(self.eje_x[i]), int(self.eje_y[i])), 2)
+    
+    def calcular_damage(self, tanque_enemigo, radio_impacto, ancho):
+        if self.impacto_terreno:
+            # GUARDA ULTIMA POSICIÓN DE LA BALA (COORDENADA DE IMPACTO)
+            coor_x = int(self.eje_x[-1])
+            coor_y = int(self.eje_y[-1])
+
+            if coor_x >= 0 and coor_x < ancho:
+                coor_x_tanque_enemigo = tanque_enemigo.posicion_x
+                coor_y_tanque_enemigo = tanque_enemigo.posicion_y
+
+                distancias = []
+                distancias.append(math.sqrt((coor_x_tanque_enemigo - coor_x) ** 2 + (coor_y_tanque_enemigo - coor_y) ** 2))
+                distancias.append(math.sqrt((coor_x_tanque_enemigo + 30 - coor_x) ** 2 + (coor_y_tanque_enemigo - coor_y) ** 2))
+                distancias.append(math.sqrt((coor_x_tanque_enemigo - 30 - coor_x) ** 2 + (coor_y_tanque_enemigo - coor_y) ** 2))
+                distancias_validas = [dist for dist in distancias if dist < radio_impacto]
+
+                if distancias_validas:
+                    mayor_distancia_valida = max(distancias_validas)
+                    return mayor_distancia_valida
+                else:
+                    return 0
+            else:
+                return 0
+        else:
+            return 0
+
 
 
 class Jugador:
@@ -142,10 +175,15 @@ class Terreno:
             self.matriz = [['x' if x >= arreglo_terreno[y] else 'o' for y in range(ancho_ventana)] for x in range(alto_ventana)]
             self.generar_arreglo_m()
 
-    def destruir_terreno(self, centro_x, centro_y, alto, ancho, radio):
-        for y in range(max(0, centro_y - radio), min(alto, centro_y + radio)):
-            for x in range(max(0, centro_x - radio), min(ancho, centro_x + radio)):
-                distancia = ((x - centro_x) ** 2 + (y - centro_y) ** 2) ** 0.5
+    def destruir_terreno(self, alto, ancho, bala, municion):
+        impacto_x = int(bala.eje_x[-1])
+        impacto_y = int(bala.eje_y[-1])
+
+        radio = municion.radio_impacto
+        
+        for y in range(max(0, impacto_y - radio), min(alto, impacto_y + radio)):
+            for x in range(max(0, impacto_x - radio), min(ancho, impacto_x + radio)):
+                distancia = ((x - impacto_x) ** 2 + (y - impacto_y) ** 2) ** 0.5
                 if distancia <= radio:
                     self.matriz[y][x] = "o"
         self.generar_arreglo_m()
@@ -237,12 +275,10 @@ class Tanque:
             if disparo.x_bala <= 0:
                 disparo.distancia_maxima = -1
                 return 0
-
             disparo.actualizar()
-            disparo.dibujar(pantalla, ancho, alto, self.color)
+            disparo.dibujar(pantalla, self.color)
             try:
-                # IMPACTO CON TERRENO
-                if disparo.y_bala > 0 and altura_terreno[int(disparo.y_bala)][int(disparo.x_bala)] == "x":
+                if not disparo.verificar_impacto_terreno(self.posicion_x, altura_terreno):
                     disparo.impacto_terreno = True
                     disparo.calcular_distancia_maxima(self.posicion_x)
                     return 0

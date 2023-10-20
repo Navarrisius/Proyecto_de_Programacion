@@ -24,7 +24,7 @@ def menu(pantalla, mandos, game):
                     0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
                         mouse[1] >= constantes.ALTO_VENTANA / 2 + 90 and mouse[
                     1] <= constantes.ALTO_VENTANA / 2 + 60 + 120)):
-                    controles()
+                    controles(pantalla)
                 if (mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
                     0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
                         mouse[1] >= constantes.ALTO_VENTANA / 2 + 245 and mouse[
@@ -83,7 +83,7 @@ def menu(pantalla, mandos, game):
         reloj.tick(60)
 
 
-def controles():
+def controles(pantalla):
     nuevo_ancho = 100
     nuevo_alto = 100
     while True:
@@ -274,7 +274,6 @@ def pausar():
     pygame.display.update()
     while pausado:
         for evento in pygame.event.get():
-
             if evento.type == pygame.QUIT:
                 pygame.quit()
                 quit()()
@@ -282,9 +281,7 @@ def pausar():
                 if evento.key == pygame.K_c:
                     pausado = False
                 elif evento.key == pygame.K_q:
-                    pygame.quit()
-                    quit()()
-
+                    main()
         reloj.tick(5)
 
 
@@ -317,6 +314,14 @@ def terminar_de_juego(ganador, pantalla):
         reloj.tick(5)
 
 
+def detectar_reinicio(event, pantalla, mandos, game):
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.button == 1: 
+            clic_x, clic_y = pygame.mouse.get_pos()
+            # Verificar si el clic ocurrió dentro de la imagen
+            if constantes.ANCHO_VENTANA - 100 <= clic_x <= constantes.ANCHO_VENTANA + 64 and 50 <= clic_y <= 50 + 64:
+                partida(pantalla, mandos, game)
+
 def partida(pantalla, mandos, game):
     global reloj , jugador_1, jugador_2
     pygame.mixer.init()
@@ -333,14 +338,14 @@ def partida(pantalla, mandos, game):
     disparo = None
     altura_terreno = []
     UI = clases.UI()
-
+    img_reiniciar = pygame.image.load("img/reiniciar.png")
+    img_reiniciar = pygame.transform.scale(img_reiniciar, (64, 64))
     altura_terreno = terreno.generar_terreno_perlin()
     terreno.generar_matriz(constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA, altura_terreno)
 
     while running:
         reloj = pygame.time.Clock()
         teclas = pygame.key.get_pressed()
-        mouse = pygame.mouse.get_pos()
         if jugador_1.puede_jugar:
             turno = jugador_1
             enemigo = jugador_2.tanque
@@ -348,6 +353,7 @@ def partida(pantalla, mandos, game):
             turno = jugador_2
             enemigo = jugador_1.tanque
         for event in pygame.event.get():
+            detectar_reinicio(event, pantalla, mandos, game)
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.JOYDEVICEADDED:
@@ -359,8 +365,6 @@ def partida(pantalla, mandos, game):
                 constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA = NUEVO_ANCHO, NUEVA_ALTURA
             elif teclas[pygame.K_ESCAPE]:
                 pausar()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                terreno.destruir_terreno(mouse[0], mouse[1], constantes.ALTO_VENTANA, constantes.ANCHO_VENTANA, 40)
             if teclas[pygame.K_a]:
                 turno.tanque.angulo_n += 0.5
                 if turno.tanque.angulo_n > constantes.LIMITE_ANGULO_MAX:
@@ -412,20 +416,22 @@ def partida(pantalla, mandos, game):
                         if turno.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=constantes.ANCHO_VENTANA,
                                                  alto=constantes.ALTO_VENTANA, disparo=disparo,
                                                  altura_terreno=terreno.matriz, tanque_enemigo=enemigo):
-                            print("impacto enemigo")
                             enemigo.salud -= disparo.proyectil.dano
+                            terreno.destruir_terreno(constantes.ALTO_VENTANA, constantes.ANCHO_VENTANA, disparo, disparo.proyectil)
                             if enemigo.salud <= 0:
                                 game.ganador = turno
                                 terminar_turnos(constantes.JUGADORES)
                             else:
                                 cambiar_turnos(jugador_1, jugador_2)
                         else:
-                            terreno.destruir_terreno(int(disparo.x_bala), int(disparo.y_bala), constantes.ALTO_VENTANA,
-                                                     constantes.ANCHO_VENTANA, turno.tanque.municion[turno.tanque.tipo_bala].radio_impacto)
+                            if disparo.impacto_terreno:
+                                terreno.destruir_terreno(constantes.ALTO_VENTANA, constantes.ANCHO_VENTANA, disparo, disparo.proyectil)
+                            enemigo.salud -= disparo.calcular_damage(enemigo, disparo.proyectil.radio_impacto, constantes.ANCHO_VENTANA)
                             cambiar_turnos(jugador_1, jugador_2)
                         turno.tanque.municion[turno.tanque.tipo_bala].unidades -= 1
                     else:
                         print("No hay municion")
+            
 
         # VACIA PANTALLA
         fondo.cargar_fondo(pantalla,1)
@@ -438,6 +444,10 @@ def partida(pantalla, mandos, game):
         terreno.dibujar_terreno(pantalla)
         barras_de_salud(jugador_1.tanque, pantalla)
         barras_de_salud(jugador_2.tanque, pantalla)
+
+        # Botón reinicio
+        pantalla.blit(img_reiniciar, (constantes.ANCHO_VENTANA - 100, 50))
+
         # Se escribe en pantalla la información del pre-disparo de cada jugador
         if jugador_1.puede_jugar:
             UI.info_pre_disparo(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA,
@@ -504,6 +514,5 @@ def main():
     mandos = []
     menu(pantalla, mandos, game)
     pygame.quit()
-
 
 main()
