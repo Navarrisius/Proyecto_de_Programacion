@@ -3,7 +3,6 @@ import math
 import clases
 import constantes
 import random
-import sys
 
 def menu(pantalla, mandos, game):
     en_menu = True
@@ -276,12 +275,12 @@ def pausar():
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 pygame.quit()
-                quit()()
+                quit()
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_c:
                     pausado = False
                 elif evento.key == pygame.K_q:
-                    main()
+                    quit()
         reloj.tick(5)
 
 
@@ -319,8 +318,16 @@ def detectar_reinicio(event, pantalla, mandos, game):
         if event.button == 1: 
             clic_x, clic_y = pygame.mouse.get_pos()
             # Verificar si el clic ocurrió dentro de la imagen
-            if constantes.ANCHO_VENTANA - 100 <= clic_x <= constantes.ANCHO_VENTANA + 64 and 50 <= clic_y <= 50 + 64:
+            if constantes.ANCHO_VENTANA - 200 <= clic_x <= constantes.ANCHO_VENTANA - 136 and 40 <= clic_y <= 40 + 64:
                 partida(pantalla, mandos, game)
+
+def detectar_termino_partida(event, pantalla, mandos, game):
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.button == 1: 
+            clic_x, clic_y = pygame.mouse.get_pos()
+            # Verificar si el clic ocurrió dentro de la imagen
+            if constantes.ANCHO_VENTANA - 100 <= clic_x <= constantes.ANCHO_VENTANA - 30 and 40 <= clic_y <= 37 + 64:
+                menu(pantalla, mandos, game)
 
 def partida(pantalla, mandos, game):
     global reloj , jugador_1, jugador_2
@@ -340,6 +347,8 @@ def partida(pantalla, mandos, game):
     UI = clases.UI()
     img_reiniciar = pygame.image.load("img/reiniciar.png")
     img_reiniciar = pygame.transform.scale(img_reiniciar, (64, 64))
+    img_terminar_partida = pygame.image.load("img/terminar_partida.png")
+    img_terminar_partida = pygame.transform.scale(img_terminar_partida, (70, 70))
     altura_terreno = terreno.generar_terreno_perlin()
     terreno.generar_matriz(constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA, altura_terreno)
 
@@ -354,6 +363,7 @@ def partida(pantalla, mandos, game):
             enemigo = jugador_1.tanque
         for event in pygame.event.get():
             detectar_reinicio(event, pantalla, mandos, game)
+            detectar_termino_partida(event, pantalla, mandos, game)
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.JOYDEVICEADDED:
@@ -413,20 +423,27 @@ def partida(pantalla, mandos, game):
                     disparo = clases.Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque,
                                              clases.Bala(turno.tanque.tipo_bala))
                     if turno.tanque.municion[turno.tanque.tipo_bala].unidades > 0:
-                        if turno.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=constantes.ANCHO_VENTANA,
+                        num = turno.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=constantes.ANCHO_VENTANA,
                                                  alto=constantes.ALTO_VENTANA, disparo=disparo,
-                                                 altura_terreno=terreno.matriz, tanque_enemigo=enemigo):
+                                                 altura_terreno=terreno.matriz, tanque_enemigo=enemigo)
+                        if num == 1:
                             enemigo.salud -= disparo.proyectil.dano
                             terreno.destruir_terreno(constantes.ALTO_VENTANA, constantes.ANCHO_VENTANA, disparo, disparo.proyectil)
-                            if enemigo.salud <= 0:
-                                game.ganador = turno
-                                terminar_turnos(constantes.JUGADORES)
-                            else:
-                                cambiar_turnos(jugador_1, jugador_2)
+                        if num == -1:
+                            turno.tanque.salud -= disparo.proyectil.dano
+                            terreno.destruir_terreno(constantes.ALTO_VENTANA, constantes.ANCHO_VENTANA, disparo, disparo.proyectil)
                         else:
                             if disparo.impacto_terreno:
                                 terreno.destruir_terreno(constantes.ALTO_VENTANA, constantes.ANCHO_VENTANA, disparo, disparo.proyectil)
+                            turno.tanque.salud -= disparo.calcular_damage(turno.tanque, disparo.proyectil.radio_impacto, constantes.ANCHO_VENTANA)
                             enemigo.salud -= disparo.calcular_damage(enemigo, disparo.proyectil.radio_impacto, constantes.ANCHO_VENTANA)
+                        if enemigo.salud <= 0:
+                            game.ganador = turno
+                            terminar_turnos(constantes.JUGADORES)
+                        elif turno.tanque.salud <=0:
+                            game.ganador = enemigo
+                            terminar_turnos(constantes.JUGADORES)
+                        else:
                             cambiar_turnos(jugador_1, jugador_2)
                         turno.tanque.municion[turno.tanque.tipo_bala].unidades -= 1
                     else:
@@ -445,9 +462,6 @@ def partida(pantalla, mandos, game):
         barras_de_salud(jugador_1.tanque, pantalla)
         barras_de_salud(jugador_2.tanque, pantalla)
 
-        # Botón reinicio
-        pantalla.blit(img_reiniciar, (constantes.ANCHO_VENTANA - 100, 50))
-
         # Se escribe en pantalla la información del pre-disparo de cada jugador
         if jugador_1.puede_jugar:
             UI.info_pre_disparo(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA,
@@ -457,11 +471,10 @@ def partida(pantalla, mandos, game):
             UI.info_pre_disparo(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA,
                                 texto_jugador="Turno del Jugador 2", color_jugador=jugador_2.tanque.color,
                                 angulo=jugador_2.tanque.angulo_n, velocidad=jugador_2.tanque.velocidad_disparo, tanque_jugador= jugador_2.tanque)
+            
         # Texto con el jugador ganador
         if game.ganador is not None:
-
             pygame.mixer.music.stop()
-            
             disparo.recorrido(pantalla, turno.tanque.color)
             # Esperar 5 segundos antes de cerrar la ventana
             tiempo_inicial = pygame.time.get_ticks()
@@ -473,6 +486,12 @@ def partida(pantalla, mandos, game):
             pygame.display.update()
             
         else:
+            # Botón reinicio
+            pantalla.blit(img_reiniciar, (constantes.ANCHO_VENTANA - 200, 40))
+
+            # Botón término partida
+            pantalla.blit(img_terminar_partida, (constantes.ANCHO_VENTANA - 100, 37))
+
             jugador_1.tanque.draw_tank(pantalla)
             jugador_2.tanque.draw_tank(pantalla)
         if disparo is not None:

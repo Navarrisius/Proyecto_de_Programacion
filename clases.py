@@ -1,7 +1,6 @@
 import pygame
 import math
 import random
-
 import constantes
 
 
@@ -48,6 +47,7 @@ class Disparo:
     autor = None
     eje_x = []
     eje_y = []
+    img_bala = None
 
     def __init__(self, angulo_grados, velocidad_inicial, autor, bala):
         self.proyectil = bala
@@ -60,6 +60,15 @@ class Disparo:
         self.eje_x = []
         self.eje_y = []
 
+    def elegir_imagen(self, tipo_municion):
+        if tipo_municion == 0:
+            self.img_bala = pygame.image.load("img/60mm.png")
+        elif tipo_municion == 1:
+            self.img_bala = pygame.image.load("img/80mm.png")
+        else:
+            self.img_bala = pygame.image.load("img/105mm.png")
+        self.img_bala = pygame.transform.scale(self.img_bala, (9.25, 20))
+
     def actualizar(self):
         self.x_bala += self.velocidad_x * self.tiempo
         self.y_bala += (self.velocidad_y * self.tiempo) + (0.5 * 9.81 * (self.tiempo ** 2))
@@ -68,8 +77,11 @@ class Disparo:
         self.eje_y.append(self.y_bala)
         self.velocidad_actual = math.sqrt(self.velocidad_x ** 2 + self.velocidad_y ** 2)
 
-    def dibujar(self, pantalla, color):
-        pygame.draw.circle(pantalla, color, (int(self.x_bala), int(self.y_bala)), self.proyectil.radio_bala)
+    def dibujar(self, pantalla):
+        angulo_rotacion = math.degrees(math.atan2(-self.velocidad_y, self.velocidad_x))
+        angulo_rotacion -= 90
+        imagen_rotada = pygame.transform.rotate(self.img_bala, angulo_rotacion)
+        pantalla.blit(imagen_rotada, (int(self.x_bala - 4.625), int(self.y_bala - 10)))
 
     def calcular_altura_maxima(self):
         self.altura_maxima = abs((self.velocidad_inicial ** 2 * (math.sin(self.angulo_radianes) ** 2)) / (2 * 9.81))
@@ -105,9 +117,9 @@ class Disparo:
                 coor_y_tanque_enemigo = tanque_enemigo.posicion_y
 
                 distancias = []
-                distancias.append(math.sqrt((coor_x_tanque_enemigo - coor_x) ** 2 + (coor_y_tanque_enemigo - coor_y) ** 2))
-                distancias.append(math.sqrt((coor_x_tanque_enemigo + 30 - coor_x) ** 2 + (coor_y_tanque_enemigo - coor_y) ** 2))
-                distancias.append(math.sqrt((coor_x_tanque_enemigo - 30 - coor_x) ** 2 + (coor_y_tanque_enemigo - coor_y) ** 2))
+                distancias.append(math.sqrt((coor_x_tanque_enemigo - coor_x) ** 2 + (coor_y_tanque_enemigo - 10 - coor_y) ** 2))
+                distancias.append(math.sqrt((coor_x_tanque_enemigo + 30 - coor_x) ** 2 + (coor_y_tanque_enemigo - 10- coor_y) ** 2))
+                distancias.append(math.sqrt((coor_x_tanque_enemigo - 30 - coor_x) ** 2 + (coor_y_tanque_enemigo - 10- coor_y) ** 2))
                 distancias_validas = [dist for dist in distancias if dist < radio_impacto]
 
                 if distancias_validas:
@@ -172,8 +184,8 @@ class Terreno:
                 pygame.draw.line(pantalla, (173, 204, 246), self.arreglo[pos], self.arreglo[pos + 1])
 
     def generar_matriz(self, ancho_ventana, alto_ventana, arreglo_terreno):
-            self.matriz = [['x' if x >= arreglo_terreno[y] else 'o' for y in range(ancho_ventana)] for x in range(alto_ventana)]
-            self.generar_arreglo_m()
+        self.matriz = [['x' if x >= arreglo_terreno[y] else 'o' for y in range(ancho_ventana)] for x in range(alto_ventana)]
+        self.generar_arreglo_m()
 
     def destruir_terreno(self, alto, ancho, bala, municion):
         impacto_x = int(bala.eje_x[-1])
@@ -186,8 +198,9 @@ class Terreno:
                 distancia = ((x - impacto_x) ** 2 + (y - impacto_y) ** 2) ** 0.5
                 if distancia <= radio:
                     self.matriz[y][x] = "o"
-        self.generar_arreglo_m()
 
+        self.generar_arreglo_m()
+        
 
     def generar_arreglo_m(self):
         self.arreglo = []
@@ -202,12 +215,7 @@ class Terreno:
                     self.arreglo.extend((pos_inicial, pos_final))
                 x += 1
 
-    def mover_o_hacia_abajo(self):
-        for x in range(len(self.matriz[0])):
-            for y in range(len(self.matriz) - 1):
-                if self.matriz[y][x] == 'o' and self.matriz[y + 1][x] == 'x':
-                    # Intercambiar 'o' y 'x'
-                    self.matriz[y][x], self.matriz[y + 1][x] = self.matriz[y + 1][x], self.matriz[y][x]
+
 
 
 class Fondo:
@@ -260,6 +268,7 @@ class Tanque:
         pantalla.blit(self.imagen, (self.posicion_x - 40, self.posicion_y - 40))
 
     def disparar(self, pantalla, ancho, alto, terreno, disparo, altura_terreno, tanque_enemigo):
+        disparo.elegir_imagen(self.tipo_bala)
         disparo.x_bala = self.turret_end[0]
         disparo.y_bala = self.turret_end[1]
         disparo.x_inicial = self.turret_end[0]
@@ -267,7 +276,6 @@ class Tanque:
         fondo = Fondo()
         while True:
             fondo.cargar_fondo(pantalla, 1)
-
             # Si la bala sale de los limites laterales de la pantalla
             if disparo.x_bala >= ancho:
                 disparo.distancia_maxima = -1
@@ -276,7 +284,7 @@ class Tanque:
                 disparo.distancia_maxima = -1
                 return 0
             disparo.actualizar()
-            disparo.dibujar(pantalla, self.color)
+            disparo.dibujar(pantalla)
             try:
                 if not disparo.verificar_impacto_terreno(self.posicion_x, altura_terreno):
                     disparo.impacto_terreno = True
@@ -284,18 +292,25 @@ class Tanque:
                     return 0
             # BALA FUERA DEL MAPA
             except IndexError:
-                None
+                pass
             # IMPACTO CON TANQUE ENEMIGO
             if disparo.verificar_impacto_tanque_enemigo(tanque_enemigo):
                 disparo.impacto_tanque = True
                 disparo.calcular_distancia_maxima(self.posicion_x)
                 return 1
+            # IMPACTO CON TANQUE PROPIO
+            if disparo.verificar_impacto_tanque_enemigo(self):
+                disparo.impacto_tanque = True
+                disparo.calcular_distancia_maxima(self.posicion_x)
+                return -1
             terreno.dibujar_terreno(pantalla)
             UI.info_velocidad_bala(pantalla, ancho, alto, int(disparo.velocidad_actual))
             self.draw_tank(pantalla)
             tanque_enemigo.draw_tank(pantalla)
             pygame.display.flip()
             pygame.time.delay(10)
+
+
 
 
 class Escribir:
