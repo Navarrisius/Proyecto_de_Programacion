@@ -1,13 +1,21 @@
 import pygame
 import math
-import clases
+from Bala import Bala
+from Disparo import Disparo
+from Escribir import Escribir
+from Fondo import Fondo
+from Jugador import Jugador
+from Partida import Partida
+from Tanque import Tanque
+from Terreno import Terreno
+from UI import UI
 import constantes
 import random
 
 def menu(pantalla, mandos, game):
     en_menu = True
     reloj = pygame.time.Clock()
-    fondo = clases.Fondo()
+    fondo = Fondo()
     while en_menu:
         mouse = pygame.mouse.get_pos()
         teclas = pygame.key.get_pressed()
@@ -33,9 +41,9 @@ def menu(pantalla, mandos, game):
             break
         fondo.cargar_fondo(pantalla,1)
         # boton jugar
-        clases.Escribir.escribir_texto(pantalla, "PessiTank", "timesnewroman", 180, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "PessiTank", "timesnewroman", 180, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA / 2 - 410, constantes.ALTO_VENTANA / 2 - 300)
-        clases.Escribir.escribir_texto(pantalla, "PessiTank", "timesnewroman", 180, (114,158,188), None,
+        Escribir.escribir_texto(pantalla, "PessiTank", "timesnewroman", 180, (114,158,188), None,
                                        constantes.ANCHO_VENTANA / 2 - 415, constantes.ALTO_VENTANA / 2 - 301)
         png_hielo = pygame.image.load("img/hielo.png").convert_alpha()
         png_hielo = pygame.transform.scale(png_hielo, (320, 220))
@@ -43,23 +51,23 @@ def menu(pantalla, mandos, game):
 
         pygame.draw.rect(pantalla, constantes.BLANCO,
                          (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 - 60, 470, 120), 60, 50)
-        clases.Escribir.escribir_texto(pantalla, "Jugar", "More Sugar", 150, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "Jugar", "More Sugar", 150, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA / 2 - 150, constantes.ALTO_VENTANA / 2 - 55)
         # boton configuracion
         pygame.draw.rect(pantalla, constantes.BLANCO,
                          (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 90, 470, 120), 60, 50)
-        clases.Escribir.escribir_texto(pantalla, "Controles", "More Sugar", 130, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "Controles", "More Sugar", 130, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA / 2 - 210, constantes.ALTO_VENTANA / 2 + 100)
         # boton salir
         pygame.draw.rect(pantalla, constantes.BLANCO,
                          (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 245, 470, 120), 60, 50)
-        clases.Escribir.escribir_texto(pantalla, "Salir", "More Sugar", 150, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "Salir", "More Sugar", 150, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA / 2 - 125, constantes.ALTO_VENTANA / 2 + 255)
         if ((constantes.ANCHO_VENTANA / 2 - 235 <= mouse[0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and
                 (constantes.ALTO_VENTANA / 2 - 60 <= mouse[1] <= constantes.ALTO_VENTANA / 2 - 60 + 120)):
             pygame.draw.rect(pantalla, (114,158,188),
                             (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 - 60, 470, 120), 60, 50)
-            clases.Escribir.escribir_texto(pantalla, "Jugar", "More Sugar", 150, constantes.BLANCO, None,
+            Escribir.escribir_texto(pantalla, "Jugar", "More Sugar", 150, constantes.BLANCO, None,
                                         constantes.ANCHO_VENTANA / 2 - 150, constantes.ALTO_VENTANA / 2 - 55)
         if ((mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
             0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
@@ -67,7 +75,7 @@ def menu(pantalla, mandos, game):
             1] <= constantes.ALTO_VENTANA / 2 + 60 + 120)):
                     pygame.draw.rect(pantalla, (114,158,188),
                          (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 90, 470, 120), 60, 50)
-                    clases.Escribir.escribir_texto(pantalla, "Controles", "More Sugar", 130, constantes.BLANCO, None,
+                    Escribir.escribir_texto(pantalla, "Controles", "More Sugar", 130, constantes.BLANCO, None,
                                                 constantes.ANCHO_VENTANA / 2 - 210, constantes.ALTO_VENTANA / 2 + 100)
         if (mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
             0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
@@ -75,7 +83,7 @@ def menu(pantalla, mandos, game):
             1] <= constantes.ALTO_VENTANA / 2 + 245 + 120):
             pygame.draw.rect(pantalla, (114,158,188),
                             (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 245, 470, 120), 60, 50)
-            clases.Escribir.escribir_texto(pantalla, "Salir", "More Sugar", 150, constantes.BLANCO, None,
+            Escribir.escribir_texto(pantalla, "Salir", "More Sugar", 150, constantes.BLANCO, None,
                                         constantes.ANCHO_VENTANA / 2 - 125, constantes.ALTO_VENTANA / 2 + 255)
         pygame.display.flip()
         # Limita los FPS a 60
@@ -88,31 +96,31 @@ def controles(pantalla):
     while True:
         mouse = pygame.mouse.get_pos()
         pantalla.fill((219, 241, 243))
-        clases.Escribir.escribir_texto(pantalla, "Controles", "More Sugar", 150, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "Controles", "More Sugar", 150, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA / 2 - 250 , constantes.ALTO_VENTANA / 2 - 450)
         png_bala60 = pygame.image.load("img/60mm.png").convert_alpha()
         pantalla.blit(png_bala60, (constantes.ANCHO_VENTANA // 2 + 300 , constantes.ALTO_VENTANA  - 850))
-        clases.Escribir.escribir_texto(pantalla, "Bala del 60mm", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "Bala del 60mm", "More Sugar", 50, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 330)
-        clases.Escribir.escribir_texto(pantalla, "3 unidades", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "3 unidades", "More Sugar", 50, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 290)
-        clases.Escribir.escribir_texto(pantalla, "30 de daño", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "30 de daño", "More Sugar", 50, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 250)
         png_bala80 = pygame.image.load("img/80mm.png").convert_alpha()
         pantalla.blit(png_bala80, (constantes.ANCHO_VENTANA // 2 + 300 , constantes.ALTO_VENTANA  - 650))
-        clases.Escribir.escribir_texto(pantalla, "Bala del 80mm", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "Bala del 80mm", "More Sugar", 50, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 130)
-        clases.Escribir.escribir_texto(pantalla, "10 unidades", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "10 unidades", "More Sugar", 50, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 90)
-        clases.Escribir.escribir_texto(pantalla, "40 de daño", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "40 de daño", "More Sugar", 50, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 50)
         png_bala105 = pygame.image.load("img/105mm.png").convert_alpha()
         pantalla.blit(png_bala105, (constantes.ANCHO_VENTANA // 2 + 300, constantes.ALTO_VENTANA  - 450))
-        clases.Escribir.escribir_texto(pantalla, "Bala del 105mm", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "Bala del 105mm", "More Sugar", 50, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 + 70)
-        clases.Escribir.escribir_texto(pantalla, "3 unidades", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "3 unidades", "More Sugar", 50, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 + 110)
-        clases.Escribir.escribir_texto(pantalla, "50 de daño", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "50 de daño", "More Sugar", 50, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 + 150)
         
         png_tecla_w = pygame.image.load("img/tecla_w_.png").convert_alpha()
@@ -121,7 +129,7 @@ def controles(pantalla):
         png_tecla_s = pygame.image.load("img/tecla_s_.png").convert_alpha()
         png_tecla_s_ajustado = pygame.transform.scale(png_tecla_s, (nuevo_ancho, nuevo_alto))
         pantalla.blit(png_tecla_s_ajustado, (constantes.ANCHO_VENTANA // 2 - 900 , constantes.ALTO_VENTANA  - 680))
-        clases.Escribir.escribir_texto(pantalla, "Aumento o disminucion de la potencia", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "Aumento o disminucion de la potencia", "More Sugar", 50, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA // 2 - 750 , constantes.ALTO_VENTANA // 2 - 170)
         
         png_tecla_a = pygame.image.load("img/tecla_a_.png").convert_alpha()
@@ -130,31 +138,31 @@ def controles(pantalla):
         png_tecla_d = pygame.image.load("img/tecla_d_.png").convert_alpha()
         png_tecla_d_ajustado = pygame.transform.scale(png_tecla_d, (nuevo_ancho, nuevo_alto))
         pantalla.blit(png_tecla_d_ajustado, (constantes.ANCHO_VENTANA // 2 - 780, constantes.ALTO_VENTANA  - 550))
-        clases.Escribir.escribir_texto(pantalla, "Aumento o disminucion  del angulo", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "Aumento o disminucion  del angulo", "More Sugar", 50, constantes.NEGRO, None,
                                 constantes.ANCHO_VENTANA // 2 - 600 , constantes.ALTO_VENTANA // 2 + 20)
         
         png_tecla_b = pygame.image.load("img/tecla_b.png").convert_alpha()
         png_tecla_b_ajustado = pygame.transform.scale(png_tecla_b, (nuevo_ancho, nuevo_alto))
         pantalla.blit(png_tecla_b_ajustado, (constantes.ANCHO_VENTANA // 2 - 900 , constantes.ALTO_VENTANA  - 400))
-        clases.Escribir.escribir_texto(pantalla, "Cambio de municion", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "Cambio de municion", "More Sugar", 50, constantes.NEGRO, None,
                                 constantes.ANCHO_VENTANA // 2 - 750 , constantes.ALTO_VENTANA // 2 + 175)
         
         png_tecla_espacio = pygame.image.load("img/tecla_espacio.png").convert_alpha()
         png_tecla_espacio_ajustado = pygame.transform.scale(png_tecla_espacio, (200, 95))
         pantalla.blit(png_tecla_espacio_ajustado, (constantes.ANCHO_VENTANA // 2 - 900, constantes.ALTO_VENTANA  - 280))
-        clases.Escribir.escribir_texto(pantalla, "Disparo", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "Disparo", "More Sugar", 50, constantes.NEGRO, None,
                                 constantes.ANCHO_VENTANA // 2 - 650 , constantes.ALTO_VENTANA // 2 + 290)
         
         png_tecla_shift = pygame.image.load("img/tecla_shift.png").convert_alpha()
         png_tecla_shift_ajustado = pygame.transform.scale(png_tecla_shift, (200, nuevo_alto))
         pantalla.blit(png_tecla_shift_ajustado, (constantes.ANCHO_VENTANA // 2 - 900, constantes.ALTO_VENTANA  - 180))
 
-        clases.Escribir.escribir_texto(pantalla, "Aumento o dismunicion mas rapida ", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "Aumento o dismunicion mas rapida ", "More Sugar", 50, constantes.NEGRO, None,
                                 constantes.ANCHO_VENTANA // 2 - 650 , constantes.ALTO_VENTANA // 2 + 400)
         
         pygame.draw.rect(pantalla, constantes.NEGRO,
                          (constantes.ANCHO_VENTANA / 2 - 165, constantes.ALTO_VENTANA / 2 + 245, 350, 120), 60, 50)
-        clases.Escribir.escribir_texto(pantalla, "Atras", "More Sugar", 150, constantes.BLANCO, None,
+        Escribir.escribir_texto(pantalla, "Atras", "More Sugar", 150, constantes.BLANCO, None,
                                        constantes.ANCHO_VENTANA / 2 - 125, constantes.ALTO_VENTANA / 2 + 255)
         pygame.display.update()
         for event in pygame.event.get():
@@ -188,14 +196,14 @@ def crear_jugadores():
     colores_disponibles.remove(segundo_color)
 
     # Se crea el jugador 1
-    jugador_1 = clases.Jugador(None, clases.Tanque(primer_color))
+    jugador_1 = Jugador(None, Tanque(primer_color))
     jugador_1.tanque.posicion_x = random.randint(30, constantes.ANCHO_VENTANA // 2 - 200)
     jugador_1.tanque.posicion_y = 30
     jugador_1.tanque.angulo_n = 0
     jugador_1.tanque.angulo_canon = (math.radians(jugador_1.tanque.angulo_n))
 
     # Se crea el jugador 2
-    jugador_2 = clases.Jugador(None, clases.Tanque(segundo_color))
+    jugador_2 = Jugador(None, Tanque(segundo_color))
     jugador_2.tanque.posicion_x = random.randint(constantes.ANCHO_VENTANA // 2 + 200, constantes.ANCHO_VENTANA - 60)
     jugador_2.tanque.posicion_y = 30
     jugador_2.tanque.angulo_n = 0
@@ -305,7 +313,7 @@ def terminar_de_juego(ganador, pantalla):
                 if evento.key == pygame.K_c:
                     termino = False
                     mandos = []
-                    game = clases.Partida()
+                    game = Partida()
                     partida(pantalla, mandos, game)
                 elif evento.key == pygame.K_q:
                     pygame.quit()
@@ -338,13 +346,13 @@ def partida(pantalla, mandos, game):
     crear_jugadores()
     jugador_1 = constantes.JUGADORES[0]
     jugador_2 = constantes.JUGADORES[1]
-    terreno = clases.Terreno()
-    fondo = clases.Fondo()
+    terreno = Terreno()
+    fondo = Fondo()
     running = game.en_partida
     pygame.time.Clock()
     disparo = None
     altura_terreno = []
-    UI = clases.UI()
+    ui = UI()
     img_reiniciar = pygame.image.load("img/reiniciar.png")
     img_reiniciar = pygame.transform.scale(img_reiniciar, (64, 64))
     img_terminar_partida = pygame.image.load("img/terminar_partida.png")
@@ -420,8 +428,7 @@ def partida(pantalla, mandos, game):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:  # Disparo
                     # Se intancia el disparo
-                    disparo = clases.Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque,
-                                             clases.Bala(turno.tanque.tipo_bala))
+                    disparo = Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque, Bala(turno.tanque.tipo_bala))
                     if turno.tanque.municion[turno.tanque.tipo_bala].unidades > 0:
                         num = turno.tanque.disparar(pantalla=pantalla, terreno=terreno, ancho=constantes.ANCHO_VENTANA,
                                                  alto=constantes.ALTO_VENTANA, disparo=disparo,
@@ -464,11 +471,11 @@ def partida(pantalla, mandos, game):
 
         # Se escribe en pantalla la información del pre-disparo de cada jugador
         if jugador_1.puede_jugar:
-            UI.info_pre_disparo(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA,
+            ui.info_pre_disparo(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA,
                                 texto_jugador="Turno del Jugador 1", color_jugador=jugador_1.tanque.color,
                                 angulo=jugador_1.tanque.angulo_n, velocidad=jugador_1.tanque.velocidad_disparo, tanque_jugador= jugador_1.tanque)
         elif jugador_2.puede_jugar:
-            UI.info_pre_disparo(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA,
+            ui.info_pre_disparo(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA,
                                 texto_jugador="Turno del Jugador 2", color_jugador=jugador_2.tanque.color,
                                 angulo=jugador_2.tanque.angulo_n, velocidad=jugador_2.tanque.velocidad_disparo, tanque_jugador= jugador_2.tanque)
             
@@ -496,7 +503,7 @@ def partida(pantalla, mandos, game):
             jugador_2.tanque.draw_tank(pantalla)
         if disparo is not None:
             disparo.recorrido(pantalla, turno.tanque.color)
-            UI.info_post_disparo(pantalla=pantalla, color_jugador=turno.tanque.color, ancho=constantes.ANCHO_VENTANA,
+            ui.info_post_disparo(pantalla=pantalla, color_jugador=turno.tanque.color, ancho=constantes.ANCHO_VENTANA,
                                  alto=constantes.ALTO_VENTANA, altura=disparo.altura_maxima,
                                  distancia=disparo.distancia_maxima)
             pygame.display.update()
@@ -527,7 +534,7 @@ def main():
     actualizar_info_pantalla()
     pantalla = pygame.display.set_mode((constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA), pygame.RESIZABLE,
                                        pygame.OPENGL)
-    game = clases.Partida()
+    game = Partida()
     # Joystick
     pygame.joystick.init()
     mandos = []
