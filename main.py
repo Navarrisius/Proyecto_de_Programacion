@@ -359,10 +359,14 @@ def partida(pantalla, mandos, game):
     img_terminar_partida = pygame.transform.scale(img_terminar_partida, (70, 70))
     altura_terreno = terreno.generar_terreno_perlin()
     terreno.generar_matriz(constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA, altura_terreno)
-
+    jugador_1.tanque.posicion_y = calcular_y(terreno.matriz, jugador_1.tanque)
+    jugador_2.tanque.posicion_y = calcular_y(terreno.matriz, jugador_2.tanque)
     while running:
+        caida_jugador1 = jugador_1.tanque.posicion_y
+        caida_jugador2 = jugador_2.tanque.posicion_y
         reloj = pygame.time.Clock()
         teclas = pygame.key.get_pressed()
+        sin_municion = False
         if jugador_1.puede_jugar:
             turno = jugador_1
             enemigo = jugador_2.tanque
@@ -454,15 +458,20 @@ def partida(pantalla, mandos, game):
                             cambiar_turnos(jugador_1, jugador_2)
                         turno.tanque.municion[turno.tanque.tipo_bala].unidades -= 1
                     else:
-                        print("No hay municion")
-            
+                        sin_municion = True
 
         # VACIA PANTALLA
-        fondo.cargar_fondo(pantalla,1)
+        fondo.cargar_fondo(pantalla, 1)
 
-        # Mantener el tanque en el terreno
+        # Mantener el tanque en el terreno y comprobar caida
         jugador_1.tanque.posicion_y = calcular_y(terreno.matriz, jugador_1.tanque)
         jugador_2.tanque.posicion_y = calcular_y(terreno.matriz, jugador_2.tanque)
+        if jugador_1.tanque.posicion_y != caida_jugador1:
+            jugador_1.tanque.calcular_damage_caida(caida_jugador1)
+            ui.mensaje_caida(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA, diff_y=abs(jugador_1.tanque.posicion_y - caida_jugador1))
+        if jugador_2.tanque.posicion_y != caida_jugador2:
+            jugador_2.tanque.calcular_damage_caida(caida_jugador2)
+            ui.mensaje_caida(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA, diff_y=abs(jugador_2.tanque.posicion_y - caida_jugador2))
 
         # Terreno
         terreno.dibujar_terreno(pantalla)
@@ -503,7 +512,10 @@ def partida(pantalla, mandos, game):
             jugador_2.tanque.draw_tank(pantalla)
         if disparo is not None:
             disparo.recorrido(pantalla, turno.tanque.color)
-            ui.info_post_disparo(pantalla=pantalla, color_jugador=turno.tanque.color, ancho=constantes.ANCHO_VENTANA,
+            if sin_municion:
+                ui.mensaje_sin_municion(pantalla, constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA)
+            else:
+                ui.info_post_disparo(pantalla=pantalla, color_jugador=turno.tanque.color, ancho=constantes.ANCHO_VENTANA,
                                  alto=constantes.ALTO_VENTANA, altura=disparo.altura_maxima,
                                  distancia=disparo.distancia_maxima)
             pygame.display.update()

@@ -62,13 +62,13 @@ class Disparo:
         self.distancia_maxima = abs(self.x_bala - self.distancia_maxima - tanque_posicion_x)
 
     def verificar_impacto_tanque_enemigo(self, tanque_enemigo):
-        if (self.y_bala >= tanque_enemigo.posicion_y - 23) and (
-                tanque_enemigo.posicion_x - 35<= self.x_bala <= tanque_enemigo.posicion_x + 35):
+        if (self.y_bala >= tanque_enemigo.posicion_y - 12) and (
+                tanque_enemigo.posicion_x - 40<= self.x_bala <= tanque_enemigo.posicion_x + 30):
             return 1
         else:
             return 0
     
-    def verificar_impacto_terreno(self, pos, altura_terreno):
+    def verificar_impacto_terreno(self, altura_terreno):
         if self.y_bala > 0 and altura_terreno[int(self.y_bala)][int(self.x_bala)] == "x":
             return 0
         else:
@@ -89,9 +89,15 @@ class Disparo:
                 coor_y_tanque_enemigo = tanque_enemigo.posicion_y
 
                 distancias = []
-                distancias.append(math.sqrt((coor_x_tanque_enemigo - coor_x) ** 2 + (coor_y_tanque_enemigo - 10 - coor_y) ** 2))
-                distancias.append(math.sqrt((coor_x_tanque_enemigo + 30 - coor_x) ** 2 + (coor_y_tanque_enemigo - 10- coor_y) ** 2))
-                distancias.append(math.sqrt((coor_x_tanque_enemigo - 30 - coor_x) ** 2 + (coor_y_tanque_enemigo - 10- coor_y) ** 2))
+                distancias.append(math.sqrt((coor_x_tanque_enemigo - coor_x) ** 2 + (coor_y_tanque_enemigo + 12 - coor_y) ** 2))
+                distancias.append(math.sqrt((coor_x_tanque_enemigo + 30 - coor_x) ** 2 + (coor_y_tanque_enemigo + 12 - coor_y) ** 2))
+                distancias.append(math.sqrt((coor_x_tanque_enemigo - 40 - coor_x) ** 2 + (coor_y_tanque_enemigo + 12 - coor_y) ** 2))
+                distancias.append(math.sqrt((coor_x_tanque_enemigo - coor_x) ** 2 + (coor_y_tanque_enemigo - coor_y) ** 2))
+                distancias.append(math.sqrt((coor_x_tanque_enemigo + 30 - coor_x) ** 2 + (coor_y_tanque_enemigo - coor_y) ** 2))
+                distancias.append(math.sqrt((coor_x_tanque_enemigo - 40 - coor_x) ** 2 + (coor_y_tanque_enemigo - coor_y) ** 2))
+                distancias.append(math.sqrt((coor_x_tanque_enemigo - coor_x) ** 2 + (coor_y_tanque_enemigo - 30 - coor_y) ** 2))
+                distancias.append(math.sqrt((coor_x_tanque_enemigo + 30 - coor_x) ** 2 + (coor_y_tanque_enemigo - 30 - coor_y) ** 2))
+                distancias.append(math.sqrt((coor_x_tanque_enemigo - 40 - coor_x) ** 2 + (coor_y_tanque_enemigo - 30 - coor_y) ** 2))
                 distancias_validas = [dist for dist in distancias if dist < radio_impacto]
 
                 if distancias_validas:

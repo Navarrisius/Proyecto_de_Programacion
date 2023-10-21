@@ -60,7 +60,7 @@ class Tanque:
             disparo.actualizar()
             disparo.dibujar(pantalla)
             try:
-                if not disparo.verificar_impacto_terreno(self.posicion_x, altura_terreno):
+                if not disparo.verificar_impacto_terreno(altura_terreno):
                     disparo.impacto_terreno = True
                     disparo.calcular_distancia_maxima(self.posicion_x)
                     return 0
@@ -83,3 +83,7 @@ class Tanque:
             tanque_enemigo.draw_tank(pantalla)
             pygame.display.flip()
             pygame.time.delay(10)
+    
+    def calcular_damage_caida(self, pos_y_anterior):
+        diff_y = abs(self.posicion_y - pos_y_anterior)
+        self.salud -= diff_y

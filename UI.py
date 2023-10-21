@@ -74,3 +74,20 @@ class UI:
                          border_radius=20)
         Escribir.escribir_texto(pantalla, f"Velocidad actual de la bala: {velocidad}m/s", "Verdana", 30, [255, 255, 255], (0, 0, 0),
                     ancho // 2 - ancho_rectangulo // 2 + 10, alto  - 70)
+    
+    def mensaje_sin_municion(self, pantalla, ancho, alto):
+        ancho_rectangulo = 350
+        alto_rectangulo = 100
+        pygame.draw.rect(surface=pantalla, color=(0, 0, 0), rect=(
+            ancho // 2 + 30, alto  - alto_rectangulo, ancho_rectangulo, alto_rectangulo),
+                         border_radius=20)
+        Escribir.escribir_texto(pantalla, "¡No hay munición!", "Verdana", 30, [255, 255, 255], (0, 0, 0),
+                    ancho // 2 + 55, alto  - 70)
+
+    def mensaje_caida(self, pantalla, ancho, alto, diff_y):
+        ancho_rectangulo = 800
+        alto_rectangulo = 70
+        pygame.draw.rect(surface=pantalla, color=(0, 0, 0),
+                rect=(ancho // 2 - ancho_rectangulo // 2, 10,
+                    ancho_rectangulo, alto_rectangulo), border_radius=20)
+        Escribir.escribir_texto(pantalla, f"¡El tanque cayó {diff_y} metros y ha recibido {diff_y} de daño!", "Verdana", 30, [255, 255, 255], (0, 0, 0), ancho // 2 - ancho_rectangulo // 2 + 10, 25)

@@ -9,4 +9,4 @@ class Fondo:
 
     def cargar_fondo(self, screen, tipo):
         if tipo == 1:
-            screen.blit(self.mountain_png, (0, 0))
+            screen.blit(self.mountain_png, (0, -100))
