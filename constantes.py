@@ -8,6 +8,7 @@ ALTO_VENTANA = None
 JUGADORES = []
 NEGRO = (0, 0, 0)
 BLANCO = (255, 255, 255)
+DISPARO = None
 
 '''
 HitBox del tanque:

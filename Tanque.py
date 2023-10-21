@@ -6,6 +6,7 @@ from UI import UI
 
 class Tanque:
     municion = None
+    balas = None
     tipo_bala = None
     salud = 100
     color = None
@@ -19,6 +20,7 @@ class Tanque:
     
     def __init__(self, color):
         self.municion = [Bala(0), Bala(1), Bala(2)]
+        self.balas = 16
         self.color = color
         self.tipo_bala = 0
         if color == (99, 11, 87):

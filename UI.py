@@ -78,10 +78,10 @@ class UI:
     def mensaje_sin_municion(self, pantalla, ancho, alto):
         ancho_rectangulo = 350
         alto_rectangulo = 100
-        pygame.draw.rect(surface=pantalla, color=(0, 0, 0), rect=(
+        pygame.draw.rect(surface=pantalla, color=(255, 0, 0), rect=(
             ancho // 2 + 30, alto  - alto_rectangulo, ancho_rectangulo, alto_rectangulo),
                          border_radius=20)
-        Escribir.escribir_texto(pantalla, "¡No hay munición!", "Verdana", 30, [255, 255, 255], (0, 0, 0),
+        Escribir.escribir_texto(pantalla, "¡No hay munición!", "Verdana", 30, [255, 255, 255], (255, 0, 0),
                     ancho // 2 + 55, alto  - 70)
 
     def mensaje_caida(self, pantalla, ancho, diff_y):
