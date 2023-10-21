@@ -16,6 +16,9 @@ def menu(pantalla, mandos, game):
     en_menu = True
     reloj = pygame.time.Clock()
     fondo = Fondo()
+    png_pessi = pygame.image.load('img/pessi.png')
+    png_pessi = pygame.transform.scale(png_pessi, (200, 200))
+    png_pessi = pygame.transform.rotate(png_pessi, 12)
     while en_menu:
         mouse = pygame.mouse.get_pos()
         teclas = pygame.key.get_pressed()
@@ -31,15 +34,16 @@ def menu(pantalla, mandos, game):
                     0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
                         mouse[1] >= constantes.ALTO_VENTANA / 2 + 90 and mouse[
                     1] <= constantes.ALTO_VENTANA / 2 + 60 + 120)):
-                    controles(pantalla)
+                    controles(pantalla, mandos, game)
                 if (mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
                     0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
                         mouse[1] >= constantes.ALTO_VENTANA / 2 + 245 and mouse[
                     1] <= constantes.ALTO_VENTANA / 2 + 245 + 120):
-                    en_menu = False
+                    quit()
         if not en_menu:
             break
         fondo.cargar_fondo(pantalla,1)
+        pantalla.blit(png_pessi, (constantes.ANCHO_VENTANA - 200, constantes.ALTO_VENTANA - 200))
         # boton jugar
         Escribir.escribir_texto(pantalla, "PessiTank", "timesnewroman", 180, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA / 2 - 410, constantes.ALTO_VENTANA / 2 - 300)
@@ -90,7 +94,7 @@ def menu(pantalla, mandos, game):
         reloj.tick(60)
 
 
-def controles(pantalla):
+def controles(pantalla, mandos, game):
     nuevo_ancho = 100
     nuevo_alto = 100
     while True:
@@ -100,7 +104,7 @@ def controles(pantalla):
                                        constantes.ANCHO_VENTANA / 2 - 250 , constantes.ALTO_VENTANA / 2 - 450)
         png_bala60 = pygame.image.load("img/60mm.png").convert_alpha()
         pantalla.blit(png_bala60, (constantes.ANCHO_VENTANA // 2 + 300 , constantes.ALTO_VENTANA  - 850))
-        Escribir.escribir_texto(pantalla, "Bala del 60mm", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "Bala de 60mm", "More Sugar", 50, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 330)
         Escribir.escribir_texto(pantalla, "3 unidades", "More Sugar", 50, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 290)
@@ -108,7 +112,7 @@ def controles(pantalla):
                                        constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 250)
         png_bala80 = pygame.image.load("img/80mm.png").convert_alpha()
         pantalla.blit(png_bala80, (constantes.ANCHO_VENTANA // 2 + 300 , constantes.ALTO_VENTANA  - 650))
-        Escribir.escribir_texto(pantalla, "Bala del 80mm", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "Bala de 80mm", "More Sugar", 50, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 130)
         Escribir.escribir_texto(pantalla, "10 unidades", "More Sugar", 50, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 90)
@@ -116,7 +120,7 @@ def controles(pantalla):
                                        constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 50)
         png_bala105 = pygame.image.load("img/105mm.png").convert_alpha()
         pantalla.blit(png_bala105, (constantes.ANCHO_VENTANA // 2 + 300, constantes.ALTO_VENTANA  - 450))
-        Escribir.escribir_texto(pantalla, "Bala del 105mm", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "Bala de 105mm", "More Sugar", 50, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 + 70)
         Escribir.escribir_texto(pantalla, "3 unidades", "More Sugar", 50, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 + 110)
@@ -129,40 +133,38 @@ def controles(pantalla):
         png_tecla_s = pygame.image.load("img/tecla_s_.png").convert_alpha()
         png_tecla_s_ajustado = pygame.transform.scale(png_tecla_s, (nuevo_ancho, nuevo_alto))
         pantalla.blit(png_tecla_s_ajustado, (constantes.ANCHO_VENTANA // 2 - 900 , constantes.ALTO_VENTANA  - 680))
-        Escribir.escribir_texto(pantalla, "Aumento o disminucion de la potencia", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "Aumento o disminución de la potencia", "More Sugar", 50, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA // 2 - 750 , constantes.ALTO_VENTANA // 2 - 170)
-        
         png_tecla_a = pygame.image.load("img/tecla_a_.png").convert_alpha()
         png_tecla_a_ajustado = pygame.transform.scale(png_tecla_a, (nuevo_ancho, nuevo_alto))
         pantalla.blit(png_tecla_a_ajustado, (constantes.ANCHO_VENTANA // 2 - 900 , constantes.ALTO_VENTANA  - 550))
         png_tecla_d = pygame.image.load("img/tecla_d_.png").convert_alpha()
         png_tecla_d_ajustado = pygame.transform.scale(png_tecla_d, (nuevo_ancho, nuevo_alto))
         pantalla.blit(png_tecla_d_ajustado, (constantes.ANCHO_VENTANA // 2 - 780, constantes.ALTO_VENTANA  - 550))
-        Escribir.escribir_texto(pantalla, "Aumento o disminucion  del angulo", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "Aumento o disminución  del ángulo", "More Sugar", 50, constantes.NEGRO, None,
                                 constantes.ANCHO_VENTANA // 2 - 600 , constantes.ALTO_VENTANA // 2 + 20)
-        
         png_tecla_b = pygame.image.load("img/tecla_b.png").convert_alpha()
         png_tecla_b_ajustado = pygame.transform.scale(png_tecla_b, (nuevo_ancho, nuevo_alto))
         pantalla.blit(png_tecla_b_ajustado, (constantes.ANCHO_VENTANA // 2 - 900 , constantes.ALTO_VENTANA  - 400))
-        Escribir.escribir_texto(pantalla, "Cambio de municion", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "Cambio de munición", "More Sugar", 50, constantes.NEGRO, None,
                                 constantes.ANCHO_VENTANA // 2 - 750 , constantes.ALTO_VENTANA // 2 + 175)
         
         png_tecla_espacio = pygame.image.load("img/tecla_espacio.png").convert_alpha()
         png_tecla_espacio_ajustado = pygame.transform.scale(png_tecla_espacio, (200, 95))
         pantalla.blit(png_tecla_espacio_ajustado, (constantes.ANCHO_VENTANA // 2 - 900, constantes.ALTO_VENTANA  - 280))
-        Escribir.escribir_texto(pantalla, "Disparo", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "Disparar", "More Sugar", 50, constantes.NEGRO, None,
                                 constantes.ANCHO_VENTANA // 2 - 650 , constantes.ALTO_VENTANA // 2 + 290)
         
         png_tecla_shift = pygame.image.load("img/tecla_shift.png").convert_alpha()
         png_tecla_shift_ajustado = pygame.transform.scale(png_tecla_shift, (200, nuevo_alto))
         pantalla.blit(png_tecla_shift_ajustado, (constantes.ANCHO_VENTANA // 2 - 900, constantes.ALTO_VENTANA  - 180))
 
-        Escribir.escribir_texto(pantalla, "Aumento o dismunicion mas rapida ", "More Sugar", 50, constantes.NEGRO, None,
+        Escribir.escribir_texto(pantalla, "Aumento o dismunición más rápida ", "More Sugar", 50, constantes.NEGRO, None,
                                 constantes.ANCHO_VENTANA // 2 - 650 , constantes.ALTO_VENTANA // 2 + 400)
         
         pygame.draw.rect(pantalla, constantes.NEGRO,
                          (constantes.ANCHO_VENTANA / 2 - 165, constantes.ALTO_VENTANA / 2 + 245, 350, 120), 60, 50)
-        Escribir.escribir_texto(pantalla, "Atras", "More Sugar", 150, constantes.BLANCO, None,
+        Escribir.escribir_texto(pantalla, "Atrás", "More Sugar", 150, constantes.BLANCO, None,
                                        constantes.ANCHO_VENTANA / 2 - 125, constantes.ALTO_VENTANA / 2 + 255)
         pygame.display.update()
         for event in pygame.event.get():
@@ -171,7 +173,7 @@ def controles(pantalla):
                     0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
                         mouse[1] >= constantes.ALTO_VENTANA / 2 + 245 and mouse[
                         1] <= constantes.ALTO_VENTANA / 2 + 245 + 120):
-                        main()
+                        menu(pantalla, mandos, game)
 
         pygame.display.update()
 
@@ -308,7 +310,7 @@ def terminar_de_juego(ganador, pantalla):
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 pygame.quit()
-                quit()()
+                quit()
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_c:
                     termino = False
@@ -468,10 +470,10 @@ def partida(pantalla, mandos, game):
         jugador_2.tanque.posicion_y = calcular_y(terreno.matriz, jugador_2.tanque)
         if jugador_1.tanque.posicion_y != caida_jugador1:
             jugador_1.tanque.calcular_damage_caida(caida_jugador1)
-            ui.mensaje_caida(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA, diff_y=abs(jugador_1.tanque.posicion_y - caida_jugador1))
+            ui.mensaje_caida(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, diff_y=abs(jugador_1.tanque.posicion_y - caida_jugador1))
         if jugador_2.tanque.posicion_y != caida_jugador2:
             jugador_2.tanque.calcular_damage_caida(caida_jugador2)
-            ui.mensaje_caida(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA, diff_y=abs(jugador_2.tanque.posicion_y - caida_jugador2))
+            ui.mensaje_caida(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, diff_y=abs(jugador_2.tanque.posicion_y - caida_jugador2))
 
         # Terreno
         terreno.dibujar_terreno(pantalla)
