@@ -477,6 +477,11 @@ def partida(pantalla, mandos, game):
         terreno.dibujar_terreno(pantalla)
         barras_de_salud(jugador_1.tanque, pantalla)
         barras_de_salud(jugador_2.tanque, pantalla)
+        
+        if enemigo.salud <= 0:
+            game.ganador = turno
+        elif turno.tanque.salud <=0:
+            game.ganador = enemigo
 
         # Se escribe en pantalla la información del pre-disparo de cada jugador
         if jugador_1.puede_jugar:
@@ -510,6 +515,7 @@ def partida(pantalla, mandos, game):
 
             jugador_1.tanque.draw_tank(pantalla)
             jugador_2.tanque.draw_tank(pantalla)
+
         if disparo is not None:
             disparo.recorrido(pantalla, turno.tanque.color)
             if sin_municion:

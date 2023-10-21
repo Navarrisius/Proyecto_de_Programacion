@@ -85,7 +85,7 @@ class UI:
                     ancho // 2 + 55, alto  - 70)
 
     def mensaje_caida(self, pantalla, ancho, alto, diff_y):
-        ancho_rectangulo = 800
+        ancho_rectangulo = 850
         alto_rectangulo = 70
         pygame.draw.rect(surface=pantalla, color=(0, 0, 0),
                 rect=(ancho // 2 - ancho_rectangulo // 2, 10,
