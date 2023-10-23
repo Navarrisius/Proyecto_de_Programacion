@@ -11,6 +11,7 @@ from Terreno import Terreno
 from UI import UI
 import constantes
 import random
+import sys
 
 def menu(pantalla, game):
     en_menu = True
@@ -285,12 +286,13 @@ def pausar():
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 pygame.quit()
-                quit()
+                sys.exit()
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_c:
                     pausado = False
                 elif evento.key == pygame.K_q:
-                    quit()
+                    pygame.quit()
+                    sys.exit()
         reloj.tick(5)
 
 
@@ -310,7 +312,7 @@ def terminar_de_juego(ganador, pantalla):
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 pygame.quit()
-                quit()
+                sys.exit()
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_c:
                     termino = False
@@ -318,6 +320,7 @@ def terminar_de_juego(ganador, pantalla):
                     partida(pantalla, game)
                 elif evento.key == pygame.K_q:
                     pygame.quit()
+                    sys.exit()
 
         reloj.tick(5)
 
