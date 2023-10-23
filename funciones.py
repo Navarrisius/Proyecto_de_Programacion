@@ -40,7 +40,7 @@ def menu(pantalla, game):
                     0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
                         mouse[1] >= constantes.ALTO_VENTANA / 2 + 245 and mouse[
                     1] <= constantes.ALTO_VENTANA / 2 + 245 + 120):
-                    quit()
+                    sys.exit()
         if not en_menu:
             break
         fondo.cargar_fondo(pantalla,1)
