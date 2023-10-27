@@ -85,9 +85,9 @@ class UI:
                     ancho // 2 + 55, alto  - 70)
 
     def mensaje_caida(self, pantalla, ancho, diff_y):
-        ancho_rectangulo = 850
+        ancho_rectangulo = 925
         alto_rectangulo = 70
         pygame.draw.rect(surface=pantalla, color=(0, 0, 0),
                 rect=(ancho // 2 - ancho_rectangulo // 2, 10,
                     ancho_rectangulo, alto_rectangulo), border_radius=20)
-        Escribir.escribir_texto(pantalla, f"¡El tanque cayó {diff_y} metros y ha recibido {diff_y // 2} de daño!", "Verdana", 30, [255, 255, 255], (0, 0, 0), ancho // 2 - ancho_rectangulo // 2 + 10, 25)
+        Escribir.escribir_texto(pantalla, f"¡El tanque cayó {diff_y} metros y ha recibido {diff_y // 2} de daño extra!", "Verdana", 30, [255, 255, 255], (0, 0, 0), ancho // 2 - ancho_rectangulo // 2 + 10, 25)
