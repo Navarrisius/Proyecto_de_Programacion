@@ -4,6 +4,7 @@ class Bala:
     radio_bala = None
     unidades = None
     radio_impacto = None
+    costo = None
 
     def __init__(self, tipo):
         if tipo == 0:

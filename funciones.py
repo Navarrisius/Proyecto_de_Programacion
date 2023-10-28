@@ -9,6 +9,7 @@ from Partida import Partida
 from Tanque import Tanque
 from Terreno import Terreno
 from UI import UI
+from configuraciones import Configuracion
 import constantes
 import random
 import sys
@@ -36,6 +37,7 @@ def menu(pantalla, game):
                         mouse[1] >= constantes.ALTO_VENTANA / 2 + 90 and mouse[
                     1] <= constantes.ALTO_VENTANA / 2 + 60 + 120)):
                     tutorial(pantalla, game)
+                    #configurar_juego(pantalla, game)
                 if (mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
                     0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
                         mouse[1] >= constantes.ALTO_VENTANA / 2 + 245 and mouse[
@@ -93,6 +95,73 @@ def menu(pantalla, game):
         pygame.display.flip()
         # Limita los FPS a 60
         reloj.tick(60)
+
+pygame.display.set_caption("Configuración de Juego")
+
+def configurar_juego(pantalla,game):
+    change_delay = 100  # Milisegundos de retraso entre cambios
+    last_change_time = 0
+    while True:
+        mouse = pygame.mouse.get_pos()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return  # Sal del menú
+
+        keys = pygame.key.get_pressed()
+
+        current_time = pygame.time.get_ticks()
+
+        if current_time - last_change_time > change_delay:
+            # Lógica para ajustar las opciones según las teclas presionadas
+            if keys[pygame.K_UP]:
+                # Aumenta el número de jugadores (limitado a 6)
+                constantes.num_jugadores = min(constantes.num_jugadores + 1, 6)
+            elif keys[pygame.K_DOWN]:
+                # Disminuye el número de jugadores (mínimo 2)
+                constantes.num_jugadores = max(constantes.num_jugadores - 1, 2)
+            elif keys[pygame.K_KP_PLUS]:
+                # Aumenta el número de partidos
+                constantes.num_partidos = min(constantes.num_partidos + 1, 20)
+            elif keys[pygame.K_KP_MINUS]:
+                # Disminuye el número de partidos (mínimo 1)
+                constantes.num_partidos = max(constantes.num_partidos - 1, 1)
+            elif keys[pygame.K_e]:
+                # Activa/desactiva los efectos del entorno
+                constantes.efectos_entorno = not constantes.efectos_entorno
+
+            last_change_time = current_time
+        if keys[pygame.K_RETURN]:
+            Configuracion(constantes.num_jugadores,800,800,constantes.num_partidos,constantes.efectos_entorno)
+        # Limpia la pantalla
+        pantalla.fill((0, 0, 0))
+
+        # Muestra las opciones y valores en la pantalla
+        font = pygame.font.Font(None, 36)
+        texto = font.render(f"Jugadores: {constantes.num_jugadores}", True, (255, 255, 255))
+        pantalla.blit(texto, (20, 20))
+        texto = font.render(f"Número de Partidos: {constantes.num_partidos}", True, (255, 255, 255))
+        pantalla.blit(texto, (20, 100))
+        texto = font.render(f"Efectos de Entorno: {'Activado' if constantes.efectos_entorno else 'Desactivado'}", True, (255, 255, 255))
+        pantalla.blit(texto, (20, 140))
+        pygame.draw.rect(pantalla, constantes.NEGRO,
+                         (constantes.ANCHO_VENTANA / 2 - 165, constantes.ALTO_VENTANA / 2 + 245, 350, 120), 60, 50)
+        Escribir.escribir_texto(pantalla, "Atrás", "More Sugar", 150, constantes.BLANCO, None,
+                                       constantes.ANCHO_VENTANA / 2 - 125, constantes.ALTO_VENTANA / 2 + 255)
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if (mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
+                    0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
+                        mouse[1] >= constantes.ALTO_VENTANA / 2 + 245 and mouse[
+                        1] <= constantes.ALTO_VENTANA / 2 + 245 + 120):
+                        menu(pantalla, game)
+
+        pygame.display.update()
+        pygame.display.flip()
 
 
 def tutorial(pantalla, game):
