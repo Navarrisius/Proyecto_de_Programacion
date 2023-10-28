@@ -4,7 +4,7 @@ import constantes
 
 
 class Boton:
-    def __init__(self, x, y, ancho, alto, text, color, hover_color, color_texto):
+    def __init__(self, x, y, ancho, alto, text, color, hover_color, color_texto, borde):
         self.x_ratio = x / constantes.ANCHO_VENTANA
         self.y_ratio = y / constantes.ALTO_VENTANA
         self.width_ratio = ancho / constantes.ALTO_VENTANA
@@ -13,6 +13,7 @@ class Boton:
         self.color = color
         self.hover_color = hover_color
         self.color_texto = color_texto
+        self.borde = borde
 
     def dibujar(self, surface, ancho, alto):
         x = self.x_ratio * ancho
@@ -23,9 +24,11 @@ class Boton:
         mouse_pos = pygame.mouse.get_pos()
 
         if x < mouse_pos[0] < x + w and y < mouse_pos[1] < y + h:
-            pygame.draw.rect(surface, self.hover_color, (x, y, w, h))
+            pygame.draw.rect(surface, self.hover_color, (x, y, w, h), border_radius= self.borde)
+            self.color_texto = (255, 255, 255)
         else:
-            pygame.draw.rect(surface, self.color, (x, y, w, h))
+            pygame.draw.rect(surface, self.color, (x, y, w, h), border_radius= self.borde)
+            self.color_texto = (0, 0, 0)
 
         font = pygame.font.Font(None, int(h // 1.5))
         text_surf = font.render(self.text, True, self.color_texto)
