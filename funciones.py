@@ -28,7 +28,9 @@ def menu(pantalla, game):
               constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
         Boton(constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 90, Ancho_boton, Alto_boton, "Ajustes",
               constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
-        Boton(constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 240, Ancho_boton, Alto_boton, "Salir",
+        Boton(constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 240, Ancho_boton, Alto_boton, "Controles",
+              constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
+        Boton(constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 380, Ancho_boton, Alto_boton, "Salir",
               constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50)
     ]
     while en_menu:
@@ -44,8 +46,9 @@ def menu(pantalla, game):
                 if botones[1].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
                     #tutorial(pantalla, game)
                     configurar_juego(pantalla, game)
-                    #configurar_juego(pantalla, game)
                 if botones[2].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
+                    tutorial(pantalla, game)
+                if botones[3].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
                     sys.exit()
         if not en_menu:
             break
@@ -70,6 +73,8 @@ def menu(pantalla, game):
 pygame.display.set_caption("Configuración de Juego")
 
 def configurar_juego(pantalla,game):
+    pantalla.fill((208, 237, 250))
+    font = pygame.font.Font(None, 42)
     change_delay = 100  # Milisegundos de retraso entre cambios
     last_change_time = 0
     while True:
@@ -94,10 +99,10 @@ def configurar_juego(pantalla,game):
             elif keys[pygame.K_DOWN]:
                 # Disminuye el número de jugadores (mínimo 2)
                 constantes.num_jugadores = max(constantes.num_jugadores - 1, 2)
-            elif keys[pygame.K_KP_PLUS]:
+            elif keys[pygame.K_RIGHT]:
                 # Aumenta el número de partidos
                 constantes.num_partidos = min(constantes.num_partidos + 1, 20)
-            elif keys[pygame.K_KP_MINUS]:
+            elif keys[pygame.K_LEFT]:
                 # Disminuye el número de partidos (mínimo 1)
                 constantes.num_partidos = max(constantes.num_partidos - 1, 1)
             elif keys[pygame.K_e]:
@@ -106,18 +111,21 @@ def configurar_juego(pantalla,game):
 
             last_change_time = current_time
         if keys[pygame.K_RETURN]:
-            Configuracion(constantes.num_jugadores,800,800,constantes.num_partidos,constantes.efectos_entorno)
-        # Limpia la pantalla
-        pantalla.fill((0, 0, 0))
-
+            Configuracion(constantes.num_jugadores,800,800,constantes.num_partidos)
+        
+        Escribir.escribir_texto(pantalla, "Ajustes del juego", "More Sugar", 150, constantes.NEGRO, None,
+                                       constantes.ANCHO_VENTANA / 2 -400 , constantes.ALTO_VENTANA / 2 - 480)
         # Muestra las opciones y valores en la pantalla
-        font = pygame.font.Font(None, 36)
-        texto = font.render(f"Jugadores: {constantes.num_jugadores}", True, (255, 255, 255))
-        pantalla.blit(texto, (20, 20))
-        texto = font.render(f"Número de Partidos: {constantes.num_partidos}", True, (255, 255, 255))
-        pantalla.blit(texto, (20, 100))
-        texto = font.render(f"Efectos de Entorno: {'Activado' if constantes.efectos_entorno else 'Desactivado'}", True, (255, 255, 255))
-        pantalla.blit(texto, (20, 140))
+        texto = font.render(f"Jugadores: {constantes.num_jugadores}", True, (0,0,0))
+        pantalla.blit(texto, (20, 320))
+        texto = font.render("Use las flechas arriba y abajo para aumentar y/o disminuir los jugadores", True, (0,0,0))
+        pantalla.blit(texto, (250, 320))
+        texto = font.render(f"Número de Partidos: {constantes.num_partidos}", True, (0,0,0))
+        pantalla.blit(texto, (20, 360))
+        texto = font.render("Use las flechas derecha e izquierda y - para aumentar y/o disminuir jugadores", True, (0,0,0))
+        pantalla.blit(texto, (400, 360))
+        texto = font.render(f"Efectos de Entorno: {'Activado' if constantes.efectos_entorno else 'Desactivado'}", True, (0,0,0))
+        pantalla.blit(texto, (20, 400))
         pygame.draw.rect(pantalla, constantes.NEGRO,
                          (constantes.ANCHO_VENTANA / 2 - 165, constantes.ALTO_VENTANA / 2 + 245, 350, 120), 60, 50)
         Escribir.escribir_texto(pantalla, "Atrás", "More Sugar", 150, constantes.BLANCO, None,
