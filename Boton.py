@@ -5,10 +5,10 @@ import constantes
 
 class Boton:
     def __init__(self, x, y, ancho, alto, text, color, hover_color, color_texto, borde):
-        self.x_ratio = x / constantes.ANCHO_VENTANA
-        self.y_ratio = y / constantes.ALTO_VENTANA
-        self.width_ratio = ancho / constantes.ALTO_VENTANA
-        self.height_ratio = alto / constantes.ANCHO_VENTANA
+        self.x_ratio = x
+        self.y_ratio = y
+        self.width_ratio = ancho
+        self.height_ratio = alto
         self.text = text
         self.color = color
         self.hover_color = hover_color

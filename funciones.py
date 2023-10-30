@@ -22,16 +22,20 @@ def menu(pantalla, game):
     png_pessi = pygame.image.load('img/pessi.png')
     png_pessi = pygame.transform.scale(png_pessi, (200, 200))
     png_pessi = pygame.transform.rotate(png_pessi, 12)
-    Ancho_boton, Alto_boton = 270, 210
+    ancho_botón, altura_botón = 0.25, 0.08
+    margin_ratio = 0.05  # Margen de separación entre botones
+
     botones = [
-        Boton(constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 - 60, Ancho_boton, Alto_boton, "Jugar",
+        Boton(0.5 - ancho_botón / 2, 0.5 - 0.5 * altura_botón + margin_ratio, ancho_botón,
+               altura_botón, "Jugar",
               constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
-        Boton(constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 90, Ancho_boton, Alto_boton, "Ajustes",
+        Boton(0.5 - ancho_botón / 2, 0.5 + 1.5 * altura_botón, ancho_botón, altura_botón, "Ajustes",
               constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
-        Boton(constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 240, Ancho_boton, Alto_boton, "Controles",
+        Boton(0.5 - ancho_botón / 2, 0.5 + 2.5 * altura_botón + margin_ratio, ancho_botón,
+               altura_botón, "Controles",
               constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
-        Boton(constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 380, Ancho_boton, Alto_boton, "Salir",
-              constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50)
+        Boton(0.5 - ancho_botón / 2, 0.5 + 3.5 * altura_botón + margin_ratio*2, ancho_botón,
+               altura_botón, "Salir", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50)
     ]
     while en_menu:
         mouse = pygame.mouse.get_pos()
