@@ -1,4 +1,5 @@
 import pygame
+import constantes
 from Escribir import Escribir
 
 
@@ -91,3 +92,10 @@ class UI:
                 rect=(ancho // 2 - ancho_rectangulo // 2, 10,
                     ancho_rectangulo, alto_rectangulo), border_radius=20)
         Escribir.escribir_texto(pantalla, f"¡El tanque cayó {diff_y} metros y ha recibido {diff_y // 2} de daño extra!", "Verdana", 30, [255, 255, 255], (0, 0, 0), ancho // 2 - ancho_rectangulo // 2 + 10, 25)
+    
+    def rectangulo_negro(self, pantalla):
+        alto_rectangulo = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 5
+        pygame.draw.rect(surface=pantalla, color=(0, 0, 0),
+                rect=(0, alto_rectangulo, constantes.ANCHO_VENTANA, alto_rectangulo))
+        pygame.draw.rect(surface=pantalla, color=(255, 255, 255),
+                rect=(0, constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 5, constantes.ANCHO_VENTANA, 20))

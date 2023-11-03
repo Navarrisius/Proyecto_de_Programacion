@@ -9,6 +9,7 @@ JUGADORES = []
 NEGRO = (0, 0, 0)
 BLANCO = (255, 255, 255)
 DISPARO = None
+PANTALLA = None
 
 '''
 HitBox del tanque:
