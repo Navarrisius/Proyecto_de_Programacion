@@ -9,9 +9,11 @@ from Partida import Partida
 from Tanque import Tanque
 from Terreno import Terreno
 from UI import UI
+from configuraciones import Configuracion
 import constantes
 import random
 import sys
+from Boton import Boton
 
 def menu(pantalla, game):
     en_menu = True
@@ -20,6 +22,21 @@ def menu(pantalla, game):
     png_pessi = pygame.image.load('img/pessi.png')
     png_pessi = pygame.transform.scale(png_pessi, (200, 200))
     png_pessi = pygame.transform.rotate(png_pessi, 12)
+    ancho_botón, altura_botón = 0.25, 0.08
+    margin_ratio = 0.05  # Margen de separación entre botones
+
+    botones = [
+        Boton(0.5 - ancho_botón / 2, 0.5 - 0.5 * altura_botón + margin_ratio, ancho_botón,
+               altura_botón, "Jugar",
+              constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
+        Boton(0.5 - ancho_botón / 2, 0.5 + 1.5 * altura_botón, ancho_botón, altura_botón, "Ajustes",
+              constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
+        Boton(0.5 - ancho_botón / 2, 0.5 + 2.5 * altura_botón + margin_ratio, ancho_botón,
+               altura_botón, "Controles",
+              constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
+        Boton(0.5 - ancho_botón / 2, 0.5 + 3.5 * altura_botón + margin_ratio*2, ancho_botón,
+               altura_botón, "Salir", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50)
+    ]
     while en_menu:
         mouse = pygame.mouse.get_pos()
         teclas = pygame.key.get_pressed()
@@ -27,19 +44,15 @@ def menu(pantalla, game):
             if teclas[pygame.K_ESCAPE]:
                 en_menu = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if ((constantes.ANCHO_VENTANA / 2 - 235 <= mouse[0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and
-                        (constantes.ALTO_VENTANA / 2 - 60 <= mouse[1] <= constantes.ALTO_VENTANA / 2 - 60 + 120)):
+                if botones[0].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
                     partida(pantalla, game)
                     en_menu = False
-                if ((mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
-                    0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
-                        mouse[1] >= constantes.ALTO_VENTANA / 2 + 90 and mouse[
-                    1] <= constantes.ALTO_VENTANA / 2 + 60 + 120)):
+                if botones[1].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
+                    #tutorial(pantalla, game)
+                    configurar_juego(pantalla, game)
+                if botones[2].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
                     tutorial(pantalla, game)
-                if (mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
-                    0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
-                        mouse[1] >= constantes.ALTO_VENTANA / 2 + 245 and mouse[
-                    1] <= constantes.ALTO_VENTANA / 2 + 245 + 120):
+                if botones[3].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
                     sys.exit()
         if not en_menu:
             break
@@ -54,45 +67,84 @@ def menu(pantalla, game):
         png_hielo = pygame.transform.scale(png_hielo, (320, 220))
         pantalla.blit(png_hielo, (constantes.ANCHO_VENTANA / 2 + 235, constantes.ALTO_VENTANA / 2 - 300))
 
-        pygame.draw.rect(pantalla, constantes.BLANCO,
-                         (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 - 60, 470, 120), 60, 50)
-        Escribir.escribir_texto(pantalla, "Jugar", "More Sugar", 150, constantes.NEGRO, None,
-                                       constantes.ANCHO_VENTANA / 2 - 150, constantes.ALTO_VENTANA / 2 - 55)
-        # boton configuracion
-        pygame.draw.rect(pantalla, constantes.BLANCO,
-                         (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 90, 470, 120), 60, 50)
-        Escribir.escribir_texto(pantalla, "Controles", "More Sugar", 130, constantes.NEGRO, None,
-                                       constantes.ANCHO_VENTANA / 2 - 210, constantes.ALTO_VENTANA / 2 + 100)
-        # boton salir
-        pygame.draw.rect(pantalla, constantes.BLANCO,
-                         (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 245, 470, 120), 60, 50)
-        Escribir.escribir_texto(pantalla, "Salir", "More Sugar", 150, constantes.NEGRO, None,
-                                       constantes.ANCHO_VENTANA / 2 - 125, constantes.ALTO_VENTANA / 2 + 255)
-        if ((constantes.ANCHO_VENTANA / 2 - 235 <= mouse[0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and
-                (constantes.ALTO_VENTANA / 2 - 60 <= mouse[1] <= constantes.ALTO_VENTANA / 2 - 60 + 120)):
-            pygame.draw.rect(pantalla, (114,158,188),
-                            (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 - 60, 470, 120), 60, 50)
-            Escribir.escribir_texto(pantalla, "Jugar", "More Sugar", 150, constantes.BLANCO, None,
-                                        constantes.ANCHO_VENTANA / 2 - 150, constantes.ALTO_VENTANA / 2 - 55)
-        if ((mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
-            0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
-                mouse[1] >= constantes.ALTO_VENTANA / 2 + 90 and mouse[
-            1] <= constantes.ALTO_VENTANA / 2 + 60 + 120)):
-                    pygame.draw.rect(pantalla, (114,158,188),
-                         (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 90, 470, 120), 60, 50)
-                    Escribir.escribir_texto(pantalla, "Controles", "More Sugar", 130, constantes.BLANCO, None,
-                                                constantes.ANCHO_VENTANA / 2 - 210, constantes.ALTO_VENTANA / 2 + 100)
-        if (mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
-            0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
-                mouse[1] >= constantes.ALTO_VENTANA / 2 + 245 and mouse[
-            1] <= constantes.ALTO_VENTANA / 2 + 245 + 120):
-            pygame.draw.rect(pantalla, (114,158,188),
-                            (constantes.ANCHO_VENTANA / 2 - 235, constantes.ALTO_VENTANA / 2 + 245, 470, 120), 60, 50)
-            Escribir.escribir_texto(pantalla, "Salir", "More Sugar", 150, constantes.BLANCO, None,
-                                        constantes.ANCHO_VENTANA / 2 - 125, constantes.ALTO_VENTANA / 2 + 255)
+        for boton in botones:
+            boton.dibujar(pantalla, constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA)
+
         pygame.display.flip()
         # Limita los FPS a 60
         reloj.tick(60)
+
+pygame.display.set_caption("Configuración de Juego")
+
+def configurar_juego(pantalla,game):
+    pantalla.fill((208, 237, 250))
+    font = pygame.font.Font(None, 42)
+    change_delay = 100  # Milisegundos de retraso entre cambios
+    last_change_time = 0
+    while True:
+        mouse = pygame.mouse.get_pos()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return  # Sal del menú
+
+        keys = pygame.key.get_pressed()
+
+        current_time = pygame.time.get_ticks()
+
+        if current_time - last_change_time > change_delay:
+            # Lógica para ajustar las opciones según las teclas presionadas
+            if keys[pygame.K_UP]:
+                # Aumenta el número de jugadores (limitado a 6)
+                constantes.num_jugadores = min(constantes.num_jugadores + 1, 6)
+            elif keys[pygame.K_DOWN]:
+                # Disminuye el número de jugadores (mínimo 2)
+                constantes.num_jugadores = max(constantes.num_jugadores - 1, 2)
+            elif keys[pygame.K_RIGHT]:
+                # Aumenta el número de partidos
+                constantes.num_partidos = min(constantes.num_partidos + 1, 20)
+            elif keys[pygame.K_LEFT]:
+                # Disminuye el número de partidos (mínimo 1)
+                constantes.num_partidos = max(constantes.num_partidos - 1, 1)
+            elif keys[pygame.K_e]:
+                # Activa/desactiva los efectos del entorno
+                constantes.efectos_entorno = not constantes.efectos_entorno
+
+            last_change_time = current_time
+        if keys[pygame.K_RETURN]:
+            Configuracion(constantes.num_jugadores,800,800,constantes.num_partidos)
+        
+        Escribir.escribir_texto(pantalla, "Ajustes del juego", "More Sugar", 150, constantes.NEGRO, None,
+                                       constantes.ANCHO_VENTANA / 2 -400 , constantes.ALTO_VENTANA / 2 - 480)
+        # Muestra las opciones y valores en la pantalla
+        texto = font.render(f"Jugadores: {constantes.num_jugadores}", True, (0,0,0))
+        pantalla.blit(texto, (20, 320))
+        texto = font.render("Use las flechas arriba y abajo para aumentar y/o disminuir los jugadores", True, (0,0,0))
+        pantalla.blit(texto, (250, 320))
+        texto = font.render(f"Número de Partidos: {constantes.num_partidos}", True, (0,0,0))
+        pantalla.blit(texto, (20, 360))
+        texto = font.render("Use las flechas derecha e izquierda y - para aumentar y/o disminuir jugadores", True, (0,0,0))
+        pantalla.blit(texto, (400, 360))
+        texto = font.render(f"Efectos de Entorno: {'Activado' if constantes.efectos_entorno else 'Desactivado'}", True, (0,0,0))
+        pantalla.blit(texto, (20, 400))
+        pygame.draw.rect(pantalla, constantes.NEGRO,
+                         (constantes.ANCHO_VENTANA / 2 - 165, constantes.ALTO_VENTANA / 2 + 245, 350, 120), 60, 50)
+        Escribir.escribir_texto(pantalla, "Atrás", "More Sugar", 150, constantes.BLANCO, None,
+                                       constantes.ANCHO_VENTANA / 2 - 125, constantes.ALTO_VENTANA / 2 + 255)
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if (mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
+                    0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
+                        mouse[1] >= constantes.ALTO_VENTANA / 2 + 245 and mouse[
+                        1] <= constantes.ALTO_VENTANA / 2 + 245 + 120):
+                        menu(pantalla, game)
+
+        pygame.display.update()
+        pygame.display.flip()
 
 
 def tutorial(pantalla, game):

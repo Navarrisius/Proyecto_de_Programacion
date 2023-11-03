@@ -1,16 +1,25 @@
+from configuraciones import Configuracion
+
+
 NOMBRE_VENTANA = "PessiTank"
 LIMITE_ANGULO_MIN = 0
 LIMITE_ANGULO_MAX = 180
 LIMITE_VELOCIDAD_MIN = 30
 GRAVEDAD = 9.8
-ANCHO_VENTANA = None
-ALTO_VENTANA = None
+ANCHO_VENTANA = 800
+ALTO_VENTANA = 800
 JUGADORES = []
 NEGRO = (0, 0, 0)
 BLANCO = (255, 255, 255)
+PLOMO = (155, 155, 155)
+CELESTE = (114,158,188)
 DISPARO = None
 PANTALLA = None
-
+num_jugadores = 2
+num_partidos = 1
+efectos_entorno = True 
+config_defecto = Configuracion(2,800,800,1)
+config_maximas = Configuracion(6,1920,1080,20)
 '''
 HitBox del tanque:
 x_izq = -40
