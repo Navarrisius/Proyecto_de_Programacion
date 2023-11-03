@@ -5,7 +5,9 @@ from Escribir import Escribir
 
 class UI:
     def __init__(self):
-        pass
+        self.png_alerta = pygame.image.load("img/alerta.png").convert_alpha()
+        self.png_dinero = pygame.image.load("img/dinero.png").convert_alpha()
+        self.png_salud = pygame.image.load("img/salud.png").convert_alpha()
 
     def info_pre_disparo(self, pantalla, ancho, alto, color_jugador, texto_jugador, angulo, velocidad, tanque_jugador):
         ancho_rectangulo = 800
@@ -93,9 +95,46 @@ class UI:
                     ancho_rectangulo, alto_rectangulo), border_radius=20)
         Escribir.escribir_texto(pantalla, f"¡El tanque cayó {diff_y} metros y ha recibido {diff_y // 2} de daño extra!", "Verdana", 30, [255, 255, 255], (0, 0, 0), ancho // 2 - ancho_rectangulo // 2 + 10, 25)
     
-    def rectangulo_negro(self, pantalla):
+    def rectangulo(self, pantalla):
         alto_rectangulo = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 5
-        pygame.draw.rect(surface=pantalla, color=(0, 0, 0),
+        pygame.draw.rect(surface=pantalla, color=(50, 50, 50),
                 rect=(0, alto_rectangulo, constantes.ANCHO_VENTANA, alto_rectangulo))
         pygame.draw.rect(surface=pantalla, color=(255, 255, 255),
                 rect=(0, constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 5, constantes.ANCHO_VENTANA, 20))
+
+    def texto_sin_municion(self, pantalla):
+        alto_rectangulo = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 1.15
+        ancho_rectangulo = constantes.ANCHO_VENTANA - constantes.ANCHO_VENTANA // 1.2
+        x = constantes.ANCHO_VENTANA // 1.25
+        y = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 6.7
+        color_fondo = (255, 62, 50)
+        pygame.draw.rect(surface=pantalla, color=color_fondo,
+                rect=(x, y, ancho_rectangulo, alto_rectangulo), border_radius=10)
+        pantalla.blit(self.png_alerta, (x + 10, y + 35))
+        Escribir.escribir_texto(pantalla, "No hay munición", "Verdana", 25, constantes.BLANCO, color_fondo,
+                    x + ancho_rectangulo // 3.9, y + alto_rectangulo // 2.7)
+
+    def texto_jugador(self, pantalla, color_jugador, texto_jugador):
+        x = 30
+        y = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 5.75
+        alto_rectangulo = constantes.ALTO_VENTANA // 20
+        ancho_rectangulo = constantes.ALTO_VENTANA // 3
+        pygame.draw.rect(surface=pantalla, color=color_jugador, rect=(x, y, ancho_rectangulo, alto_rectangulo), border_radius=20)
+        Escribir.escribir_texto(pantalla, texto_jugador, "Verdana", 25, constantes.BLANCO, color_jugador,
+                    x + ancho_rectangulo // 3.05, y + 10)
+        
+    def texto_dinero(self, pantalla, dinero):
+        x = 30
+        y = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 8.2
+        pantalla.blit(self.png_dinero, (x, y))
+        Escribir.escribir_texto(pantalla, f"${dinero}", "Verdana", 30, constantes.BLANCO, (50, 50, 50),
+                    x + (x * 3), y + 10)
+
+    def texto_salud(self, pantalla, salud):
+        x = 50
+        y = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 20
+        x_texto = 30
+        y_texto = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 16.4
+        pantalla.blit(self.png_salud, (x, y))
+        Escribir.escribir_texto(pantalla, f"{int(salud)} HP", "Verdana", 30, constantes.BLANCO, (50, 50, 50),
+                    x_texto + (x_texto * 3), y_texto + 10)

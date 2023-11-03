@@ -34,6 +34,10 @@ class Tanque:
         elif color == (0, 0, 0):
             self.imagen = pygame.image.load("img/tanque_negro.png").convert_alpha()
 
+    def corregir_salud(self):
+        if self.salud <= 0:
+            self.salud = 0
+
     def draw_tank(self, pantalla):
         turret_length = 30
         turret_start = (self.posicion_x - 5, self.posicion_y - 25)

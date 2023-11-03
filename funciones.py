@@ -16,12 +16,18 @@ import sys
 from Boton import Boton
 
 def menu(pantalla, game):
+    pygame.mixer.init()
+    pygame.mixer.music.load('mp3/aria_math.mp3')
+    pygame.mixer.music.set_volume(0.1)
+    pygame.mixer.music.play(-1)
     en_menu = True
     reloj = pygame.time.Clock()
     fondo = Fondo()
     png_pessi = pygame.image.load('img/pessi.png')
     png_pessi = pygame.transform.scale(png_pessi, (200, 200))
-    png_pessi = pygame.transform.rotate(png_pessi, 12)
+    png_balon_de_hielo = pygame.image.load('img/balon_de_hielo.png')
+    png_balon_de_hielo = pygame.transform.scale(png_balon_de_hielo, (120, 120))
+    png_balon_de_hielo = pygame.transform.rotate(png_balon_de_hielo, 12)
     ancho_botón, altura_botón = 0.25, 0.08
     margin_ratio = 0.05  # Margen de separación entre botones
 
@@ -57,7 +63,8 @@ def menu(pantalla, game):
         if not en_menu:
             break
         fondo.cargar_fondo(pantalla,1)
-        pantalla.blit(png_pessi, (constantes.ANCHO_VENTANA - 200, constantes.ALTO_VENTANA - 200))
+        pantalla.blit(png_pessi, (constantes.ANCHO_VENTANA - 230, constantes.ALTO_VENTANA - 200))
+        pantalla.blit(png_balon_de_hielo, (constantes.ANCHO_VENTANA - 110, constantes.ALTO_VENTANA - 120))
         # boton jugar
         Escribir.escribir_texto(pantalla, "PessiTank", "timesnewroman", 180, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA / 2 - 410, constantes.ALTO_VENTANA / 2 - 300)
@@ -467,12 +474,16 @@ def controles(event, teclas, turno, enemigo, terreno, game):
             turno.tanque.tipo_bala = 0
     # Comprar al apretar la tecla 'V'
     if teclas[pygame.K_v]:
+        sound = pygame.mixer.Sound('mp3/sonido_compra.mp3')
         if turno.tanque.tipo_bala == 0:
             turno.comprar_bala_60mm()
+            sound.play()
         if turno.tanque.tipo_bala == 1:
             turno.comprar_bala_80mm()
+            sound.play()
         if turno.tanque.tipo_bala == 2:
             turno.comprar_bala_105mm()
+            sound.play()
 
     # Verifica disparo del tanque y cambio de turnos
     if event.type == pygame.KEYDOWN:
@@ -505,6 +516,7 @@ def partida(pantalla, game):
     terreno.generar_matriz(constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA, altura_terreno)
     jugador_1.tanque.posicion_y = calcular_y(terreno.matriz, jugador_1.tanque)
     jugador_2.tanque.posicion_y = calcular_y(terreno.matriz, jugador_2.tanque)
+
     while running:
         caida_jugador1 = jugador_1.tanque.posicion_y
         caida_jugador2 = jugador_2.tanque.posicion_y
@@ -548,17 +560,27 @@ def partida(pantalla, game):
         barras_de_salud(jugador_1.tanque, pantalla)
         barras_de_salud(jugador_2.tanque, pantalla)
 
+        ui.rectangulo(pantalla)
+        ui.texto_dinero(pantalla, turno.dinero)
+        ui.texto_salud(pantalla, turno.tanque.salud)
+    
+        if turno.tanque.municion[turno.tanque.tipo_bala].unidades == 0:
+            ui.texto_sin_municion(pantalla)
+
         # Se escribe en pantalla la información del pre-disparo de cada jugador
         if jugador_1.puede_jugar:
+            ui.texto_jugador(pantalla, turno.tanque.color, "Jugador 1")
+            
             ui.info_pre_disparo(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA,
                                 texto_jugador="Turno del Jugador 1", color_jugador=jugador_1.tanque.color,
                                 angulo=jugador_1.tanque.angulo_n, velocidad=jugador_1.tanque.velocidad_disparo, tanque_jugador= jugador_1.tanque)
         elif jugador_2.puede_jugar:
+            ui.texto_jugador(pantalla, turno.tanque.color, "Jugador 2")
             ui.info_pre_disparo(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, alto=constantes.ALTO_VENTANA,
                                 texto_jugador="Turno del Jugador 2", color_jugador=jugador_2.tanque.color,
                                 angulo=jugador_2.tanque.angulo_n, velocidad=jugador_2.tanque.velocidad_disparo, tanque_jugador= jugador_2.tanque)
             
-        # ui.rectangulo_negro(pantalla)
+
             
         # Texto con el jugador ganador
         if game.ganador is not None:
