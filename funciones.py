@@ -583,6 +583,12 @@ def partida(pantalla, game):
             jugador_2.tanque.calcular_damage_caida(caida_jugador2)
             ui.mensaje_caida(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, diff_y=abs(jugador_2.tanque.posicion_y - caida_jugador2))
 
+        if jugador_1.tanque.salud <= 0:
+            game.ganador = jugador_2
+        elif jugador_2.tanque.salud <= 0:
+            game.ganador = jugador_1
+
+
         # Terreno
         terreno.dibujar_terreno(pantalla)
         barras_de_salud(jugador_1.tanque, pantalla)
@@ -595,7 +601,6 @@ def partida(pantalla, game):
         elif turno == jugador_2:
             ui.texto_jugador(pantalla, turno.tanque.color, "Penaldo")
 
-        
         # Texto con el jugador ganador
         if game.ganador is not None:
             pygame.mixer.music.stop()
@@ -606,7 +611,6 @@ def partida(pantalla, game):
             while pygame.time.get_ticks() - tiempo_inicial < tiempo_espera:
                 pygame.display.update()
                 terminar_de_juego(game.ganador, pantalla)
-                # pass
             pygame.display.update()
             
         else:
