@@ -8,45 +8,11 @@ class UI:
         self.png_alerta = pygame.image.load("img/alerta.png").convert_alpha()
         self.png_dinero = pygame.image.load("img/dinero.png").convert_alpha()
         self.png_salud = pygame.image.load("img/salud.png").convert_alpha()
-
-    def info_pre_disparo(self, pantalla, ancho, alto, color_jugador, texto_jugador, angulo, velocidad, tanque_jugador):
-        ancho_rectangulo = 800
-        alto_rectangulo = 150
-        png_angulo = pygame.image.load("img/angulo.png").convert_alpha()
-        png_velocidad = pygame.image.load("img/velocidad.png").convert_alpha()
-        png_bala60 = pygame.image.load("img/60mm.png").convert_alpha()
-        png_bala80 = pygame.image.load("img/80mm.png").convert_alpha()
-        png_bala105 = pygame.image.load("img/105mm.png").convert_alpha()
-        ancho_rectangulo = 1000
-        pygame.draw.rect(surface=pantalla, color=color_jugador,
-                rect=(ancho // 2 - ancho_rectangulo // 2, alto - alto_rectangulo,
-                    ancho_rectangulo, alto_rectangulo), border_radius=20)
-        Escribir.escribir_texto(pantalla, texto_jugador, "Verdana", 30, [255, 255, 255], color_jugador,
-                                ancho // 2 - 150, alto  - alto_rectangulo)
-        pantalla.blit(png_angulo, (ancho // 2 - ancho_rectangulo // 2 + 30, alto  - 75))
-        pantalla.blit(png_velocidad, (ancho // 2 - ancho_rectangulo // 2 + 250, alto  - 75))
-
-        # Tanque con bala 60mm seleccionada
-        if tanque_jugador.tipo_bala == 0:
-            for i in range(tanque_jugador.municion[tanque_jugador.tipo_bala].unidades):
-                pantalla.blit(png_bala60, (ancho // 2 - ancho_rectangulo // 2 + 550 + i * 40, alto  - 90))
-
-        # Tanque con bala 80mm seleccionada
-        if tanque_jugador.tipo_bala == 1:
-            
-            for i in range(tanque_jugador.municion[tanque_jugador.tipo_bala].unidades):
-                pantalla.blit(png_bala80, (ancho // 2 - ancho_rectangulo // 2 + 550 + i * 40, alto  - 90))
-
-        # Tanque con bala 105mm seleccionada
-        if tanque_jugador.tipo_bala == 2:
-            for i in range(tanque_jugador.municion[tanque_jugador.tipo_bala].unidades):
-                pantalla.blit(png_bala105, (ancho // 2 - ancho_rectangulo // 2 + 550 + i * 40, alto  - 90))
-
-
-        Escribir.escribir_texto(pantalla, f"{angulo}°", "Verdana", 30, [255, 255, 255], color_jugador,
-                                ancho // 2 - ancho_rectangulo // 2 + 120, alto  - 70)
-        Escribir.escribir_texto(pantalla, f"{velocidad} m/s", "Verdana", 30, [255, 255, 255], color_jugador,
-                                ancho // 2 - ancho_rectangulo // 2 + 320, alto  - 70)
+        self.png_angulo = pygame.image.load("img/angulo.png").convert_alpha()
+        self.png_velocidad = pygame.image.load("img/velocidad.png").convert_alpha()
+        self.png_bala60 = pygame.image.load("img/60mm.png").convert_alpha()
+        self.png_bala80 = pygame.image.load("img/80mm.png").convert_alpha()
+        self.png_bala105 = pygame.image.load("img/105mm.png").convert_alpha()
 
     def info_post_disparo(self, pantalla, ancho, alto, color_jugador, altura, distancia):
         ancho_rectangulo = 1200
@@ -77,15 +43,6 @@ class UI:
                          border_radius=20)
         Escribir.escribir_texto(pantalla, f"Velocidad actual de la bala: {velocidad}m/s", "Verdana", 30, [255, 255, 255], (0, 0, 0),
                     ancho // 2 - ancho_rectangulo // 2 + 10, alto  - 70)
-    
-    def mensaje_sin_municion(self, pantalla, ancho, alto):
-        ancho_rectangulo = 350
-        alto_rectangulo = 100
-        pygame.draw.rect(surface=pantalla, color=(255, 0, 0), rect=(
-            ancho // 2 + 30, alto  - alto_rectangulo, ancho_rectangulo, alto_rectangulo),
-                         border_radius=20)
-        Escribir.escribir_texto(pantalla, "¡No hay munición!", "Verdana", 30, [255, 255, 255], (255, 0, 0),
-                    ancho // 2 + 55, alto  - 70)
 
     def mensaje_caida(self, pantalla, ancho, diff_y):
         ancho_rectangulo = 925
@@ -101,18 +58,6 @@ class UI:
                 rect=(0, alto_rectangulo, constantes.ANCHO_VENTANA, alto_rectangulo))
         pygame.draw.rect(surface=pantalla, color=(255, 255, 255),
                 rect=(0, constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 5, constantes.ANCHO_VENTANA, 20))
-
-    def texto_sin_municion(self, pantalla):
-        alto_rectangulo = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 1.15
-        ancho_rectangulo = constantes.ANCHO_VENTANA - constantes.ANCHO_VENTANA // 1.2
-        x = constantes.ANCHO_VENTANA // 1.25
-        y = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 6.7
-        color_fondo = (255, 62, 50)
-        pygame.draw.rect(surface=pantalla, color=color_fondo,
-                rect=(x, y, ancho_rectangulo, alto_rectangulo), border_radius=10)
-        pantalla.blit(self.png_alerta, (x + 10, y + 35))
-        Escribir.escribir_texto(pantalla, "No hay munición", "Verdana", 25, constantes.BLANCO, color_fondo,
-                    x + ancho_rectangulo // 3.9, y + alto_rectangulo // 2.7)
 
     def texto_jugador(self, pantalla, color_jugador, texto_jugador):
         x = 30
@@ -138,3 +83,95 @@ class UI:
         pantalla.blit(self.png_salud, (x, y))
         Escribir.escribir_texto(pantalla, f"{int(salud)} HP", "Verdana", 30, constantes.BLANCO, (50, 50, 50),
                     x_texto + (x_texto * 3), y_texto + 10)
+        
+        
+    def texto_ajustes_disparo(self, pantalla):
+        x_texto = constantes.ANCHO_VENTANA - constantes.ANCHO_VENTANA // (1.4 + 0.275)
+        y_texto = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 6
+        Escribir.escribir_texto(pantalla, "Ajustes del disparo", "Verdana", 30, constantes.BLANCO, (50, 50, 50),
+                    x_texto, y_texto)
+        
+
+    def texto_angulo(self, pantalla, angulo):
+        x_texto = constantes.ANCHO_VENTANA - constantes.ANCHO_VENTANA // (1.3 + 0.3 + 0.1)
+        y_texto = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 9.5
+        x_img = x_texto + constantes.ANCHO_VENTANA // (20 + 0.3)
+        y_img = y_texto - constantes.ALTO_VENTANA // 50
+        Escribir.escribir_texto(pantalla, "Ángulo:", "Verdana", 20, constantes.BLANCO, (50, 50, 50),
+                    x_texto, y_texto)
+        pantalla.blit(self.png_angulo, (x_img, y_img))
+        x_texto2 = x_texto + constantes.ANCHO_VENTANA // (11 + 0.3)
+        y_texto2 = y_texto - 5
+        Escribir.escribir_texto(pantalla, f"{round(angulo, 1)}°", "Verdana", 25, constantes.BLANCO, (50, 50, 50),
+                    x_texto2, y_texto2)
+        
+
+    def texto_velocidad(self, pantalla, velocidad):
+        x_texto = constantes.ANCHO_VENTANA - constantes.ANCHO_VENTANA // (1.28 + 0.3 + 0.1)
+        y_texto = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 25
+        x_img = x_texto + constantes.ANCHO_VENTANA // (16 + 0.3)
+        y_img = y_texto - constantes.ALTO_VENTANA // 50
+        Escribir.escribir_texto(pantalla, "Velocidad:", "Verdana", 20, constantes.BLANCO, (50, 50, 50),
+                    x_texto, y_texto)
+        pantalla.blit(self.png_velocidad, (x_img, y_img))
+        x_texto2 = x_texto + constantes.ANCHO_VENTANA // (9.5 + 0.3)
+        y_texto2 = y_texto - 5
+        Escribir.escribir_texto(pantalla, f"{int(velocidad)} m/s", "Verdana", 25, constantes.BLANCO, (50, 50, 50),
+                    x_texto2, y_texto2)
+    
+
+    def texto_tipo_bala(self, pantalla, tipo_bala):
+        x_texto = constantes.ANCHO_VENTANA - constantes.ANCHO_VENTANA // (6 + 0.3 + 0.1)
+        y_texto = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 6
+        if tipo_bala == 0:
+            texto = "Bala 60mm"
+        elif tipo_bala == 1:
+            texto = "Bala 80mm"
+        else:
+            texto = "Bala 105mm"
+        Escribir.escribir_texto(pantalla, texto, "Verdana", 25, constantes.BLANCO, (50, 50, 50), x_texto, y_texto)     
+
+
+    def texto_sin_municion(self, pantalla):
+        alto_rectangulo = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 1.075
+        ancho_rectangulo = constantes.ANCHO_VENTANA - constantes.ANCHO_VENTANA // 1.2
+        x = constantes.ANCHO_VENTANA // 1.25
+        y = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 8.5
+        color_fondo = (255, 62, 50)
+        pygame.draw.rect(surface=pantalla, color=color_fondo,
+                rect=(x, y, ancho_rectangulo, alto_rectangulo), border_radius=10)
+        pantalla.blit(self.png_alerta, (x + 10, y + 5))
+        Escribir.escribir_texto(pantalla, "No hay munición", "Verdana", 25, constantes.BLANCO, color_fondo,
+                    x + ancho_rectangulo // 3.9, y + alto_rectangulo // 3.5)
+        
+
+    def texto_unidades(self, pantalla, unidades):
+        x_texto = constantes.ANCHO_VENTANA - constantes.ANCHO_VENTANA // (6 + 0.3 + 0.1)
+        y_texto = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 25
+        if unidades != 1:
+            Escribir.escribir_texto(pantalla, f"x{unidades} unidades.", "Verdana", 25, constantes.BLANCO, (50, 50, 50), x_texto, y_texto)
+        else:
+            Escribir.escribir_texto(pantalla, f"x1 unidad.", "Verdana", 25, constantes.BLANCO, (50, 50, 50), x_texto, y_texto)
+           
+
+    def cantidad_img_balas(self, pantalla, tipo_bala, unidades):
+        if unidades == 0:
+            self.texto_sin_municion(pantalla)
+        else:
+            if tipo_bala == 0:
+                bala = self.png_bala60
+            elif tipo_bala == 1:
+                bala = self.png_bala80
+            else:
+                bala = self.png_bala105
+            bala = pygame.transform.scale(bala, (9.25 * 3, 20 * 3))
+            x_primera_bala = constantes.ANCHO_VENTANA // 1.28
+            y_primera_bala = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 8.5
+            if unidades <= 20:
+                for i in range(unidades):
+                    pantalla.blit(bala, (x_primera_bala + (20 * i), y_primera_bala))
+            else:
+                for i in range(20):
+                    pantalla.blit(bala, (x_primera_bala + (20 * i), y_primera_bala))
+            self.texto_unidades(pantalla, unidades)
+

@@ -20,6 +20,8 @@ num_partidos = 1
 efectos_entorno = True 
 config_defecto = Configuracion(2,800,800,1)
 config_maximas = Configuracion(6,1920,1080,20)
+MUSICA_PARTIDA = True
+
 '''
 HitBox del tanque:
 x_izq = -40

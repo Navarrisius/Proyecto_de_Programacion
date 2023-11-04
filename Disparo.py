@@ -55,6 +55,11 @@ class Disparo:
         imagen_rotada = pygame.transform.rotate(self.img_bala, angulo_rotacion)
         pantalla.blit(imagen_rotada, (int(self.x_bala - 4.625), int(self.y_bala - 10)))
 
+    def dibujar_indicador(self, pantalla, color_jugador):
+        vertices = [(self.eje_x[-1], 20), (self.eje_x[-1] + 10, 5), (self.eje_x[-1] + 20, 20)]
+        if self.eje_y[-1] < 0:
+            pygame.draw.polygon(pantalla, color_jugador, vertices)
+
     def calcular_altura_maxima(self):
         self.altura_maxima = abs((self.velocidad_inicial ** 2 * (math.sin(self.angulo_radianes) ** 2)) / (2 * 9.81))
 

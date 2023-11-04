@@ -65,6 +65,7 @@ class Tanque:
                 return 0
             disparo.actualizar()
             disparo.dibujar(pantalla)
+            disparo.dibujar_indicador(pantalla, self.color)
             try:
                 if not disparo.verificar_impacto_terreno(altura_terreno):
                     disparo.impacto_terreno = True
