@@ -583,6 +583,8 @@ def partida(pantalla, game):
             jugador_2.tanque.calcular_damage_caida(caida_jugador2)
             ui.mensaje_caida(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, diff_y=abs(jugador_2.tanque.posicion_y - caida_jugador2))
 
+        jugador_1.tanque.corregir_salud()
+        jugador_2.tanque.corregir_salud()
         if jugador_1.tanque.salud <= 0:
             game.ganador = jugador_2
         elif jugador_2.tanque.salud <= 0:

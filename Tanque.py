@@ -94,4 +94,3 @@ class Tanque:
     def calcular_damage_caida(self, pos_y_anterior):
         diff_y = abs(self.posicion_y - pos_y_anterior) // 2
         self.salud -= diff_y
-        self.corregir_salud()
