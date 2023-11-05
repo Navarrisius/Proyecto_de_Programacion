@@ -257,39 +257,21 @@ def actualizar_info_pantalla():
 
 def crear_jugadores():
     colores_rgb = {
-        "purpura": (99, 11, 87),
+        "verde_musgo": (47, 69, 56),
         "rojo": (255, 0, 0),
         "azul": (0, 0, 255),
-        "verde_musgo": (47, 69, 56),
-        "NEGRO": (0, 0, 0)
+        "rosado": (252, 3, 186),
+        "negro": (0, 0, 0),
+        "morado" : (99, 11, 87)
     }
     colores_disponibles = list(colores_rgb.values())
-    primer_color = random.choice(colores_disponibles)
-    colores_disponibles.remove(primer_color)
-    segundo_color = random.choice(colores_disponibles)
-    colores_disponibles.remove(segundo_color)
-
-    # Se crea el jugador 1
-    jugador_1 = Jugador(None, Tanque(primer_color))
-    jugador_1.tanque.posicion_x = random.randint(30, constantes.ANCHO_VENTANA // 2 - 200)
-    jugador_1.tanque.posicion_y = 30
-    jugador_1.tanque.angulo_n = 0
-    jugador_1.tanque.angulo_canon = (math.radians(jugador_1.tanque.angulo_n))
-
-    # Se crea el jugador 2
-    jugador_2 = Jugador(None, Tanque(segundo_color))
-    jugador_2.tanque.posicion_x = random.randint(constantes.ANCHO_VENTANA // 2 + 200, constantes.ANCHO_VENTANA - 60)
-    jugador_2.tanque.posicion_y = 30
-    jugador_2.tanque.angulo_n = 0
-    jugador_2.tanque.angulo_canon = (math.radians(jugador_2.tanque.angulo_n))
-    if random.choice([True, False]):
-        jugador_1.puede_jugar = True
-        jugador_2.puede_jugar = False
-    else:
-        jugador_1.puede_jugar = True
-        jugador_2.puede_jugar = False
-
-    constantes.JUGADORES = [jugador_1, jugador_2]
+    for i in range(1, constantes.CANT_JUGADORES + 1) :
+        color = random.choice(colores_disponibles)
+        colores_disponibles.remove(color)
+        jugador = Jugador(None, Tanque(color))
+        jugador.tanque.posicion_x = random.randint(30, constantes.ANCHO_VENTANA // i - 200)
+        jugador.tanque.posicion_y = 30
+        constantes.JUGADORES.append(jugador)
 
 
 def calcular_y(matriz, tanque):
@@ -298,18 +280,20 @@ def calcular_y(matriz, tanque):
             return y - 1
 
 
-def cambiar_turnos(jugador1, jugador2):
-    if jugador1.puede_jugar:
-        jugador1.puede_jugar = False
-        jugador2.puede_jugar = True
-    else:
-        jugador1.puede_jugar = True
-        jugador2.puede_jugar = False
+def cambiar_turnos(jugadores):
+    posibles_jugadores = terminar_turnos(jugadores)
+    turno = random.choice(posibles_jugadores)
+    turno.puede_jugar = True
+    turno.ya_jugado = True
 
 
 def terminar_turnos(jugadores):
+    posibles_jugadores = []
     for jugador in jugadores:
         jugador.puede_jugar = False
+        if jugador.ya_jugado == False :
+            posibles_jugadores.append(jugador)
+    return posibles_jugadores
 
 
 def barras_de_salud(tanque, pantalla):
@@ -373,10 +357,7 @@ def terminar_de_juego(ganador, pantalla):
                          rect=(constantes.ANCHO_VENTANA// 2 - 1400 // 2, constantes.ALTO_VENTANA//2 - 250,
                                1400, 400), border_radius=20)
     mensaje_a_pantalla("Presiona C para reiniciar partida o Q para salir", (34, 113, 179), 25)
-    if ganador == jugador_1:
-        mensaje_a_pantalla(f"Juego terminado. Gana Jugador 1", constantes.BLANCO, -100, tamaño="large")
-    else:
-        mensaje_a_pantalla(f"Juego terminado. Gana Jugador 2", constantes.BLANCO, -100, tamaño="large")
+    mensaje_a_pantalla(f"Juego terminado. Gana " + ganador.nombre, constantes.BLANCO, -100, tamaño="large")
     pygame.display.flip()
     pygame.display.update()
     while termino:
@@ -453,7 +434,7 @@ def shoot(turno, enemigo, terreno, game):
             game.ganador = enemigo
             terminar_turnos(constantes.JUGADORES)
         else:
-            cambiar_turnos(jugador_1, jugador_2)
+            cambiar_turnos(constantes.JUGADORES)
         turno.tanque.municion[turno.tanque.tipo_bala].unidades -= 1
         turno.tanque.balas -= 1
         return disparo
@@ -533,14 +514,13 @@ def ui_pre_disparo(ui, pantalla, turno):
 
 
 def partida(pantalla, game):
-    global reloj , jugador_1, jugador_2
+    global reloj
     pygame.mixer.init()
     pygame.mixer.music.load('mp3/Death_by_Glamour.mp3')
     pygame.mixer.music.set_volume(0.05)
     pygame.mixer.music.play(-1)
     crear_jugadores()
-    jugador_1 = constantes.JUGADORES[0]
-    jugador_2 = constantes.JUGADORES[1]
+    turno = None
     terreno = Terreno()
     fondo = Fondo()
     running = game.en_partida
@@ -556,20 +536,18 @@ def partida(pantalla, game):
     img_linea_diagonal_sin_musica = pygame.image.load("img/linea_diagonal.png")
     altura_terreno = terreno.generar_terreno_perlin()
     terreno.generar_matriz(constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA, altura_terreno)
-    jugador_1.tanque.posicion_y = calcular_y(terreno.matriz, jugador_1.tanque)
-    jugador_2.tanque.posicion_y = calcular_y(terreno.matriz, jugador_2.tanque)
-
+    for jugador in constantes.JUGADORES :
+        jugador.tanque.posicion_y = calcular_y(terreno.matriz, jugador.tanque)
+        jugador.tanque.caida_tanque = jugador.tanque.posicion_y
     while running:
-        caida_jugador1 = jugador_1.tanque.posicion_y
-        caida_jugador2 = jugador_2.tanque.posicion_y
+        cambiar_turnos(constantes.JUGADORES)
+        for jugador in constantes.JUGADORES : 
+            if jugador.puede_jugar :
+                turno = jugador
+            else :
+                constantes.ENEMIGOS.append(jugador)
         reloj = pygame.time.Clock()
         teclas = pygame.key.get_pressed()
-        if jugador_1.puede_jugar:
-            turno = jugador_1
-            enemigo = jugador_2.tanque
-        else:
-            turno = jugador_2
-            enemigo = jugador_1.tanque
         for event in pygame.event.get():
             detectar_reinicio(event, pantalla, game)
             detectar_termino_partida(event, pantalla, game)
@@ -582,41 +560,33 @@ def partida(pantalla, game):
                 constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA = NUEVO_ANCHO, NUEVA_ALTURA
             elif teclas[pygame.K_ESCAPE]:
                 pausar()
-            controles(event, teclas, turno, enemigo, terreno, game)
+            controles(event, teclas, turno, constantes.ENEMIGOS, terreno, game)
             
 
         # VACIA PANTALLA
         fondo.cargar_fondo(pantalla, 1)
 
         # Mantener el tanque en el terreno y comprobar caida
-        jugador_1.tanque.posicion_y = calcular_y(terreno.matriz, jugador_1.tanque)
-        jugador_2.tanque.posicion_y = calcular_y(terreno.matriz, jugador_2.tanque)
-        if jugador_1.tanque.posicion_y != caida_jugador1:
-            jugador_1.tanque.calcular_damage_caida(caida_jugador1)
-            ui.mensaje_caida(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, diff_y=abs(jugador_1.tanque.posicion_y - caida_jugador1))
-        if jugador_2.tanque.posicion_y != caida_jugador2:
-            jugador_2.tanque.calcular_damage_caida(caida_jugador2)
-            ui.mensaje_caida(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, diff_y=abs(jugador_2.tanque.posicion_y - caida_jugador2))
+        for jugador in constantes.JUGADORES :
+            jugador.tanque.posicion_y = calcular_y(terreno.matriz, jugador.tanque)
+            if jugador.tanque.posicion_y != jugador.tanque.caida_tanque:
+                jugador.tanque.calcular_damage_caida(jugador.tanque.caida_tanque)
+                ui.mensaje_caida(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, diff_y=abs(jugador.tanque.posicion_y - jugador.tanque.caida_tanque))
 
-        jugador_1.tanque.corregir_salud()
-        jugador_2.tanque.corregir_salud()
-        if jugador_1.tanque.salud <= 0:
-            game.ganador = jugador_2
-        elif jugador_2.tanque.salud <= 0:
-            game.ganador = jugador_1
+        for jugador in constantes.JUGADORES :
+            if jugador.tanque.salud <= 0 :
+                jugador.tanque.corregir_salud()
+                jugador.vivo = False
 
 
         # Terreno
         terreno.dibujar_terreno(pantalla)
-        barras_de_salud(jugador_1.tanque, pantalla)
-        barras_de_salud(jugador_2.tanque, pantalla)
+        for jugador in constantes.JUGADORES :
+            barras_de_salud(jugador.tanque, pantalla)
 
         ui_pre_disparo(ui, pantalla, turno)
 
-        if turno == jugador_1:
-            ui.texto_jugador(pantalla, turno.tanque.color, "Pessi")
-        elif turno == jugador_2:
-            ui.texto_jugador(pantalla, turno.tanque.color, "Penaldo")
+        ui.texto_jugador(pantalla, turno.tanque.color, turno.nombre)
 
         # Texto con el jugador ganador
         if game.ganador is not None:
@@ -644,8 +614,8 @@ def partida(pantalla, game):
                 pantalla.blit(img_musica, (constantes.ANCHO_VENTANA - 300, 37))
                 pantalla.blit(img_linea_diagonal_sin_musica, (constantes.ANCHO_VENTANA - 297, 40))
 
-            jugador_1.tanque.draw_tank(pantalla)
-            jugador_2.tanque.draw_tank(pantalla)
+            for jugador in constantes.JUGADORES :
+                jugador.tanque.draw_tank(pantalla)
 
         if constantes.DISPARO is not None:
             disparo = constantes.DISPARO
