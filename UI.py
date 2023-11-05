@@ -102,7 +102,7 @@ class UI:
         pantalla.blit(self.png_angulo, (x_img, y_img))
         x_texto2 = x_texto + constantes.ANCHO_VENTANA // (11 + 0.3)
         y_texto2 = y_texto - 5
-        Escribir.escribir_texto(pantalla, f"{round(angulo, 1)}°", "Verdana", 25, constantes.BLANCO, (50, 50, 50),
+        Escribir.escribir_texto(pantalla, angulo, "Verdana", 25, constantes.BLANCO, (50, 50, 50),
                     x_texto2, y_texto2)
         
 

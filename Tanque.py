@@ -17,12 +17,14 @@ class Tanque:
     velocidad_disparo = 50
     turret_end = None
     imagen = None
+    caida_tanque = None
     
     def __init__(self, color):
         self.municion = [Bala(0), Bala(1), Bala(2)]
         self.balas = 16
         self.color = color
         self.tipo_bala = 0
+        self.angulo_canon = 90
         if color == (99, 11, 87):
             self.imagen = pygame.image.load("img/tanque_morado.png").convert_alpha()
         elif color == (0, 0, 255):
@@ -33,6 +35,8 @@ class Tanque:
             self.imagen = pygame.image.load("img/tanque_verde_musgo.png").convert_alpha()
         elif color == (0, 0, 0):
             self.imagen = pygame.image.load("img/tanque_negro.png").convert_alpha()
+        elif color == (252, 3, 186):
+            self.imagen = pygame.image.load("img/tanque_rojo.png").convert_alpha()
 
     def corregir_salud(self):
         if self.salud <= 0:
@@ -47,7 +51,7 @@ class Tanque:
 
         pantalla.blit(self.imagen, (self.posicion_x - 40, self.posicion_y - 40))
 
-    def disparar(self, pantalla, ancho, alto, terreno, disparo, altura_terreno, tanque_enemigo):
+    def disparar(self, pantalla, ancho, alto, terreno, disparo, altura_terreno, tanques_enemigos):
         disparo.elegir_imagen(self.tipo_bala)
         disparo.x_bala = self.turret_end[0]
         disparo.y_bala = self.turret_end[1]
@@ -75,10 +79,11 @@ class Tanque:
             except IndexError:
                 pass
             # IMPACTO CON TANQUE ENEMIGO
-            if disparo.verificar_impacto_tanque_enemigo(tanque_enemigo):
-                disparo.impacto_tanque = True
-                disparo.calcular_distancia_maxima(self.posicion_x)
-                return 1
+            for tanque in tanques_enemigos :
+                if disparo.verificar_impacto_tanque_enemigo(tanque):
+                    disparo.impacto_tanque = True
+                    disparo.calcular_distancia_maxima(self.posicion_x)
+                    return 1
             # IMPACTO CON TANQUE PROPIO
             if disparo.verificar_impacto_tanque_enemigo(self):
                 disparo.impacto_tanque = True
