@@ -17,6 +17,7 @@ from Boton import Boton
 
 
 def menu(pantalla, game):
+    constantes.PANTALLA = pygame.display.set_mode((constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA), pygame.RESIZABLE, pygame.OPENGL)
     en_menu = True
     reloj = pygame.time.Clock()
     fondo = Fondo()
@@ -80,10 +81,14 @@ def menu(pantalla, game):
 
 
 def configurar_juego(pantalla,game):
-    pantalla.fill((208, 237, 250))
     font = pygame.font.Font(None, 42)
     change_delay = 100  # Milisegundos de retraso entre cambios
     last_change_time = 0
+    ancho_botón, altura_botón = 0.10, 0.04
+    margin_ratio = 0.05  # Margen de separación entre botones
+    Volver = Boton(0.36 + ancho_botón / 2, 0.65 + 0.5 * altura_botón + margin_ratio, 0.18, 0.10, "Volver", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50)
+    boton_dimenciones = [Boton(0.8 + ancho_botón / 2, 0.5 - 0.5 * altura_botón + margin_ratio, ancho_botón, altura_botón, "->", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
+                         Boton(0.5 + ancho_botón / 2, 0.5 - 0.5 * altura_botón + margin_ratio, ancho_botón, altura_botón, "<-", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50)]
     while True:
         mouse = pygame.mouse.get_pos()
         for event in pygame.event.get():
@@ -119,7 +124,11 @@ def configurar_juego(pantalla,game):
             last_change_time = current_time
         if keys[pygame.K_RETURN]:
             Configuracion(constantes.num_jugadores,800,800,constantes.num_partidos)
-        
+        pantalla.fill((208, 237, 250))
+        for boton in boton_dimenciones:
+            boton.dibujar(pantalla, constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA)
+        Volver.dibujar(pantalla, constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA)
+        Escribir.render_text(pantalla, str(constantes.dimenciones),(0.7 + ancho_botón / 2, 0.5 - 0.5 * altura_botón + margin_ratio), 30, constantes.NEGRO,"Arial")
         Escribir.escribir_texto(pantalla, "Ajustes del juego", "More Sugar", 150, constantes.NEGRO, None,
                                        constantes.ANCHO_VENTANA / 2 -400 , constantes.ALTO_VENTANA / 2 - 480)
         # Muestra las opciones y valores en la pantalla
@@ -133,18 +142,24 @@ def configurar_juego(pantalla,game):
         pantalla.blit(texto, (400, 360))
         texto = font.render(f"Efectos de Entorno: {'Activado' if constantes.efectos_entorno else 'Desactivado'}", True, (0,0,0))
         pantalla.blit(texto, (20, 400))
-        pygame.draw.rect(pantalla, constantes.NEGRO,
-                         (constantes.ANCHO_VENTANA / 2 - 165, constantes.ALTO_VENTANA / 2 + 245, 350, 120), 60, 50)
-        Escribir.escribir_texto(pantalla, "Atrás", "More Sugar", 150, constantes.BLANCO, None,
-                                       constantes.ANCHO_VENTANA / 2 - 125, constantes.ALTO_VENTANA / 2 + 255)
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if (mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
-                    0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
-                        mouse[1] >= constantes.ALTO_VENTANA / 2 + 245 and mouse[
-                        1] <= constantes.ALTO_VENTANA / 2 + 245 + 120):
+                if Volver.si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
+                        constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA = constantes.dimenciones[0], \
+                        constantes.dimenciones[1]
                         menu(pantalla, game)
+                if boton_dimenciones[1].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
+                    constantes.dimenciones[0] = int(constantes.config_defecto.ancho_pantalla)
+                    constantes.dimenciones[1] = int(constantes.config_defecto.alto_pantalla)
+                if boton_dimenciones[0].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
+                    constantes.dimenciones[0] = int(constantes.config_maximas.ancho_pantalla)
+                    constantes.dimenciones[1] = int(constantes.config_maximas.alto_pantalla)
+
+
+
+
+
 
         pygame.display.update()
         pygame.display.flip()
