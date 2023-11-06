@@ -153,40 +153,39 @@ def configurar_juego(pantalla,game):
 
         pygame.display.update()
         pygame.display.flip()
-
-
+def posicion(x,y,ancho_botón,altura_botón,margin_ratio):
+    pos_x_rel = x + ancho_botón // 2
+    pos_y_rel = y - 0.5 * altura_botón + margin_ratio
+        # Calcula las coordenadas en función de la resolución actual
+    pos_x = constantes.ANCHO_VENTANA * pos_x_rel
+    pos_y = constantes.ALTO_VENTANA * pos_y_rel
+    return pos_x, pos_y
 def tutorial(pantalla, game):
     nuevo_ancho = 100
     nuevo_alto = 100
+    ancho_botón, altura_botón = 0.10, 0.04
+    margin_ratio = 0.05  # Margen de separación entre botones
+    Volver = Boton(0.36 + ancho_botón / 2, 0.65 + 0.5 * altura_botón + margin_ratio, 0.18, 0.10, "Volver", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50)
     while True:
         mouse = pygame.mouse.get_pos()
         pantalla.fill((219, 241, 243))
-        Escribir.escribir_texto(pantalla, "Controles", "More Sugar", 150, constantes.NEGRO, None,
-                                       constantes.ANCHO_VENTANA / 2 - 250 , constantes.ALTO_VENTANA / 2 - 450)
+        Volver.dibujar(pantalla, constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA)
+        Escribir.render_text(pantalla, "Controles", (0.47 + ancho_botón / 2, 0.07 - 0.5 * altura_botón + margin_ratio), 60, constantes.NEGRO, "More Sugar")
         png_bala60 = pygame.image.load("img/60mm.png").convert_alpha()
-        pantalla.blit(png_bala60, (constantes.ANCHO_VENTANA // 2 + 300 , constantes.ALTO_VENTANA  - 850))
-        Escribir.escribir_texto(pantalla, "Bala de 60mm", "More Sugar", 50, constantes.NEGRO, None,
-                                       constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 330)
-        Escribir.escribir_texto(pantalla, "3 unidades", "More Sugar", 50, constantes.NEGRO, None,
-                                       constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 290)
-        Escribir.escribir_texto(pantalla, "30 de daño", "More Sugar", 50, constantes.NEGRO, None,
-                                       constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 250)
+        pantalla.blit(png_bala60, posicion(0.65,0.18,ancho_botón,altura_botón,margin_ratio))
+        Escribir.render_text(pantalla, "Bala 60mm", (0.70 + ancho_botón / 2, 0.18 - 0.5 * altura_botón + margin_ratio), 24, constantes.NEGRO, "More Sugar")
+        Escribir.render_text(pantalla, "Costo $1000", (0.705 + ancho_botón / 2, 0.22 - 0.5 * altura_botón + margin_ratio), 24, constantes.NEGRO, "More Sugar")
+        Escribir.render_text(pantalla, "Daño 30", (0.688 + ancho_botón / 2, 0.26 - 0.5 * altura_botón + margin_ratio), 25, constantes.NEGRO, "More Sugar")
         png_bala80 = pygame.image.load("img/80mm.png").convert_alpha()
-        pantalla.blit(png_bala80, (constantes.ANCHO_VENTANA // 2 + 300 , constantes.ALTO_VENTANA  - 650))
-        Escribir.escribir_texto(pantalla, "Bala de 80mm", "More Sugar", 50, constantes.NEGRO, None,
-                                       constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 130)
-        Escribir.escribir_texto(pantalla, "10 unidades", "More Sugar", 50, constantes.NEGRO, None,
-                                       constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 90)
-        Escribir.escribir_texto(pantalla, "40 de daño", "More Sugar", 50, constantes.NEGRO, None,
-                                       constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 - 50)
+        pantalla.blit(png_bala80, posicion(0.65,0.385,ancho_botón,altura_botón,margin_ratio))
+        Escribir.render_text(pantalla, "Bala 80mm", (0.70 + ancho_botón / 2, 0.385 - 0.5 * altura_botón + margin_ratio), 24, constantes.NEGRO, "More Sugar")
+        Escribir.render_text(pantalla, "Costo $2500", (0.705 + ancho_botón / 2, 0.425 - 0.5 * altura_botón + margin_ratio), 24, constantes.NEGRO, "More Sugar")
+        Escribir.render_text(pantalla, "Daño 40", (0.688 + ancho_botón / 2, 0.465 - 0.5 * altura_botón + margin_ratio), 25, constantes.NEGRO, "More Sugar")
         png_bala105 = pygame.image.load("img/105mm.png").convert_alpha()
-        pantalla.blit(png_bala105, (constantes.ANCHO_VENTANA // 2 + 300, constantes.ALTO_VENTANA  - 450))
-        Escribir.escribir_texto(pantalla, "Bala de 105mm", "More Sugar", 50, constantes.NEGRO, None,
-                                       constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 + 70)
-        Escribir.escribir_texto(pantalla, "3 unidades", "More Sugar", 50, constantes.NEGRO, None,
-                                       constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 + 110)
-        Escribir.escribir_texto(pantalla, "50 de daño", "More Sugar", 50, constantes.NEGRO, None,
-                                       constantes.ANCHO_VENTANA // 2 + 400 , constantes.ALTO_VENTANA // 2 + 150)
+        pantalla.blit(png_bala105, posicion(0.65,0.555,ancho_botón,altura_botón,margin_ratio))
+        Escribir.render_text(pantalla, "Bala 105mm", (0.705 + ancho_botón / 2, 0.555 - 0.5 * altura_botón + margin_ratio), 24, constantes.NEGRO, "More Sugar")
+        Escribir.render_text(pantalla, "Costo $4000", (0.705 + ancho_botón / 2, 0.59 - 0.5 * altura_botón + margin_ratio), 24, constantes.NEGRO, "More Sugar")
+        Escribir.render_text(pantalla, "Daño 50", (0.688 + ancho_botón / 2, 0.63 - 0.5 * altura_botón + margin_ratio), 25, constantes.NEGRO, "More Sugar")
         
         png_tecla_w = pygame.image.load("img/tecla_w_.png").convert_alpha()
         png_tecla_w_ajustado = pygame.transform.scale(png_tecla_w, (nuevo_ancho, nuevo_alto))
@@ -223,17 +222,12 @@ def tutorial(pantalla, game):
         Escribir.escribir_texto(pantalla, "Aumento o dismunición más rápida ", "More Sugar", 50, constantes.NEGRO, None,
                                 constantes.ANCHO_VENTANA // 2 - 650 , constantes.ALTO_VENTANA // 2 + 400)
         
-        pygame.draw.rect(pantalla, constantes.NEGRO,
-                         (constantes.ANCHO_VENTANA / 2 - 165, constantes.ALTO_VENTANA / 2 + 245, 350, 120), 60, 50)
-        Escribir.escribir_texto(pantalla, "Atrás", "More Sugar", 150, constantes.BLANCO, None,
-                                       constantes.ANCHO_VENTANA / 2 - 125, constantes.ALTO_VENTANA / 2 + 255)
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if (mouse[0] >= constantes.ANCHO_VENTANA / 2 - 235 and mouse[
-                    0] <= constantes.ANCHO_VENTANA / 2 - 235 + 470) and (
-                        mouse[1] >= constantes.ALTO_VENTANA / 2 + 245 and mouse[
-                        1] <= constantes.ALTO_VENTANA / 2 + 245 + 120):
+                if Volver.si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
+                        constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA = constantes.dimenciones[0], \
+                        constantes.dimenciones[1]
                         menu(pantalla, game)
 
         pygame.display.update()
