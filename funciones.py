@@ -293,6 +293,8 @@ def terminar_turnos(jugadores):
         jugador.puede_jugar = False
         if jugador.ya_jugado == False :
             posibles_jugadores.append(jugador)
+        else:
+            jugador.ya_jugado = False
     return posibles_jugadores
 
 
