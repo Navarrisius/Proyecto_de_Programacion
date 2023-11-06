@@ -12,7 +12,7 @@ class Tanque:
     color = None
     posicion_x = None
     posicion_y = None
-    angulo_n = None
+    angulo_n = 0
     angulo_canon = None
     velocidad_disparo = 50
     turret_end = None
@@ -92,7 +92,7 @@ class Tanque:
             terreno.dibujar_terreno(pantalla)
             UI.info_velocidad_bala(pantalla, ancho, alto, int(disparo.velocidad_actual))
             self.draw_tank(pantalla)
-            tanque_enemigo.draw_tank(pantalla)
+            tanques_enemigos.draw_tank(pantalla)
             pygame.display.flip()
             pygame.time.delay(10)
     
