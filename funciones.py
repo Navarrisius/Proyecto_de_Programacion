@@ -64,13 +64,15 @@ def menu(pantalla, game):
         pantalla.blit(png_pessi, (constantes.ANCHO_VENTANA - 230, constantes.ALTO_VENTANA - 200))
         pantalla.blit(png_balon_de_hielo, (constantes.ANCHO_VENTANA - 110, constantes.ALTO_VENTANA - 120))
         # boton jugar
-        Escribir.render_text(pantalla, "PessiTank", (0.593 - ancho_botón / 2, 0.19 + 1.5 * altura_botón), 90,constantes.NEGRO, "timesnewroman")
-        Escribir.render_text(pantalla, "PessiTank", (0.597 - ancho_botón / 2, 0.19 + 1.5 * altura_botón), 90, constantes.CELESTE, "timesnewroman")
+        Escribir.render_text(pantalla, "PessiTank", (0.593 - ancho_botón / 2, 0.19 + 1.5 * altura_botón), 85,constantes.NEGRO, "timesnewroman")
+        Escribir.render_text(pantalla, "PessiTank", (0.597 - ancho_botón / 2, 0.19 + 1.5 * altura_botón), 85, constantes.CELESTE, "timesnewroman")
         ####Escribir.escribir_texto(pantalla, "PessiTank", "timesnewroman", 180, constantes.NEGRO, None,constantes.ANCHO_VENTANA / 2 - 410, constantes.ALTO_VENTANA / 2 - 300)
         ####Escribir.escribir_texto(pantalla, "PessiTank", "timesnewroman", 180, (114,158,188), None,constantes.ANCHO_VENTANA / 2 - 415, constantes.ALTO_VENTANA / 2 - 301)
         png_hielo = pygame.image.load("img/hielo.png").convert_alpha()
         png_hielo = pygame.transform.scale(png_hielo, (320, 220))
-        pantalla.blit(png_hielo, (40 +constantes.ANCHO_VENTANA / 2 + 235, constantes.ALTO_VENTANA / 2 - 300))
+        if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
+            png_hielo = pygame.transform.scale(png_hielo, (220, 150))
+        pantalla.blit(png_hielo, posicion(0.50,0.18,ancho_botón,altura_botón,margin_ratio))
 
         for boton in botones:
             boton.dibujar(pantalla, constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA)
@@ -405,7 +407,7 @@ def shoot(turno, enemigo, terreno, game):
     if turno.tanque.municion[turno.tanque.tipo_bala].unidades > 0:
         num = turno.tanque.disparar(pantalla=constantes.PANTALLA, terreno=terreno, ancho=constantes.ANCHO_VENTANA,
                                     alto=constantes.ALTO_VENTANA, disparo=disparo,
-                                    altura_terreno=terreno.matriz, tanque_enemigo=enemigo)
+                                    altura_terreno=terreno.matriz, tanques_enemigos=enemigo)
         if num == 1:
             enemigo.salud -= disparo.proyectil.dano
             terreno.destruir_terreno(constantes.ALTO_VENTANA, constantes.ANCHO_VENTANA, disparo, disparo.proyectil)
