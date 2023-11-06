@@ -542,12 +542,15 @@ def partida(pantalla, game):
         jugador.tanque.posicion_y = calcular_y(terreno.matriz, jugador.tanque)
         jugador.tanque.caida_tanque = jugador.tanque.posicion_y
     while running:
-        cambiar_turnos(constantes.JUGADORES)
-        for jugador in constantes.JUGADORES : 
-            if jugador.puede_jugar :
-                turno = jugador
-            else :
-                constantes.ENEMIGOS.append(jugador)
+        if jugador.puede_jugar:
+            pass
+        else:
+            cambiar_turnos(constantes.JUGADORES)
+            for jugador in constantes.JUGADORES : 
+                if jugador.puede_jugar :
+                    turno = jugador
+                else :
+                    constantes.ENEMIGOS.append(jugador)
         reloj = pygame.time.Clock()
         teclas = pygame.key.get_pressed()
         for event in pygame.event.get():
