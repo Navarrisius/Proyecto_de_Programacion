@@ -2,9 +2,7 @@ class Jugador:
     nombre = None
     tanque = None
     puede_jugar = False
-    vivo = True
     dinero = None
-    ya_jugado = False
     kills = None
 
     def __init__(self, nombre, tanque):

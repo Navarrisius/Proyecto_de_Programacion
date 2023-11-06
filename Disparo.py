@@ -32,6 +32,14 @@ class Disparo:
         self.eje_x = []
         self.eje_y = []
 
+
+    def actualizar_dibujo(self, pantalla, color):
+        self.actualizar()
+        self.dibujar(pantalla)
+        self.dibujar_indicador(pantalla, color)
+        self.recorrido(pantalla, color)
+
+
     def elegir_imagen(self, tipo_municion):
         if tipo_municion == 0:
             self.img_bala = pygame.image.load("img/60mm.png")
@@ -40,6 +48,7 @@ class Disparo:
         else:
             self.img_bala = pygame.image.load("img/105mm.png")
         self.img_bala = pygame.transform.scale(self.img_bala, (9.25, 20))
+
 
     def actualizar(self):
         self.x_bala += self.velocidad_x * self.tiempo
