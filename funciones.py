@@ -505,13 +505,13 @@ def partida(pantalla, game):
     pygame.mixer.music.load('mp3/Death_by_Glamour.mp3')
     pygame.mixer.music.set_volume(0.05)
     pygame.mixer.music.play(-1)
+    constantes.JUGADORES = []
     crear_jugadores()
     turno = None
     terreno = Terreno()
     fondo = Fondo()
     running = game.en_partida
     pygame.time.Clock()
-    altura_terreno = []
     ui = UI()
     img_reiniciar = pygame.image.load("img/reiniciar.png")
     img_reiniciar = pygame.transform.scale(img_reiniciar, (64, 64))
