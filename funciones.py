@@ -64,13 +64,13 @@ def menu(pantalla, game):
         pantalla.blit(png_pessi, (constantes.ANCHO_VENTANA - 230, constantes.ALTO_VENTANA - 200))
         pantalla.blit(png_balon_de_hielo, (constantes.ANCHO_VENTANA - 110, constantes.ALTO_VENTANA - 120))
         # boton jugar
-        Escribir.escribir_texto(pantalla, "PessiTank", "timesnewroman", 180, constantes.NEGRO, None,
-                                       constantes.ANCHO_VENTANA / 2 - 410, constantes.ALTO_VENTANA / 2 - 300)
-        Escribir.escribir_texto(pantalla, "PessiTank", "timesnewroman", 180, (114,158,188), None,
-                                       constantes.ANCHO_VENTANA / 2 - 415, constantes.ALTO_VENTANA / 2 - 301)
+        Escribir.render_text(pantalla, "PessiTank", (0.593 - ancho_botón / 2, 0.19 + 1.5 * altura_botón), 90,constantes.NEGRO, "timesnewroman")
+        Escribir.render_text(pantalla, "PessiTank", (0.597 - ancho_botón / 2, 0.19 + 1.5 * altura_botón), 90, constantes.CELESTE, "timesnewroman")
+        ####Escribir.escribir_texto(pantalla, "PessiTank", "timesnewroman", 180, constantes.NEGRO, None,constantes.ANCHO_VENTANA / 2 - 410, constantes.ALTO_VENTANA / 2 - 300)
+        ####Escribir.escribir_texto(pantalla, "PessiTank", "timesnewroman", 180, (114,158,188), None,constantes.ANCHO_VENTANA / 2 - 415, constantes.ALTO_VENTANA / 2 - 301)
         png_hielo = pygame.image.load("img/hielo.png").convert_alpha()
         png_hielo = pygame.transform.scale(png_hielo, (320, 220))
-        pantalla.blit(png_hielo, (constantes.ANCHO_VENTANA / 2 + 235, constantes.ALTO_VENTANA / 2 - 300))
+        pantalla.blit(png_hielo, (40 +constantes.ANCHO_VENTANA / 2 + 235, constantes.ALTO_VENTANA / 2 - 300))
 
         for boton in botones:
             boton.dibujar(pantalla, constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA)
@@ -129,14 +129,14 @@ def configurar_juego(pantalla,game):
             boton.dibujar(pantalla, constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA)
         Volver.dibujar(pantalla, constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA)
         Escribir.render_text(pantalla, str(constantes.dimenciones),(0.7 + ancho_botón / 2, 0.5 - 0.5 * altura_botón + margin_ratio), 30, constantes.NEGRO,"Arial")
-        Escribir.render_text(pantalla, "Ajustes del juego", (0.47 + ancho_botón / 2, 0.07 - 0.5 * altura_botón + margin_ratio), 60, constantes.PLOMO, "More Sugar")
+        Escribir.render_text(pantalla, "Ajustes del juego", (0.47 + ancho_botón / 2, 0.07 - 0.5 * altura_botón + margin_ratio), 60, constantes.NEGRO, "More Sugar")
         # Muestra las opciones y valores en la pantalla
-        Escribir.render_text(pantalla, f"Jugadores: {constantes.num_jugadores}", (0.016 + ancho_botón / 2, 0.28 - 0.5 * altura_botón + margin_ratio), 20, constantes.PLOMO, None)
-        Escribir.render_text(pantalla, "Use las flechas arriba y abajo para aumentar y disminuir los jugadores", (0.38 + ancho_botón / 2, 0.28 - 0.5 * altura_botón + margin_ratio), 20, constantes.PLOMO, None)
-        Escribir.render_text(pantalla, f"Número de Partidos: {constantes.num_partidos}", (0.05 + ancho_botón / 2, 0.32 - 0.5 * altura_botón + margin_ratio), 20, constantes.PLOMO, None)
-        Escribir.render_text(pantalla, "Use las flechas derecha e izquierda para aumentar y disminuir jugadores", (0.47 + ancho_botón / 2, 0.32 - 0.5 * altura_botón + margin_ratio), 20, constantes.PLOMO, None)
-        Escribir.render_text(pantalla, f"Efectos de Entorno: {'Activado' if constantes.efectos_entorno else 'Desactivado'}", (0.08 + ancho_botón / 2, 0.36 - 0.5 * altura_botón + margin_ratio), 20, constantes.PLOMO, None)
-        Escribir.render_text(pantalla, f"Dimenciones: {constantes.dimenciones[0]},{constantes.dimenciones[1]}", (0.06 + ancho_botón / 2, 0.4 - 0.5 * altura_botón + margin_ratio), 20, constantes.PLOMO, None)
+        Escribir.render_text(pantalla, f"Jugadores: {constantes.num_jugadores}", (0.016 + ancho_botón / 2, 0.28 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
+        Escribir.render_text(pantalla, "Use las flechas arriba y abajo para aumentar y disminuir los jugadores", (0.38 + ancho_botón / 2, 0.28 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
+        Escribir.render_text(pantalla, f"Número de Partidos: {constantes.num_partidos}", (0.05 + ancho_botón / 2, 0.32 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
+        Escribir.render_text(pantalla, "Use las flechas derecha e izquierda para aumentar y disminuir jugadores", (0.47 + ancho_botón / 2, 0.32 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
+        Escribir.render_text(pantalla, f"Efectos de Entorno: {'Activado' if constantes.efectos_entorno else 'Desactivado'}", (0.08 + ancho_botón / 2, 0.36 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
+        Escribir.render_text(pantalla, f"Dimenciones: {constantes.dimenciones[0]},{constantes.dimenciones[1]}", (0.06 + ancho_botón / 2, 0.4 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
