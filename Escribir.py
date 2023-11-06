@@ -24,4 +24,3 @@ class Escribir:
         text_rect = text_surface.get_rect(center=(x,y))
         # Dibujamos el texto en la pantalla
         screen.blit(text_surface, text_rect)
-        ##Posicion no se ajusta a tipos de pantalla posible mejora futura
