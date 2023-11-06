@@ -248,14 +248,18 @@ def crear_jugadores():
         "negro": (0, 0, 0),
         "morado" : (99, 11, 87)
     }
+    pos_inicial = 0
+    pos_final = pos_inicial + constantes.ANCHO_VENTANA // constantes.num_jugadores
     colores_disponibles = list(colores_rgb.values())
-    for i in range(1, constantes.CANT_JUGADORES + 1) :
+    for i in range(1, constantes.num_jugadores + 1) :
         color = random.choice(colores_disponibles)
         colores_disponibles.remove(color)
         jugador = Jugador(None, Tanque(color))
-        jugador.tanque.posicion_x = random.randint(30, constantes.ANCHO_VENTANA // i - 200)
+        jugador.tanque.posicion_x = random.randint(pos_inicial, pos_final)
         jugador.tanque.posicion_y = 30
         constantes.JUGADORES.append(jugador)
+        pos_inicial = pos_final
+        pos_final = pos_inicial + constantes.ANCHO_VENTANA // constantes.num_jugadores
 
 
 def calcular_y(matriz, tanque):
