@@ -401,29 +401,26 @@ def detectar_musica(event):
                     pygame.mixer.music.set_volume(0.05)
                     constantes.MUSICA_PARTIDA = True
 
-def shoot(turno, enemigo, terreno, game):
+def shoot(turno, tanques, terreno, game):
     # Se intancia el disparo
     disparo = Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque, Bala(turno.tanque.tipo_bala))
     if turno.tanque.municion[turno.tanque.tipo_bala].unidades > 0:
-        num = turno.tanque.disparar(pantalla=constantes.PANTALLA, terreno=terreno, ancho=constantes.ANCHO_VENTANA,
+        tanque = turno.tanque.disparar(pantalla=constantes.PANTALLA, terreno=terreno, ancho=constantes.ANCHO_VENTANA,
                                     alto=constantes.ALTO_VENTANA, disparo=disparo,
-                                    altura_terreno=terreno.matriz, tanques_enemigos=enemigo)
-        if num == 1:
-            enemigo.salud -= disparo.proyectil.dano
-            terreno.destruir_terreno(constantes.ALTO_VENTANA, constantes.ANCHO_VENTANA, disparo, disparo.proyectil)
-        if num == -1:
-            turno.tanque.salud -= disparo.proyectil.dano
+                                    altura_terreno=terreno.matriz, tanques=tanques)
+        if tanque != 0:
+            tanque.salud -= disparo.proyectil.dano
             terreno.destruir_terreno(constantes.ALTO_VENTANA, constantes.ANCHO_VENTANA, disparo, disparo.proyectil)
         else:
             if disparo.impacto_terreno:
                 terreno.destruir_terreno(constantes.ALTO_VENTANA, constantes.ANCHO_VENTANA, disparo, disparo.proyectil)
-            turno.tanque.salud -= disparo.calcular_damage(turno.tanque, disparo.proyectil.radio_impacto, constantes.ANCHO_VENTANA)
-            enemigo.salud -= disparo.calcular_damage(enemigo, disparo.proyectil.radio_impacto, constantes.ANCHO_VENTANA)
-        if enemigo.salud <= 0:
+            for tanque in constantes.TANQUES :
+                tanque.salud -= disparo.calcular_damage(tanque, disparo.proyectil.radio_impacto, constantes.ANCHO_VENTANA)
+        if tanque.salud <= 0:
             game.ganador = turno
             terminar_turnos(constantes.JUGADORES)
         elif turno.tanque.salud <=0:
-            game.ganador = enemigo
+            game.ganador = tanque
             terminar_turnos(constantes.JUGADORES)
         else:
             cambiar_turnos(constantes.JUGADORES)
@@ -433,7 +430,7 @@ def shoot(turno, enemigo, terreno, game):
     else:
         return None
 
-def controles(event, teclas, turno, enemigo, terreno, game):
+def controles(event, teclas, turno, tanques, terreno, game):
     if teclas[pygame.K_a]:
         turno.tanque.angulo_n += 0.5
         if turno.tanque.angulo_n > constantes.LIMITE_ANGULO_MAX:
@@ -492,7 +489,7 @@ def controles(event, teclas, turno, enemigo, terreno, game):
     # Verifica disparo del tanque y cambio de turnos
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_SPACE:  # Disparo
-            constantes.DISPARO = shoot(turno, enemigo, terreno, game)
+            constantes.DISPARO = shoot(turno, tanques, terreno, game)
 
 def ui_pre_disparo(ui, pantalla, turno):
     ui.rectangulo(pantalla)
@@ -537,10 +534,9 @@ def partida(pantalla, game):
         else:
             cambiar_turnos(constantes.JUGADORES)
             for jugador in constantes.JUGADORES : 
+                constantes.TANQUES.append(jugador.tanque)
                 if jugador.puede_jugar :
                     turno = jugador
-                else :
-                    constantes.ENEMIGOS.append(jugador)
         reloj = pygame.time.Clock()
         teclas = pygame.key.get_pressed()
         for event in pygame.event.get():
@@ -555,7 +551,7 @@ def partida(pantalla, game):
                 constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA = NUEVO_ANCHO, NUEVA_ALTURA
             elif teclas[pygame.K_ESCAPE]:
                 pausar()
-            controles(event, teclas, turno, constantes.ENEMIGOS, terreno, game)
+            controles(event, teclas, turno, constantes.TANQUES, terreno, game)
             
 
         # VACIA PANTALLA

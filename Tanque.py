@@ -51,7 +51,7 @@ class Tanque:
 
         pantalla.blit(self.imagen, (self.posicion_x - 40, self.posicion_y - 40))
 
-    def disparar(self, pantalla, ancho, alto, terreno, disparo, altura_terreno, tanques_enemigos):
+    def disparar(self, pantalla, ancho, alto, terreno, disparo, altura_terreno, tanques):
         disparo.elegir_imagen(self.tipo_bala)
         disparo.x_bala = self.turret_end[0]
         disparo.y_bala = self.turret_end[1]
@@ -79,20 +79,16 @@ class Tanque:
             except IndexError:
                 pass
             # IMPACTO CON TANQUE ENEMIGO
-            for tanque in tanques_enemigos :
+            for tanque in tanques :
                 if disparo.verificar_impacto_tanque_enemigo(tanque):
                     disparo.impacto_tanque = True
                     disparo.calcular_distancia_maxima(self.posicion_x)
-                    return 1
-            # IMPACTO CON TANQUE PROPIO
-            if disparo.verificar_impacto_tanque_enemigo(self):
-                disparo.impacto_tanque = True
-                disparo.calcular_distancia_maxima(self.posicion_x)
-                return -1
+                    return tanque
             terreno.dibujar_terreno(pantalla)
             UI.info_velocidad_bala(pantalla, ancho, alto, int(disparo.velocidad_actual))
             self.draw_tank(pantalla)
-            tanques_enemigos.draw_tank(pantalla)
+            for tanque in tanques :
+                tanque.draw_tank(pantalla)
             pygame.display.flip()
             pygame.time.delay(10)
     
