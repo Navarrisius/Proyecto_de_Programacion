@@ -175,3 +175,47 @@ class UI:
                     pantalla.blit(bala, (x_primera_bala + (20 * i), y_primera_bala))
             self.texto_unidades(pantalla, unidades)
 
+    def barras_de_salud(self, pantalla):
+        for tanque in constantes.TANQUES:
+            if tanque.salud > 75:
+                color_de_salud_del_jugador = (0, 143, 57)
+            elif tanque.salud > 50:
+                color_de_salud_del_jugador = (255, 255, 0)
+            else:
+                color_de_salud_del_jugador = (255, 0, 0)
+
+            pygame.draw.rect(pantalla, (0, 0, 0), (tanque.posicion_x - 59, tanque.posicion_y + 13, 104, 24))
+            pygame.draw.rect(pantalla, color_de_salud_del_jugador, (tanque.posicion_x - 57, tanque.posicion_y + 15, tanque.salud, 20))
+
+    
+    def info_bala(self, pantalla, velocidad, altura, distancia):
+        self.rectangulo(pantalla)
+        x = constantes.ANCHO_VENTANA // 10
+        y = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 5.75
+        if velocidad != -1:
+            Escribir.escribir_texto(pantalla, "Velocidad Actual del disparo", "Verdana", 25, constantes.BLANCO, (50, 50, 50), x, y)
+            Escribir.escribir_texto(pantalla, f"{velocidad} m/s.", "Verdana", 30, constantes.BLANCO, (50, 50, 50), x * 1.65, y + 50)
+        if altura != 0:
+            x = constantes.ANCHO_VENTANA // 2.5
+            Escribir.escribir_texto(pantalla, "Altura máxima del disparo", "Verdana", 25, constantes.BLANCO, (50, 50, 50), x, y)
+            Escribir.escribir_texto(pantalla, f"{altura} m.", "Verdana", 30, constantes.BLANCO, (50, 50, 50), x * 1.2, y + 50)
+        if distancia != 1 and distancia != 0:
+            x = constantes.ANCHO_VENTANA // 1.5
+            Escribir.escribir_texto(pantalla, "Distancia máxima del disparo", "Verdana", 25, constantes.BLANCO, (50, 50, 50), x, y)
+            Escribir.escribir_texto(pantalla, f"{distancia} m.", "Verdana", 30, constantes.BLANCO, (50, 50, 50), x * 1.1, y + 50)
+        if distancia == -1 and distancia != 0:
+            x = constantes.ANCHO_VENTANA // 1.5
+            Escribir.escribir_texto(pantalla, "Distancia máxima del disparo", "Verdana", 25, constantes.BLANCO, (50, 50, 50), x, y)
+            Escribir.escribir_texto(pantalla, f"Bala fuera del mapa", "Verdana", 30, constantes.BLANCO, (50, 50, 50), x * 1.1, y + 50)
+
+    
+    def esperar(self, tiempo):
+        pygame.display.update()
+        # Esperar 2 segundos
+        tiempo_inicial = pygame.time.get_ticks()
+        tiempo_espera = tiempo * 1000
+        while pygame.time.get_ticks() - tiempo_inicial < tiempo_espera:
+            pass
+        pygame.display.flip()
+
+

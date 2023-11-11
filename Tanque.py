@@ -12,17 +12,19 @@ class Tanque:
     color = None
     posicion_x = None
     posicion_y = None
-    angulo_n = None
+    angulo_n = 0
     angulo_canon = None
     velocidad_disparo = 50
     turret_end = None
     imagen = None
+    caida_tanque = None
     
     def __init__(self, color):
         self.municion = [Bala(0), Bala(1), Bala(2)]
         self.balas = 16
         self.color = color
         self.tipo_bala = 0
+        self.angulo_canon = 90
         if color == (99, 11, 87):
             self.imagen = pygame.image.load("img/tanque_morado.png").convert_alpha()
         elif color == (0, 0, 255):
@@ -33,6 +35,8 @@ class Tanque:
             self.imagen = pygame.image.load("img/tanque_verde_musgo.png").convert_alpha()
         elif color == (0, 0, 0):
             self.imagen = pygame.image.load("img/tanque_negro.png").convert_alpha()
+        elif color == (252, 3, 186):
+            self.imagen = pygame.image.load("img/tanque_rosado.png").convert_alpha()
 
     def corregir_salud(self):
         if self.salud <= 0:
@@ -47,49 +51,59 @@ class Tanque:
 
         pantalla.blit(self.imagen, (self.posicion_x - 40, self.posicion_y - 40))
 
-    def disparar(self, pantalla, ancho, alto, terreno, disparo, altura_terreno, tanque_enemigo):
+
+    def disparar(self, pantalla, ancho, alto, terreno, disparo, altura_terreno, tanques):
         disparo.elegir_imagen(self.tipo_bala)
         disparo.x_bala = self.turret_end[0]
         disparo.y_bala = self.turret_end[1]
         disparo.x_inicial = self.turret_end[0]
         disparo.calcular_altura_maxima()
         fondo = Fondo()
+        ui = UI()
+        altura_alcanzada = False
         while True:
+            altura = self.turret_end[1] - disparo.y_bala
             fondo.cargar_fondo(pantalla, 1)
             # Si la bala sale de los limites laterales de la pantalla
             if disparo.x_bala >= ancho:
                 disparo.distancia_maxima = -1
-                return 0
+                return -1
             if disparo.x_bala <= 0:
                 disparo.distancia_maxima = -1
-                return 0
+                return -1
             disparo.actualizar_dibujo(pantalla, self.color)
             try:
                 if not disparo.verificar_impacto_terreno(altura_terreno):
                     disparo.impacto_terreno = True
+                    tanque_danyado = disparo.realizar_damage_tanque(self.municion[self.tipo_bala])
                     disparo.calcular_distancia_maxima(self.posicion_x)
-                    return 0
-            # BALA FUERA DEL MAPA
+                    if tanque_danyado != -1:
+                        return tanque_danyado
+                    else:
+                        return -1
             except IndexError:
                 pass
-            # IMPACTO CON TANQUE ENEMIGO
-            if disparo.verificar_impacto_tanque_enemigo(tanque_enemigo):
-                disparo.impacto_tanque = True
-                disparo.calcular_distancia_maxima(self.posicion_x)
-                return 1
-            # IMPACTO CON TANQUE PROPIO
-            if disparo.verificar_impacto_tanque_enemigo(self):
-                disparo.impacto_tanque = True
-                disparo.calcular_distancia_maxima(self.posicion_x)
-                return -1
+            # IMPACTO CON TANQUE
+            for tanque in tanques:
+                if disparo.verificar_impacto_tanque_enemigo(tanque):
+                    disparo.impacto_tanque = True
+                    tanque.salud -= self.municion[self.tipo_bala].dano
+                    disparo.calcular_distancia_maxima(self.posicion_x)
+                    return tanque
             terreno.dibujar_terreno(pantalla)
-            UI.info_velocidad_bala(pantalla, ancho, alto, int(disparo.velocidad_actual))
-            self.draw_tank(pantalla)
-            tanque_enemigo.draw_tank(pantalla)
+            ui.barras_de_salud(pantalla)
+            if altura >= disparo.altura_maxima - 1:
+                altura_alcanzada = True
+            if altura_alcanzada:
+                ui.info_bala(pantalla, int(disparo.velocidad_actual), int(disparo.altura_maxima), 0)
+            else:
+                ui.info_bala(pantalla, int(disparo.velocidad_actual), 0, 0)
+            for tanque in tanques:
+                tanque.draw_tank(pantalla)
             pygame.display.flip()
-            pygame.time.delay(10)
+
+
     
     def calcular_damage_caida(self, pos_y_anterior):
         diff_y = abs(self.posicion_y - pos_y_anterior) // 2
         self.salud -= diff_y
-        self.corregir_salud()
