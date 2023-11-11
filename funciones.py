@@ -555,7 +555,6 @@ def partida(pantalla, game):
             elif teclas[pygame.K_ESCAPE]:
                 pausar()
             controles(event, teclas, turno, constantes.TANQUES, terreno, game)
-            controles(event, teclas, turno, constantes.TANQUES, terreno, game)
             
 
         # VACIA PANTALLA
