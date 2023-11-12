@@ -200,12 +200,15 @@ class UI:
         pygame.display.flip()
 
     def ronda_compra(self, pantalla, ancho):
-        ancho_rectangulo = 925
+        ancho_rectangulo = 600
         alto_rectangulo = 70
+        if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
+            ancho_rectangulo = 240
+            alto_rectangulo = 40
         pygame.draw.rect(surface=pantalla, color=(0, 0, 0),
                 rect=(ancho // 2 - ancho_rectangulo // 2, 10,
                     ancho_rectangulo, alto_rectangulo), border_radius=20)
-        Escribir.escribir_texto(pantalla, f"Ronda de compra - Ronda {constantes.RONDA_ACTUAL}", "Verdana", 35, [255, 255, 255], (0, 0, 0), ancho // 2.75, 20)
+        Escribir.render_text(pantalla, f"Ronda de compra - Ronda {constantes.RONDA_ACTUAL}",(0.45 + ancho_botón / 2, 0.01 - 0.5 * altura_botón + margin_ratio),15, constantes.BLANCO, "verdana")
 
     
     def ronda_actual(self, pantalla):
@@ -213,8 +216,6 @@ class UI:
         
     
     def kills(self, pantalla, kills):
-        x = constantes.ANCHO_VENTANA // 4.5
-        y = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 9.25
         if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
             self.png_kills = pygame.transform.scale(self.png_kills, (20, 20))
         pantalla.blit(self.png_kills, posicion(0.165,0.865,ancho_botón,altura_botón,margin_ratio))
