@@ -21,7 +21,7 @@ class Tanque:
     
     def __init__(self, color):
         self.municion = [Bala(0), Bala(1), Bala(2)]
-        self.balas = 16
+        self.balas = 0
         self.color = color
         self.tipo_bala = 0
         self.angulo_canon = 90

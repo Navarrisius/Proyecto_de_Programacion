@@ -424,6 +424,7 @@ def shoot(turno, tanques, terreno, game):
                 if turno.tanque == tanque_danyado:
                     detectar_suicidio(turno)
                 else:
+                    constantes.TANQUES.remove(tanque_danyado)
                     detectar_kill(turno)
                     
             
