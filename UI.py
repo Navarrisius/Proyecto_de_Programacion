@@ -1,8 +1,14 @@
 import pygame
 import constantes
 from Escribir import Escribir
-
-
+ancho_botón, altura_botón = 0.10, 0.04
+margin_ratio = 0.05
+def posicion(x,y,ancho_botón,altura_botón,margin_ratio):
+        pos_x_rel = x + ancho_botón / 2
+        pos_y_rel = y - 0.5 * altura_botón + margin_ratio
+        pos_x = constantes.ANCHO_VENTANA * pos_x_rel
+        pos_y = constantes.ALTO_VENTANA * pos_y_rel
+        return pos_x, pos_y
 class UI:
     def __init__(self):
         self.png_alerta = pygame.image.load("img/alerta.png").convert_alpha()
@@ -15,7 +21,7 @@ class UI:
         self.png_bala105 = pygame.image.load("img/105mm.png").convert_alpha()
         self.png_kills = pygame.image.load("img/kills.png").convert_alpha()
 
-    def info_post_disparo(self, pantalla, ancho, alto, color_jugador, altura, distancia):
+    def info_post_disparo(self, pantalla, ancho, alto, color_jugador, altura, distancia):  
         ancho_rectangulo = 1200
         alto_rectangulo = 150
         png_altura = pygame.image.load("img/altura.png").convert_alpha()
@@ -23,8 +29,8 @@ class UI:
         pygame.draw.rect(surface=pantalla, color=color_jugador, rect=(
             ancho // 2 - ancho_rectangulo // 2, alto  - alto_rectangulo, ancho_rectangulo, alto_rectangulo),
                          border_radius=20)
-        Escribir.escribir_texto(pantalla, f"Información del disparo", "Verdana", 30, [255, 255, 255], color_jugador,
-                                ancho // 2 - 180, alto  - alto_rectangulo)
+        Escribir.escribir_texto(pantalla, f"Información del disparo", "Verdana", 30, [255, 255, 255], color_jugador,ancho // 2 - 180, alto  - alto_rectangulo)
+        #Escribir.render_text(pantalla,f"Información del disparo",(0.47 + ancho_botón / 2, 0.07 - 0.5 * altura_botón + margin_ratio),30,[255, 255, 255],"Verdana")
         pantalla.blit(png_altura, (ancho // 2 - ancho_rectangulo // 2 + 130, alto - 75))
         pantalla.blit(png_distancia, (ancho // 2 - ancho_rectangulo // 2 + 640, alto  - 75))
         Escribir.escribir_texto(pantalla, f"{int(altura)} metros", "Verdana", 30, [255, 255, 255], color_jugador,
@@ -66,71 +72,49 @@ class UI:
         alto_rectangulo = constantes.ALTO_VENTANA // 20
         ancho_rectangulo = constantes.ALTO_VENTANA // 3
         pygame.draw.rect(surface=pantalla, color=color_jugador, rect=(x, y, ancho_rectangulo, alto_rectangulo), border_radius=20)
-        Escribir.escribir_texto(pantalla, texto_jugador, "Verdana", 25, constantes.BLANCO, color_jugador,
-                    x + ancho_rectangulo // 3.05, y + 10)
+        Escribir.render_text(pantalla, texto_jugador,(0.05 + ancho_botón / 2, 0.82 - 0.5 * altura_botón + margin_ratio),15, constantes.BLANCO, "verdana")
         
     def texto_dinero(self, pantalla, dinero):
-        x = 30
-        y = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 8.2
-        pantalla.blit(self.png_dinero, (x, y))
-        Escribir.escribir_texto(pantalla, f"${dinero}", "Verdana", 30, constantes.BLANCO, (50, 50, 50),
-                    x + (x * 3), y + 10)
+        if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
+            self.png_dinero = pygame.transform.scale(self.png_dinero, (30, 40))
+        pantalla.blit(self.png_dinero, posicion(-0.034,0.85,ancho_botón,altura_botón,margin_ratio))
+        Escribir.render_text(pantalla,f"${dinero}",(0.05 + ancho_botón / 2, 0.88 - 0.5 * altura_botón + margin_ratio),15, constantes.BLANCO,"Verdana")
 
     def texto_salud(self, pantalla, salud):
-        x = 50
-        y = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 20
-        x_texto = 30
-        y_texto = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 16.4
-        pantalla.blit(self.png_salud, (x, y))
-        Escribir.escribir_texto(pantalla, f"{int(salud)} HP", "Verdana", 30, constantes.BLANCO, (50, 50, 50),
-                    x_texto + (x_texto * 3), y_texto + 10)
+        if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
+            self.png_salud = pygame.transform.scale(self.png_salud, (20, 20))
+        pantalla.blit(self.png_salud, posicion(-0.02,0.92,ancho_botón,altura_botón,margin_ratio))
+        Escribir.render_text(pantalla,f"{int(salud)} HP",(0.05 + ancho_botón / 2, 0.935 - 0.5 * altura_botón + margin_ratio),15, constantes.BLANCO,"Verdana")
         
         
     def texto_ajustes_disparo(self, pantalla):
-        x_texto = constantes.ANCHO_VENTANA - constantes.ANCHO_VENTANA // (1.4 + 0.275)
-        y_texto = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 6
-        Escribir.escribir_texto(pantalla, "Ajustes del disparo", "Verdana", 30, constantes.BLANCO, (50, 50, 50),
-                    x_texto, y_texto)
+        Escribir.render_text(pantalla,  "Ajustes del disparo",(0.42 + ancho_botón / 2, 0.82 - 0.5 * altura_botón + margin_ratio),15, constantes.BLANCO,"Verdana")
         
 
     def texto_angulo(self, pantalla, angulo):
-        x_texto = constantes.ANCHO_VENTANA - constantes.ANCHO_VENTANA // (1.3 + 0.3 + 0.1)
-        y_texto = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 9.5
-        x_img = x_texto + constantes.ANCHO_VENTANA // (20 + 0.3)
-        y_img = y_texto - constantes.ALTO_VENTANA // 50
-        Escribir.escribir_texto(pantalla, "Ángulo:", "Verdana", 20, constantes.BLANCO, (50, 50, 50),
-                    x_texto, y_texto)
-        pantalla.blit(self.png_angulo, (x_img, y_img))
-        x_texto2 = x_texto + constantes.ANCHO_VENTANA // (11 + 0.3)
-        y_texto2 = y_texto - 5
-        Escribir.escribir_texto(pantalla, f"{round(angulo, 1)}°", "Verdana", 25, constantes.BLANCO, (50, 50, 50),
-                    x_texto2, y_texto2)
+        Escribir.render_text(pantalla,"Ángulo:",(0.38 + ancho_botón / 2, 0.88 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO,"Verdana")
+        if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
+            self.png_angulo = pygame.transform.scale(self.png_angulo, (23,43))
+        pantalla.blit(self.png_angulo, posicion(0.41,0.84,ancho_botón,altura_botón,margin_ratio))
+        Escribir.render_text(pantalla,f"{round(angulo, 1)}°",(0.465 + ancho_botón / 2, 0.88 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO,"Verdana")
         
 
     def texto_velocidad(self, pantalla, velocidad):
-        x_texto = constantes.ANCHO_VENTANA - constantes.ANCHO_VENTANA // (1.28 + 0.3 + 0.1)
-        y_texto = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 25
-        x_img = x_texto + constantes.ANCHO_VENTANA // (16 + 0.3)
-        y_img = y_texto - constantes.ALTO_VENTANA // 50
-        Escribir.escribir_texto(pantalla, "Velocidad:", "Verdana", 20, constantes.BLANCO, (50, 50, 50),
-                    x_texto, y_texto)
-        pantalla.blit(self.png_velocidad, (x_img, y_img))
-        x_texto2 = x_texto + constantes.ANCHO_VENTANA // (9.5 + 0.3)
-        y_texto2 = y_texto - 5
-        Escribir.escribir_texto(pantalla, f"{int(velocidad)} m/s", "Verdana", 25, constantes.BLANCO, (50, 50, 50),
-                    x_texto2, y_texto2)
+        Escribir.render_text(pantalla,"Velocidad:",(0.373 + ancho_botón / 2, 0.94 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO,"Verdana")
+        if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
+            self.png_velocidad = pygame.transform.scale(self.png_velocidad, (23, 45))
+        pantalla.blit(self.png_velocidad, posicion(0.41,0.91,ancho_botón,altura_botón,margin_ratio))
+        Escribir.render_text(pantalla,f"{int(velocidad)} m/s",(0.48 + ancho_botón / 2, 0.94 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO,"Verdana")
     
 
     def texto_tipo_bala(self, pantalla, tipo_bala):
-        x_texto = constantes.ANCHO_VENTANA - constantes.ANCHO_VENTANA // (6 + 0.3 + 0.1)
-        y_texto = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 6
         if tipo_bala == 0:
             texto = "Bala 60mm"
         elif tipo_bala == 1:
             texto = "Bala 80mm"
         else:
             texto = "Bala 105mm"
-        Escribir.escribir_texto(pantalla, texto, "Verdana", 25, constantes.BLANCO, (50, 50, 50), x_texto, y_texto)     
+        Escribir.render_text(pantalla, texto,(0.83 + ancho_botón / 2, 0.82 - 0.5 * altura_botón + margin_ratio),15, constantes.BLANCO,"Verdana") 
 
 
     def texto_sin_municion(self, pantalla):
@@ -141,18 +125,17 @@ class UI:
         color_fondo = (255, 62, 50)
         pygame.draw.rect(surface=pantalla, color=color_fondo,
                 rect=(x, y, ancho_rectangulo, alto_rectangulo), border_radius=10)
-        pantalla.blit(self.png_alerta, (x + 10, y + 5))
-        Escribir.escribir_texto(pantalla, "No hay munición", "Verdana", 25, constantes.BLANCO, color_fondo,
-                    x + ancho_rectangulo // 3.9, y + alto_rectangulo // 3.5)
-        
+        if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
+            self.png_alerta = pygame.transform.scale(self.png_alerta, (23,43))
+        pantalla.blit(self.png_alerta, posicion(0.753,0.857,ancho_botón,altura_botón,margin_ratio))
+        Escribir.render_text(pantalla,"No hay munición",(0.85 + ancho_botón / 2, 0.885 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO,"Verdana")
 
     def texto_unidades(self, pantalla, unidades):
-        x_texto = constantes.ANCHO_VENTANA - constantes.ANCHO_VENTANA // (6 + 0.3 + 0.1)
-        y_texto = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 25
         if unidades != 1:
-            Escribir.escribir_texto(pantalla, f"x{unidades} unidades.", "Verdana", 25, constantes.BLANCO, (50, 50, 50), x_texto, y_texto)
+            Escribir.render_text(pantalla, f"x{unidades} unidades.",(0.83 + ancho_botón / 2, 0.945 - 0.5 * altura_botón + margin_ratio),10, constantes.BLANCO,"Verdana") 
         else:
-            Escribir.escribir_texto(pantalla, f"x1 unidad.", "Verdana", 25, constantes.BLANCO, (50, 50, 50), x_texto, y_texto)
+            Escribir.render_text(pantalla, f"x1 unidad.",(0.83 + ancho_botón / 2, 0.945 - 0.5 * altura_botón + margin_ratio),10, constantes.BLANCO,"Verdana") 
+
            
 
     def cantidad_img_balas(self, pantalla, tipo_bala, unidades):
@@ -166,14 +149,16 @@ class UI:
             else:
                 bala = self.png_bala105
             bala = pygame.transform.scale(bala, (9.25 * 3, 20 * 3))
+            if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
+                bala = pygame.transform.scale(bala, (15, 40))
             x_primera_bala = constantes.ANCHO_VENTANA // 1.28
             y_primera_bala = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 8.5
             if unidades <= 20:
                 for i in range(unidades):
-                    pantalla.blit(bala, (x_primera_bala + (20 * i), y_primera_bala))
+                    pantalla.blit(bala, (x_primera_bala + (18 * i), y_primera_bala))
             else:
                 for i in range(20):
-                    pantalla.blit(bala, (x_primera_bala + (20 * i), y_primera_bala))
+                    pantalla.blit(bala, (x_primera_bala + (18 * i), y_primera_bala))
             self.texto_unidades(pantalla, unidades)
 
     def barras_de_salud(self, pantalla):
@@ -191,23 +176,18 @@ class UI:
     
     def info_bala(self, pantalla, velocidad, altura, distancia):
         self.rectangulo(pantalla)
-        x = constantes.ANCHO_VENTANA // 10
-        y = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 5.75
         if velocidad != -1:
-            Escribir.escribir_texto(pantalla, "Velocidad Actual del disparo", "Verdana", 25, constantes.BLANCO, (50, 50, 50), x, y)
-            Escribir.escribir_texto(pantalla, f"{velocidad} m/s.", "Verdana", 30, constantes.BLANCO, (50, 50, 50), x * 1.65, y + 50)
+            Escribir.render_text(pantalla, "Velocidad Actual del disparo",(0.1 + ancho_botón / 2, 0.814 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
+            Escribir.render_text(pantalla, f"{velocidad} m/s.",(0.1 + ancho_botón / 2, 0.87 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
         if altura != 0:
-            x = constantes.ANCHO_VENTANA // 2.5
-            Escribir.escribir_texto(pantalla, "Altura máxima del disparo", "Verdana", 25, constantes.BLANCO, (50, 50, 50), x, y)
-            Escribir.escribir_texto(pantalla, f"{altura} m.", "Verdana", 30, constantes.BLANCO, (50, 50, 50), x * 1.2, y + 50)
+            Escribir.render_text(pantalla, "Altura máxima del disparo",(0.43 + ancho_botón / 2, 0.814 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
+            Escribir.render_text(pantalla, f"{altura} m.",(0.43 + ancho_botón / 2, 0.87 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
         if distancia != 1 and distancia != 0:
-            x = constantes.ANCHO_VENTANA // 1.5
-            Escribir.escribir_texto(pantalla, "Distancia máxima del disparo", "Verdana", 25, constantes.BLANCO, (50, 50, 50), x, y)
-            Escribir.escribir_texto(pantalla, f"{distancia} m.", "Verdana", 30, constantes.BLANCO, (50, 50, 50), x * 1.1, y + 50)
+            Escribir.render_text(pantalla, "Distancia máxima del disparo",(0.73 + ancho_botón / 2, 0.814 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
+            Escribir.render_text(pantalla, f"{distancia} m.",(0.73 + ancho_botón / 2, 0.87 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
         if distancia == -1 and distancia != 0:
-            x = constantes.ANCHO_VENTANA // 1.5
-            Escribir.escribir_texto(pantalla, "Distancia máxima del disparo", "Verdana", 25, constantes.BLANCO, (50, 50, 50), x, y)
-            Escribir.escribir_texto(pantalla, f"Bala fuera del mapa", "Verdana", 30, constantes.BLANCO, (50, 50, 50), x * 1.1, y + 50)
+            Escribir.render_text(pantalla, "Distancia máxima del disparo",(0.73 + ancho_botón / 2, 0.814 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
+            Escribir.render_text(pantalla, f"Bala fuera del mapa",(0.73 + ancho_botón / 2, 0.87 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
 
     
     def esperar(self, tiempo):
@@ -219,7 +199,6 @@ class UI:
             pass
         pygame.display.flip()
 
-
     def ronda_compra(self, pantalla, ancho):
         ancho_rectangulo = 925
         alto_rectangulo = 70
@@ -230,21 +209,17 @@ class UI:
 
     
     def ronda_actual(self, pantalla):
-        alto_rectangulo = constantes.ALTO_VENTANA // 20
-        ancho_rectangulo = constantes.ALTO_VENTANA // 5
-        x =  ancho_rectangulo * 2
-        y = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 5.75
-        pygame.draw.rect(surface=pantalla, color=(0, 0, 0), rect=(x, y, ancho_rectangulo, alto_rectangulo), border_radius=20)
-        Escribir.escribir_texto(pantalla, f"Ronda {constantes.RONDA_ACTUAL}", "Verdana", 25, constantes.BLANCO, (0, 0, 0),
-                    x + ancho_rectangulo // 4, y + 10)
+        Escribir.render_text(pantalla, f"Ronda {constantes.RONDA_ACTUAL}",(0.2 + ancho_botón / 2, 0.82 - 0.5 * altura_botón + margin_ratio),15, constantes.BLANCO, "verdana")
         
     
     def kills(self, pantalla, kills):
         x = constantes.ANCHO_VENTANA // 4.5
         y = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 9.25
-        pantalla.blit(self.png_kills, (x, y))
+        if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
+            self.png_kills = pygame.transform.scale(self.png_kills, (20, 20))
+        pantalla.blit(self.png_kills, posicion(0.165,0.865,ancho_botón,altura_botón,margin_ratio))
         if kills == 1:
-            Escribir.escribir_texto(pantalla, f"{kills} kill", "Verdana", 30, constantes.BLANCO, (50, 50, 50), x + 45, y - 3)
+            Escribir.render_text(pantalla,f"{kills} kill",(0.208 + ancho_botón / 2, 0.877 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
         else:
-            Escribir.escribir_texto(pantalla, f"{kills} kills", "Verdana", 30, constantes.BLANCO, (50, 50, 50), x + 45, y - 3)
+            Escribir.render_text(pantalla,f"{kills} kill",(0.208 + ancho_botón / 2, 0.877 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
 
