@@ -5,7 +5,7 @@ class Jugador:
     vivo = True
     dinero = None
     ya_jugado = False
-    kills = None
+    kills = 0
 
     def __init__(self, nombre, tanque):
         self.nombre = nombre

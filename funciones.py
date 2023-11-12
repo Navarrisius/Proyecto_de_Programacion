@@ -297,7 +297,6 @@ def elegir_nombres():
         jugador.nombre = nombre
     
 
-
 def terminar_turnos(jugadores):
     posibles_jugadores = []
     for jugador in jugadores:
@@ -421,7 +420,12 @@ def shoot(turno, tanques, terreno, game):
                                     altura_terreno=terreno.matriz, tanques=tanques)
         # Ningun tanque dañado
         if tanque_danyado != -1:
-            print(f"Tanque dañado: {tanque_danyado.color}")
+            if tanque_danyado.salud <= 0:
+                if turno.tanque == tanque_danyado:
+                    detectar_suicidio(turno)
+                else:
+                    detectar_kill(turno)
+                    
             
         terreno.destruir_terreno(constantes.ALTO_VENTANA, constantes.ANCHO_VENTANA, disparo, disparo.proyectil)
             
@@ -432,6 +436,14 @@ def shoot(turno, tanques, terreno, game):
     else:
         return None
     
+
+def detectar_suicidio(turno):
+    turno.puede_jugar = False
+    turno.dinero -= 5000
+
+def detectar_kill(turno):
+    turno.kills += 1
+    turno.dinero += 5000
 
 def limpiar_constantes():
     constantes.JUGADORES = []
@@ -500,6 +512,7 @@ def ui_pre_disparo(ui, pantalla, turno):
     ui.texto_tipo_bala(pantalla, turno.tanque.tipo_bala)
     ui.cantidad_img_balas(pantalla, turno.tanque.tipo_bala, turno.tanque.municion[turno.tanque.tipo_bala].unidades)
     ui.ronda_actual(pantalla)
+    ui.kills(pantalla, turno.kills)
 
 
 def iniciar_tanques(terreno):
@@ -573,13 +586,52 @@ def combrobar_municion_tanques():
             tanques_sin_municion += 1
 
     if tanques_sin_municion == len(constantes.TANQUES) and constantes.EN_RONDA_DE_COMPRA == False:
-        constantes.RONDA_ACTUAL += 1
-        constantes.EN_RONDA_DE_COMPRA = True
+        avanzar_partido()
+
+
+def avanzar_partido():
+    constantes.RONDA_ACTUAL += 1
+    constantes.EN_RONDA_DE_COMPRA = True
+    for jugador in constantes.JUGADORES:
+        jugador.dinero += 10000
+        jugador.tanque.salud = 100
+
+    pos_inicial = 0
+    pos_final = pos_inicial + constantes.ANCHO_VENTANA // constantes.num_jugadores
+    for jugador in constantes.JUGADORES:
+        jugador.tanque.posicion_x = random.randint(pos_inicial, pos_final)
+        jugador.tanque.posicion_y = 30
+        jugador.tanque.angulo_canon = 0
+        pos_inicial = pos_final
+        pos_final = pos_inicial + constantes.ANCHO_VENTANA // constantes.num_jugadores
+
+    altura_terreno = constantes.TERRENO.generar_terreno_perlin()
+    constantes.TERRENO.generar_matriz(constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA, altura_terreno)
+    iniciar_tanques(constantes.TERRENO)
+    definir_turnos()
+    
+        
 
 
 def saltar_turno_tanque_sin_municion(turno):
     if tanque_sin_municion(turno.tanque):
         cambiar_turno()
+
+
+def queda_un_jugador_vivo():
+    jugadores_vivos = 0
+    for tanque in constantes.TANQUES:
+        if tanque.salud > 0:
+            jugadores_vivos += 1
+    if jugadores_vivos == 1:
+        return True
+    else:
+        return False
+
+
+def comprobar_jugadores_vivos():
+    if queda_un_jugador_vivo() and constantes.EN_RONDA_DE_COMPRA == False:
+        avanzar_partido()
 
 
 def partida(pantalla, game):
@@ -592,7 +644,7 @@ def partida(pantalla, game):
     constantes.MUSICA = 'mp3/C418_Living_Mice.mp3'
     crear_jugadores()
     turno = None
-    terreno = Terreno()
+    constantes.TERRENO = Terreno()
     fondo = Fondo()
     running = game.en_partida
     pygame.time.Clock()
@@ -604,9 +656,9 @@ def partida(pantalla, game):
     img_musica = pygame.image.load("img/musica.png")
     img_musica = pygame.transform.scale(img_musica, (70, 70))
     img_linea_diagonal_sin_musica = pygame.image.load("img/linea_diagonal.png")
-    altura_terreno = terreno.generar_terreno_perlin()
-    terreno.generar_matriz(constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA, altura_terreno)
-    iniciar_tanques(terreno)
+    altura_terreno = constantes.TERRENO.generar_terreno_perlin()
+    constantes.TERRENO.generar_matriz(constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA, altura_terreno)
+    iniciar_tanques(constantes.TERRENO)
     definir_turnos()
 
     while running:
@@ -648,14 +700,14 @@ def partida(pantalla, game):
                     constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA = NUEVO_ANCHO, NUEVA_ALTURA
                 elif teclas[pygame.K_ESCAPE]:
                     pausar()
-                controles(event, teclas, turno, constantes.TANQUES, terreno, game)
+                controles(event, teclas, turno, constantes.TANQUES, constantes.TERRENO, game)
 
         # VACIA PANTALLA
         fondo.cargar_fondo(pantalla, 1)
 
         # Mantener el tanque en el terreno y comprobar caida
         for jugador in constantes.JUGADORES:
-            jugador.tanque.posicion_y = calcular_y(terreno.matriz, jugador.tanque)
+            jugador.tanque.posicion_y = calcular_y(constantes.TERRENO.matriz, jugador.tanque)
             if jugador.tanque.posicion_y != jugador.tanque.caida_tanque:
                 jugador.tanque.calcular_damage_caida(jugador.tanque.caida_tanque)
                 ui.mensaje_caida(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, diff_y=abs(jugador.tanque.posicion_y - jugador.tanque.caida_tanque))
@@ -667,7 +719,7 @@ def partida(pantalla, game):
                 jugador.vivo = False
 
         # Terreno
-        terreno.dibujar_terreno(pantalla)
+        constantes.TERRENO.dibujar_terreno(pantalla)
         ui.barras_de_salud(pantalla)
         
 
@@ -720,6 +772,7 @@ def partida(pantalla, game):
             ui.ronda_compra(pantalla, constantes.ANCHO_VENTANA)
         
         combrobar_municion_tanques()
+        comprobar_jugadores_vivos()
 
         pygame.display.flip()
 

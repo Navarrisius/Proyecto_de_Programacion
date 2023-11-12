@@ -30,6 +30,7 @@ MUSICA_PARTIDA = True
 EN_RONDA_DE_COMPRA = True
 MUSICA = None
 RONDA_ACTUAL = 1
+TERRENO = None
 
 '''
 HitBox del tanque:

@@ -13,6 +13,7 @@ class UI:
         self.png_bala60 = pygame.image.load("img/60mm.png").convert_alpha()
         self.png_bala80 = pygame.image.load("img/80mm.png").convert_alpha()
         self.png_bala105 = pygame.image.load("img/105mm.png").convert_alpha()
+        self.png_kills = pygame.image.load("img/kills.png").convert_alpha()
 
     def info_post_disparo(self, pantalla, ancho, alto, color_jugador, altura, distancia):
         ancho_rectangulo = 1200
@@ -236,4 +237,14 @@ class UI:
         pygame.draw.rect(surface=pantalla, color=(0, 0, 0), rect=(x, y, ancho_rectangulo, alto_rectangulo), border_radius=20)
         Escribir.escribir_texto(pantalla, f"Ronda {constantes.RONDA_ACTUAL}", "Verdana", 25, constantes.BLANCO, (0, 0, 0),
                     x + ancho_rectangulo // 4, y + 10)
+        
+    
+    def kills(self, pantalla, kills):
+        x = constantes.ANCHO_VENTANA // 4.5
+        y = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 9.25
+        pantalla.blit(self.png_kills, (x, y))
+        if kills == 1:
+            Escribir.escribir_texto(pantalla, f"{kills} kill", "Verdana", 30, constantes.BLANCO, (50, 50, 50), x + 45, y - 3)
+        else:
+            Escribir.escribir_texto(pantalla, f"{kills} kills", "Verdana", 30, constantes.BLANCO, (50, 50, 50), x + 45, y - 3)
 
