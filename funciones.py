@@ -384,6 +384,7 @@ def detectar_reinicio(event, pantalla, game):
             clic_x, clic_y = pygame.mouse.get_pos()
             # Verificar si el clic ocurrió dentro de la imagen
             if constantes.ANCHO_VENTANA - 200 <= clic_x <= constantes.ANCHO_VENTANA - 136 and 40 <= clic_y <= 40 + 64:
+                limpiar_constantes()
                 partida(pantalla, game)
 
 def detectar_termino_partida(event, pantalla, game):
@@ -395,6 +396,7 @@ def detectar_termino_partida(event, pantalla, game):
                 pygame.mixer.music.load('mp3/aria_math.mp3')
                 pygame.mixer.music.set_volume(0.1)
                 pygame.mixer.music.play(-1)
+                limpiar_constantes()
                 menu(pantalla, game)
 
 def detectar_musica(event):
@@ -411,7 +413,6 @@ def detectar_musica(event):
                     constantes.MUSICA_PARTIDA = True
 
 def shoot(turno, tanques, terreno, game):
-    ui = UI()
     # Se intancia el disparo
     disparo = Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque, Bala(turno.tanque.tipo_bala))
     if turno.tanque.municion[turno.tanque.tipo_bala].unidades > 0:
@@ -421,6 +422,7 @@ def shoot(turno, tanques, terreno, game):
         # Ningun tanque dañado
         if tanque_danyado != -1:
             print(f"Tanque dañado: {tanque_danyado.color}")
+            
         terreno.destruir_terreno(constantes.ALTO_VENTANA, constantes.ANCHO_VENTANA, disparo, disparo.proyectil)
             
         turno.tanque.municion[turno.tanque.tipo_bala].unidades -= 1
@@ -429,6 +431,14 @@ def shoot(turno, tanques, terreno, game):
         return disparo
     else:
         return None
+    
+
+def limpiar_constantes():
+    constantes.JUGADORES = []
+    constantes.TANQUES = []
+    constantes.ARRAY_TURNOS = []
+    constantes.EN_RONDA_DE_COMPRA = True
+    constantes.RONDA_ACTUAL = 1
 
 
 def controles(event, teclas, turno, tanques, terreno, game):
@@ -467,25 +477,12 @@ def controles(event, teclas, turno, tanques, terreno, game):
         turno.tanque.velocidad_disparo -= 3.0
         if turno.tanque.velocidad_disparo < constantes.LIMITE_VELOCIDAD_MIN:
             turno.tanque.velocidad_disparo = constantes.LIMITE_VELOCIDAD_MIN
-    # Cambio de tipo de municion al apretar la tecla 'B' estas rotan en un ciclo
-    if teclas[pygame.K_b]:
+    # Cambio de tipo de municion al apretar la tecla 'Q' estas rotan en un ciclo
+    if teclas[pygame.K_q]:
         if turno.tanque.tipo_bala < 2:
             turno.tanque.tipo_bala += 1
         else:
             turno.tanque.tipo_bala = 0
-    # Comprar al apretar la tecla 'V'
-    if teclas[pygame.K_v]:
-        sound = pygame.mixer.Sound('mp3/sonido_compra.mp3')
-        sound.set_volume(0.2)
-        if turno.tanque.tipo_bala == 0 and turno.dinero >= 1000:
-            turno.comprar_bala_60mm()
-            sound.play()
-        if turno.tanque.tipo_bala == 1 and turno.dinero >= 2500:
-            turno.comprar_bala_80mm()
-            sound.play()
-        if turno.tanque.tipo_bala == 2 and turno.dinero >= 4000:
-            turno.comprar_bala_105mm()
-            sound.play()
 
     # Verifica disparo del tanque y cambio de turnos
     if event.type == pygame.KEYDOWN:
@@ -502,6 +499,7 @@ def ui_pre_disparo(ui, pantalla, turno):
     ui.texto_salud(pantalla, turno.tanque.salud)
     ui.texto_tipo_bala(pantalla, turno.tanque.tipo_bala)
     ui.cantidad_img_balas(pantalla, turno.tanque.tipo_bala, turno.tanque.municion[turno.tanque.tipo_bala].unidades)
+    ui.ronda_actual(pantalla)
 
 
 def iniciar_tanques(terreno):
@@ -510,13 +508,88 @@ def iniciar_tanques(terreno):
         jugador.tanque.caida_tanque = jugador.tanque.posicion_y
 
 
+def controles_compra(teclas, turno):
+    # Cambio de tipo de municion al apretar la tecla 'Q' estas rotan en un ciclo
+    if teclas[pygame.K_q]:
+        if turno.tanque.tipo_bala < 2:
+            turno.tanque.tipo_bala += 1
+        else:
+            turno.tanque.tipo_bala = 0
+
+    # Comprar al apretar la tecla 'B'
+    if teclas[pygame.K_b]:
+        sound = pygame.mixer.Sound('mp3/sonido_compra.mp3')
+        sound.set_volume(0.2)
+        if turno.tanque.tipo_bala == 0 and turno.dinero >= 1000:
+            turno.comprar_bala_60mm()
+            sound.play()
+        if turno.tanque.tipo_bala == 1 and turno.dinero >= 2500:
+            turno.comprar_bala_80mm()
+            sound.play()
+        if turno.tanque.tipo_bala == 2 and turno.dinero >= 4000:
+            turno.comprar_bala_105mm()
+            sound.play()
+
+    # Vender al apretar la tecla 'S'
+    if teclas[pygame.K_s]:
+        sound = pygame.mixer.Sound('mp3/sonido_venta.mp3')
+        sound.set_volume(0.2)
+        if turno.tanque.tipo_bala == 0 and turno.tanque.municion[0].unidades > 0:
+            turno.vender_bala_60mm()
+            sound.play()
+        if turno.tanque.tipo_bala == 1 and turno.tanque.municion[1].unidades > 0:
+            turno.vender_bala_80mm()
+            sound.play()
+        if turno.tanque.tipo_bala == 2 and turno.tanque.municion[2].unidades > 0:
+            turno.vender_bala_105mm()
+            sound.play()
+    
+    if teclas[pygame.K_n]:
+        constantes.TURNO_ACTUAL += 1
+
+
+def combrobar_compra_de_todos_los_jugadores():
+    if constantes.TURNO_ACTUAL >= constantes.CANT_JUGADORES:
+        constantes.EN_RONDA_DE_COMPRA = False
+        constantes.TURNO_ACTUAL = 0
+
+def cambiar_musica(nueva_cancion):
+    pygame.mixer.music.stop()
+    pygame.mixer.music.load(nueva_cancion)
+    pygame.mixer.music.play()
+
+
+def tanque_sin_municion(tanque_turno):
+    if tanque_turno.municion[0].unidades == 0 and tanque_turno.municion[1].unidades == 0 and tanque_turno.municion[2].unidades == 0:
+        return True
+    else:
+        return False
+    
+
+def combrobar_municion_tanques():
+    tanques_sin_municion = 0
+    for tanque in constantes.TANQUES:
+        if tanque_sin_municion(tanque):
+            tanques_sin_municion += 1
+
+    if tanques_sin_municion == len(constantes.TANQUES) and constantes.EN_RONDA_DE_COMPRA == False:
+        constantes.RONDA_ACTUAL += 1
+        constantes.EN_RONDA_DE_COMPRA = True
+
+
+def saltar_turno_tanque_sin_municion(turno):
+    if tanque_sin_municion(turno.tanque):
+        cambiar_turno()
+
+
 def partida(pantalla, game):
     global reloj
     pygame.mixer.init()
-    pygame.mixer.music.load('mp3/Death_by_Glamour.mp3')
+    pygame.mixer.music.load('mp3/C418_Living_Mice.mp3')
     pygame.mixer.music.set_volume(0.05)
     pygame.mixer.music.play(-1)
     constantes.JUGADORES = []
+    constantes.MUSICA = 'mp3/C418_Living_Mice.mp3'
     crear_jugadores()
     turno = None
     terreno = Terreno()
@@ -537,25 +610,45 @@ def partida(pantalla, game):
     definir_turnos()
 
     while running:
-
         turno = constantes.ARRAY_TURNOS[constantes.TURNO_ACTUAL]
-
         reloj = pygame.time.Clock()
         teclas = pygame.key.get_pressed()
-        for event in pygame.event.get():
-            detectar_reinicio(event, pantalla, game)
-            detectar_termino_partida(event, pantalla, game)
-            detectar_musica(event)
-            if event.type == pygame.QUIT:
-                running = False
-            elif event.type == pygame.VIDEORESIZE:
-                NUEVO_ANCHO, NUEVA_ALTURA = event.size
-                pantalla = pygame.display.set_mode((NUEVO_ANCHO, NUEVA_ALTURA), pygame.RESIZABLE, pygame.OPENGL)
-                constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA = NUEVO_ANCHO, NUEVA_ALTURA
-            elif teclas[pygame.K_ESCAPE]:
-                pausar()
-            controles(event, teclas, turno, constantes.TANQUES, terreno, game)
-            
+        if constantes.EN_RONDA_DE_COMPRA:
+            if constantes.MUSICA != 'mp3/C418_Living_Mice.mp3':
+                cambiar_musica('mp3/C418_Living_Mice.mp3')
+                constantes.MUSICA = 'mp3/C418_Living_Mice.mp3'
+            for event in pygame.event.get():
+                detectar_reinicio(event, pantalla, game)
+                detectar_termino_partida(event, pantalla, game)
+                detectar_musica(event)
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.VIDEORESIZE:
+                    NUEVO_ANCHO, NUEVA_ALTURA = event.size
+                    pantalla = pygame.display.set_mode((NUEVO_ANCHO, NUEVA_ALTURA), pygame.RESIZABLE, pygame.OPENGL)
+                    constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA = NUEVO_ANCHO, NUEVA_ALTURA
+                elif teclas[pygame.K_ESCAPE]:
+                    pausar()
+                controles_compra(teclas, turno)
+                combrobar_compra_de_todos_los_jugadores()
+        else:
+            for event in pygame.event.get():
+                saltar_turno_tanque_sin_municion(turno)
+                if constantes.MUSICA != 'mp3/Death_by_Glamour.mp3':
+                    cambiar_musica('mp3/Death_by_Glamour.mp3')
+                    constantes.MUSICA = 'mp3/Death_by_Glamour.mp3'
+                detectar_reinicio(event, pantalla, game)
+                detectar_termino_partida(event, pantalla, game)
+                detectar_musica(event)
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.VIDEORESIZE:
+                    NUEVO_ANCHO, NUEVA_ALTURA = event.size
+                    pantalla = pygame.display.set_mode((NUEVO_ANCHO, NUEVA_ALTURA), pygame.RESIZABLE, pygame.OPENGL)
+                    constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA = NUEVO_ANCHO, NUEVA_ALTURA
+                elif teclas[pygame.K_ESCAPE]:
+                    pausar()
+                controles(event, teclas, turno, constantes.TANQUES, terreno, game)
 
         # VACIA PANTALLA
         fondo.cargar_fondo(pantalla, 1)
@@ -565,8 +658,8 @@ def partida(pantalla, game):
             jugador.tanque.posicion_y = calcular_y(terreno.matriz, jugador.tanque)
             if jugador.tanque.posicion_y != jugador.tanque.caida_tanque:
                 jugador.tanque.calcular_damage_caida(jugador.tanque.caida_tanque)
-                jugador.tanque.caida_tanque = jugador.tanque.posicion_y
                 ui.mensaje_caida(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, diff_y=abs(jugador.tanque.posicion_y - jugador.tanque.caida_tanque))
+                jugador.tanque.caida_tanque = jugador.tanque.posicion_y
 
         for jugador in constantes.JUGADORES :
             if jugador.tanque.salud <= 0 :
@@ -623,7 +716,10 @@ def partida(pantalla, game):
                 pass
             constantes.DISPARO = None
         
+        if constantes.EN_RONDA_DE_COMPRA:
+            ui.ronda_compra(pantalla, constantes.ANCHO_VENTANA)
         
+        combrobar_municion_tanques()
 
         pygame.display.flip()
 

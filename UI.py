@@ -219,3 +219,21 @@ class UI:
         pygame.display.flip()
 
 
+    def ronda_compra(self, pantalla, ancho):
+        ancho_rectangulo = 925
+        alto_rectangulo = 70
+        pygame.draw.rect(surface=pantalla, color=(0, 0, 0),
+                rect=(ancho // 2 - ancho_rectangulo // 2, 10,
+                    ancho_rectangulo, alto_rectangulo), border_radius=20)
+        Escribir.escribir_texto(pantalla, f"Ronda de compra - Ronda {constantes.RONDA_ACTUAL}", "Verdana", 35, [255, 255, 255], (0, 0, 0), ancho // 2.75, 20)
+
+    
+    def ronda_actual(self, pantalla):
+        alto_rectangulo = constantes.ALTO_VENTANA // 20
+        ancho_rectangulo = constantes.ALTO_VENTANA // 5
+        x =  ancho_rectangulo * 2
+        y = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 5.75
+        pygame.draw.rect(surface=pantalla, color=(0, 0, 0), rect=(x, y, ancho_rectangulo, alto_rectangulo), border_radius=20)
+        Escribir.escribir_texto(pantalla, f"Ronda {constantes.RONDA_ACTUAL}", "Verdana", 25, constantes.BLANCO, (0, 0, 0),
+                    x + ancho_rectangulo // 4, y + 10)
+

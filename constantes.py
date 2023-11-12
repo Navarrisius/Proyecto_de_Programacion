@@ -11,6 +11,7 @@ ALTO_VENTANA = 800
 JUGADORES = []
 TANQUES = []
 ARRAY_TURNOS = []
+JUGADOR_IMPACTADO = None
 TURNO_ACTUAL = 0
 CANT_JUGADORES = 2
 NEGRO = (0, 0, 0)
@@ -26,6 +27,9 @@ dimenciones = [1920, 1080]
 config_defecto = Configuracion(2,800,800,1)
 config_maximas = Configuracion(6,1920,1080,20)
 MUSICA_PARTIDA = True
+EN_RONDA_DE_COMPRA = True
+MUSICA = None
+RONDA_ACTUAL = 1
 
 '''
 HitBox del tanque:
