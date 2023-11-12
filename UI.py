@@ -182,10 +182,12 @@ class UI:
         if altura != 0:
             Escribir.render_text(pantalla, "Altura máxima del disparo",(0.43 + ancho_botón / 2, 0.814 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
             Escribir.render_text(pantalla, f"{altura} m.",(0.43 + ancho_botón / 2, 0.87 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
-        if distancia != 1 and distancia != 0:
+        if distancia != -1 and distancia != 0:
             Escribir.render_text(pantalla, "Distancia máxima del disparo",(0.73 + ancho_botón / 2, 0.814 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
             Escribir.render_text(pantalla, f"{distancia} m.",(0.73 + ancho_botón / 2, 0.87 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
-        if distancia == -1 and distancia != 0:
+        elif distancia == 0:
+            pass
+        else:
             Escribir.render_text(pantalla, "Distancia máxima del disparo",(0.73 + ancho_botón / 2, 0.814 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
             Escribir.render_text(pantalla, f"Bala fuera del mapa",(0.73 + ancho_botón / 2, 0.87 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
 
@@ -222,5 +224,5 @@ class UI:
         if kills == 1:
             Escribir.render_text(pantalla,f"{kills} kill",(0.208 + ancho_botón / 2, 0.877 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
         else:
-            Escribir.render_text(pantalla,f"{kills} kill",(0.208 + ancho_botón / 2, 0.877 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
+            Escribir.render_text(pantalla,f"{kills} kills",(0.208 + ancho_botón / 2, 0.877 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
 

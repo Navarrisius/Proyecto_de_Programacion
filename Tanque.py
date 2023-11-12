@@ -82,13 +82,13 @@ class Tanque:
                     else:
                         return -1
             except IndexError:
-                pass
+                disparo.distancia_maxima = -1
             # IMPACTO CON TANQUE
             for tanque in tanques:
                 if disparo.verificar_impacto_tanque_enemigo(tanque):
                     disparo.impacto_tanque = True
                     tanque.salud -= self.municion[self.tipo_bala].dano
-                    disparo.calcular_distancia_maxima(self.posicion_x)
+                    disparo.calcular_distancia_maxima(self.posicion_x - 5)
                     return tanque
             terreno.dibujar_terreno(pantalla)
             ui.barras_de_salud(pantalla)
@@ -107,3 +107,4 @@ class Tanque:
     def calcular_damage_caida(self, pos_y_anterior):
         diff_y = abs(self.posicion_y - pos_y_anterior) // 2
         self.salud -= diff_y
+        self.corregir_salud()
