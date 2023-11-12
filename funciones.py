@@ -145,7 +145,7 @@ def configurar_juego(pantalla,game):
                 if Volver.si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
                         constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA = constantes.dimenciones[0], \
                         constantes.dimenciones[1]
-                        menu(pantalla, game)
+                        menu(pantalla, game)       
                 if boton_dimenciones[1].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
                     constantes.dimenciones[0] = int(constantes.config_defecto.ancho_pantalla)
                     constantes.dimenciones[1] = int(constantes.config_defecto.alto_pantalla)
@@ -171,7 +171,7 @@ def tutorial(pantalla, game):
     nuevo_alto = 100
     if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
         nuevo_alto = 50
-        nuevo_ancho = 50
+        nuevo_ancho = 55
     ancho_botón, altura_botón = 0.10, 0.04
     margin_ratio = 0.05  # Margen de separación entre botones
     Volver = Boton(0.36 + ancho_botón / 2, 0.65 + 0.5 * altura_botón + margin_ratio, 0.18, 0.10, "Volver", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50)
@@ -202,31 +202,31 @@ def tutorial(pantalla, game):
         png_tecla_s = pygame.image.load("img/tecla_s_.png").convert_alpha()
         png_tecla_s_ajustado = pygame.transform.scale(png_tecla_s, (nuevo_ancho, nuevo_alto))
         pantalla.blit(png_tecla_s_ajustado,  posicion(-0.017,0.10,ancho_botón,altura_botón,margin_ratio))
-        Escribir.render_text(pantalla, "Aumento o disminución de la potencia", (0.25 + ancho_botón / 2, 0.195 - 0.5 * altura_botón + margin_ratio), 24, constantes.NEGRO, "More Sugar")
+        Escribir.render_text(pantalla, "Aumento o disminución de la potencia", (0.3 + ancho_botón / 2, 0.195 - 0.5 * altura_botón + margin_ratio), 24, constantes.NEGRO, "More Sugar")
         
         png_tecla_a = pygame.image.load("img/tecla_a_.png").convert_alpha()
         png_tecla_a_ajustado = pygame.transform.scale(png_tecla_a, (nuevo_ancho, nuevo_alto))
         pantalla.blit(png_tecla_a_ajustado,  posicion(-0.04,0.35,ancho_botón,altura_botón,margin_ratio))
         png_tecla_d = pygame.image.load("img/tecla_d_.png").convert_alpha()
         png_tecla_d_ajustado = pygame.transform.scale(png_tecla_d, (nuevo_ancho, nuevo_alto))
-        pantalla.blit(png_tecla_d_ajustado,  posicion(0.015,0.35,ancho_botón,altura_botón,margin_ratio))
-        Escribir.render_text(pantalla, "Aumento o disminución  del ángulo", (0.26 + ancho_botón / 2, 0.40 - 0.5 * altura_botón + margin_ratio), 24, constantes.NEGRO, "More Sugar")
+        pantalla.blit(png_tecla_d_ajustado,  posicion(0.025,0.35,ancho_botón,altura_botón,margin_ratio))
+        Escribir.render_text(pantalla, "Aumento o disminución  del ángulo", (0.28 + ancho_botón / 2, 0.40 - 0.5 * altura_botón + margin_ratio), 24, constantes.NEGRO, "More Sugar")
         
         png_tecla_b = pygame.image.load("img/tecla_b.png").convert_alpha()
         png_tecla_b_ajustado = pygame.transform.scale(png_tecla_b, (nuevo_ancho, nuevo_alto))
         pantalla.blit(png_tecla_b_ajustado, posicion(-0.017,0.50,ancho_botón,altura_botón,margin_ratio))
-        Escribir.render_text(pantalla, "Cambio de munición", (0.15 + ancho_botón / 2, 0.55 - 0.5 * altura_botón + margin_ratio), 24, constantes.NEGRO, "More Sugar")
+        Escribir.render_text(pantalla, "Cambio de munición", (0.205 + ancho_botón / 2, 0.55 - 0.5 * altura_botón + margin_ratio), 24, constantes.NEGRO, "More Sugar")
         
-        png_tecla_espacio = pygame.image.load("img/tecla_espacio.png").convert_alpha()
-        png_tecla_espacio_ajustado = pygame.transform.scale(png_tecla_espacio, (200, 95))
-        pantalla.blit(png_tecla_espacio_ajustado, posicion(-0.04,0.65,ancho_botón,altura_botón,margin_ratio))
-        Escribir.render_text(pantalla, "Disparar", (0.12 + ancho_botón / 2, 0.69 - 0.5 * altura_botón + margin_ratio), 24, constantes.NEGRO, "More Sugar")
+        png_tecla_espacio = pygame.image.load("img/Space.png").convert_alpha()
+        png_tecla_espacio_ajustado = pygame.transform.scale(png_tecla_espacio, (nuevo_ancho, nuevo_alto))
+        pantalla.blit(png_tecla_espacio_ajustado, posicion(-0.017,0.65,ancho_botón,altura_botón,margin_ratio))
+        Escribir.render_text(pantalla, "Disparar", (0.145 + ancho_botón / 2, 0.69 - 0.5 * altura_botón + margin_ratio), 24, constantes.NEGRO, "More Sugar")
 
 
-        png_tecla_shift = pygame.image.load("img/tecla_shift.png").convert_alpha()
-        png_tecla_shift_ajustado = pygame.transform.scale(png_tecla_shift, (200, nuevo_alto))
-        pantalla.blit(png_tecla_shift_ajustado, posicion(-0.04,0.80,ancho_botón,altura_botón,margin_ratio))
-        Escribir.render_text(pantalla, "Aumento o dismunición más rápida ", (0.25 + ancho_botón / 2, 0.85 - 0.5 * altura_botón + margin_ratio), 24, constantes.NEGRO, "More Sugar")
+        png_tecla_shift = pygame.image.load("img/SHIFT.png").convert_alpha()
+        png_tecla_shift_ajustado = pygame.transform.scale(png_tecla_shift, (nuevo_ancho, nuevo_alto))
+        pantalla.blit(png_tecla_shift_ajustado, posicion(-0.017,0.80,ancho_botón,altura_botón,margin_ratio))
+        Escribir.render_text(pantalla, "Aumento o dismunición más rápida ", (0.28 + ancho_botón / 2, 0.85 - 0.5 * altura_botón + margin_ratio), 24, constantes.NEGRO, "More Sugar")
 
         pygame.display.update()
         for event in pygame.event.get():
