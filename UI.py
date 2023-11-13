@@ -210,11 +210,11 @@ class UI:
         pygame.draw.rect(surface=pantalla, color=(0, 0, 0),
                 rect=(ancho // 2 - ancho_rectangulo // 2, 10,
                     ancho_rectangulo, alto_rectangulo), border_radius=20)
-        Escribir.render_text(pantalla, f"Ronda de compra - Ronda {constantes.RONDA_ACTUAL}",(0.45 + ancho_botón / 2, 0.01 - 0.5 * altura_botón + margin_ratio),15, constantes.BLANCO, "verdana")
+        Escribir.render_text(pantalla, f"Tiempo de compra - Partida {constantes.RONDA_ACTUAL}",(0.45 + ancho_botón / 2, 0.01 - 0.5 * altura_botón + margin_ratio),15, constantes.BLANCO, "verdana")
 
     
     def ronda_actual(self, pantalla):
-        Escribir.render_text(pantalla, f"Ronda {constantes.RONDA_ACTUAL}",(0.2 + ancho_botón / 2, 0.82 - 0.5 * altura_botón + margin_ratio),15, constantes.BLANCO, "verdana")
+        Escribir.render_text(pantalla, f"Partida {constantes.RONDA_ACTUAL}",(0.2 + ancho_botón / 2, 0.82 - 0.5 * altura_botón + margin_ratio),15, constantes.BLANCO, "verdana")
         
     
     def kills(self, pantalla, kills):

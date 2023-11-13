@@ -104,7 +104,6 @@ def configurar_juego(pantalla,game):
         keys = pygame.key.get_pressed()
 
         current_time = pygame.time.get_ticks()
-
         if current_time - last_change_time > change_delay:
             # Lógica para ajustar las opciones según las teclas presionadas
             if keys[pygame.K_UP]:
@@ -285,7 +284,7 @@ def definir_turnos():
 
 def cambiar_turno():
     constantes.TURNO_ACTUAL += 1
-    if constantes.TURNO_ACTUAL >= constantes.num_jugadores:
+    if constantes.TURNO_ACTUAL > constantes.num_jugadores:
         constantes.TURNO_ACTUAL = 0
 
 
@@ -524,45 +523,52 @@ def iniciar_tanques(terreno):
 
 def controles_compra(teclas, turno):
     # Cambio de tipo de municion al apretar la tecla 'Q' estas rotan en un ciclo
-    if teclas[pygame.K_q]:
-        if turno.tanque.tipo_bala < 2:
-            turno.tanque.tipo_bala += 1
-        else:
-            turno.tanque.tipo_bala = 0
+    change_delay = 100
+    last_change_time = 0
+    current_time = pygame.time.get_ticks()
+    if current_time - last_change_time > change_delay:
+        # Lógica para ajustar las opciones según las teclas presionadas
 
-    # Comprar al apretar la tecla 'B'
-    if teclas[pygame.K_b]:
-        sound = pygame.mixer.Sound('mp3/sonido_compra.mp3')
-        sound.set_volume(0.2)
-        if turno.tanque.tipo_bala == 0 and turno.dinero >= 1000:
-            turno.comprar_bala_60mm()
-            sound.play()
-        if turno.tanque.tipo_bala == 1 and turno.dinero >= 2500:
-            turno.comprar_bala_80mm()
-            sound.play()
-        if turno.tanque.tipo_bala == 2 and turno.dinero >= 4000:
-            turno.comprar_bala_105mm()
-            sound.play()
+        if teclas[pygame.K_q]:
+            if turno.tanque.tipo_bala < 2:
+                turno.tanque.tipo_bala += 1
+            else:
+                turno.tanque.tipo_bala = 0
 
-    # Vender al apretar la tecla 'S'
-    if teclas[pygame.K_s]:
-        sound = pygame.mixer.Sound('mp3/sonido_venta.mp3')
-        sound.set_volume(0.2)
-        if turno.tanque.tipo_bala == 0 and turno.tanque.municion[0].unidades > 0:
-            turno.vender_bala_60mm()
-            sound.play()
-        if turno.tanque.tipo_bala == 1 and turno.tanque.municion[1].unidades > 0:
-            turno.vender_bala_80mm()
-            sound.play()
-        if turno.tanque.tipo_bala == 2 and turno.tanque.municion[2].unidades > 0:
-            turno.vender_bala_105mm()
-            sound.play()
-    
-    if teclas[pygame.K_n]:
-        constantes.TURNO_ACTUAL += 1
+        # Comprar al apretar la tecla 'B'
+        if teclas[pygame.K_b]:
+            sound = pygame.mixer.Sound('mp3/sonido_compra.mp3')
+            sound.set_volume(0.2)
+            if turno.tanque.tipo_bala == 0 and turno.dinero >= 1000:
+                turno.comprar_bala_60mm()
+                sound.play()
+            if turno.tanque.tipo_bala == 1 and turno.dinero >= 2500:
+                turno.comprar_bala_80mm()
+                sound.play()
+            if turno.tanque.tipo_bala == 2 and turno.dinero >= 4000:
+                turno.comprar_bala_105mm()
+                sound.play()
+
+        # Vender al apretar la tecla 'S'
+        if teclas[pygame.K_s]:
+            sound = pygame.mixer.Sound('mp3/sonido_venta.mp3')
+            sound.set_volume(0.2)
+            if turno.tanque.tipo_bala == 0 and turno.tanque.municion[0].unidades > 0:
+                turno.vender_bala_60mm()
+                sound.play()
+            if turno.tanque.tipo_bala == 1 and turno.tanque.municion[1].unidades > 0:
+                turno.vender_bala_80mm()
+                sound.play()
+            if turno.tanque.tipo_bala == 2 and turno.tanque.municion[2].unidades > 0:
+                turno.vender_bala_105mm()
+                sound.play()
+
+        if teclas[pygame.K_n]:
+            constantes.TURNO_ACTUAL += 1
+
 
 def combrobar_compra_de_todos_los_jugadores():
-    if constantes.TURNO_ACTUAL >= constantes.CANT_JUGADORES:
+    if constantes.TURNO_ACTUAL > constantes.CANT_JUGADORES:
         constantes.EN_RONDA_DE_COMPRA = False
         constantes.TURNO_ACTUAL = 0
 
@@ -742,7 +748,7 @@ def partida(pantalla, game):
 
 
         # Texto con el jugador ganador
-        if game.ganador is not None:
+        if (game.ganador is not None) and constantes.num_partidos == constantes.RONDA_ACTUAL-1:
             pygame.mixer.music.stop()
             disparo.recorrido(pantalla, turno.tanque.color)
             # Esperar 5 segundos antes de cerrar la ventana
