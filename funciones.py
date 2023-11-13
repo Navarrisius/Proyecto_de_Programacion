@@ -561,7 +561,6 @@ def controles_compra(teclas, turno):
     if teclas[pygame.K_n]:
         constantes.TURNO_ACTUAL += 1
 
-
 def combrobar_compra_de_todos_los_jugadores():
     if constantes.TURNO_ACTUAL >= constantes.CANT_JUGADORES:
         constantes.EN_RONDA_DE_COMPRA = False
@@ -606,7 +605,7 @@ def avanzar_partido():
         pos_inicial = pos_final
         pos_final = pos_inicial + constantes.ANCHO_VENTANA // constantes.num_jugadores
 
-    altura_terreno = constantes.TERRENO.generar_terreno_perlin()
+    altura_terreno = constantes.TERRENO.generar_terreno_perlin(constantes.dimenciones[0])
     constantes.TERRENO.generar_matriz(constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA, altura_terreno)
     iniciar_tanques(constantes.TERRENO)
     definir_turnos()
@@ -657,7 +656,7 @@ def partida(pantalla, game):
     img_musica = pygame.image.load("img/musica.png")
     img_musica = pygame.transform.scale(img_musica, (70, 70))
     img_linea_diagonal_sin_musica = pygame.image.load("img/linea_diagonal.png")
-    altura_terreno = constantes.TERRENO.generar_terreno_perlin()
+    altura_terreno = constantes.TERRENO.generar_terreno_perlin(constantes.dimenciones[0])
     constantes.TERRENO.generar_matriz(constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA, altura_terreno)
     iniciar_tanques(constantes.TERRENO)
     definir_turnos()

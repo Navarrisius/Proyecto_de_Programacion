@@ -7,7 +7,11 @@ class Terreno:
         self.arreglo = []
         self.tipo = random.randint(1,3)
 
-    def generar_terreno_perlin(self):
+    def generar_terreno_perlin(self, rango_onda):
+        if rango_onda == 800:
+            onda = 0.012
+        else:
+            onda = 0.006
         gradientes = [random.uniform(-1, 1) for _ in range(256)]
         #Funcion para la atenuacion
         def fade(t):
@@ -24,7 +28,7 @@ class Terreno:
             return (1 - u) * val1 + u * val2
         arr = []
         for x in range(constantes.ANCHO_VENTANA):
-            arr.append(int(constantes.ALTO_VENTANA / 2 + perlin(x * 0.006) * 600))
+            arr.append(int(constantes.ALTO_VENTANA / 2 + perlin(x * onda) * 600))
         return arr
 
     def dibujar_terreno(self, pantalla):
