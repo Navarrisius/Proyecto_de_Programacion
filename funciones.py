@@ -633,6 +633,17 @@ def comprobar_jugadores_vivos():
     if queda_un_jugador_vivo() and constantes.EN_RONDA_DE_COMPRA == False:
         avanzar_partido()
 
+def encontrar_ganador(jugadores):
+    ganador = None
+    max_kills = 0
+
+    for jugador in jugadores:
+        # Comprobar si este jugador tiene más kills que el máximo actual
+        if jugador.kills > max_kills:
+            max_kills = jugador.kills
+            ganador = jugador
+
+    return ganador
 
 def partida(pantalla, game):
     global reloj
@@ -726,6 +737,9 @@ def partida(pantalla, game):
         ui_pre_disparo(ui, pantalla, turno)
 
         ui.texto_jugador(pantalla, turno.tanque.color, turno.nombre)
+
+        #game.ganador = encontrar_ganador(constantes.JUGADORES)
+
 
         # Texto con el jugador ganador
         if game.ganador is not None:
