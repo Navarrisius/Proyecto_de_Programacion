@@ -108,49 +108,49 @@ def configurar_juego(pantalla,game):
             # Lógica para ajustar las opciones según las teclas presionadas
             if keys[pygame.K_UP]:
                 # Aumenta el número de jugadores (limitado a 6)
-                constantes.num_jugadores = min(constantes.num_jugadores + 1, 6)
+                constantes.NUM_JUGADORES = min(constantes.NUM_JUGADORES + 1, 6)
             elif keys[pygame.K_DOWN]:
                 # Disminuye el número de jugadores (mínimo 2)
-                constantes.num_jugadores = max(constantes.num_jugadores - 1, 2)
+                constantes.NUM_JUGADORES = max(constantes.NUM_JUGADORES - 1, 2)
             elif keys[pygame.K_RIGHT]:
                 # Aumenta el número de partidos
-                constantes.num_partidos = min(constantes.num_partidos + 1, 20)
+                constantes.NUM_PARTIDAS = min(constantes.NUM_PARTIDAS + 1, 20)
             elif keys[pygame.K_LEFT]:
                 # Disminuye el número de partidos (mínimo 1)
-                constantes.num_partidos = max(constantes.num_partidos - 1, 1)
+                constantes.NUM_PARTIDAS = max(constantes.NUM_PARTIDAS - 1, 1)
             elif keys[pygame.K_e]:
                 # Activa/desactiva los efectos del entorno
-                constantes.efectos_entorno = not constantes.efectos_entorno
+                constantes.EFECTOS_ENTORNO = not constantes.EFECTOS_ENTORNO
 
             last_change_time = current_time
         if keys[pygame.K_RETURN]:
-            Configuracion(constantes.num_jugadores,800,800,constantes.num_partidos)
+            Configuracion(constantes.NUM_JUGADORES,800,800,constantes.NUM_PARTIDAS)
         pantalla.fill((208, 237, 250))
         for boton in boton_dimenciones:
             boton.dibujar(pantalla, constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA)
         Volver.dibujar(pantalla, constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA)
-        Escribir.render_text(pantalla, str(constantes.dimenciones),(0.7 + ancho_botón / 2, 0.5 - 0.5 * altura_botón + margin_ratio), 30, constantes.NEGRO,"Arial")
+        Escribir.render_text(pantalla, str(constantes.DIMENSIONES),(0.7 + ancho_botón / 2, 0.5 - 0.5 * altura_botón + margin_ratio), 30, constantes.NEGRO,"Arial")
         Escribir.render_text(pantalla, "Ajustes del juego", (0.47 + ancho_botón / 2, 0.07 - 0.5 * altura_botón + margin_ratio), 60, constantes.NEGRO, "More Sugar")
         # Muestra las opciones y valores en la pantalla
-        Escribir.render_text(pantalla, f"Jugadores: {constantes.num_jugadores}", (0.016 + ancho_botón / 2, 0.28 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
+        Escribir.render_text(pantalla, f"Jugadores: {constantes.NUM_JUGADORES}", (0.016 + ancho_botón / 2, 0.28 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
         Escribir.render_text(pantalla, "Use las flechas arriba y abajo para aumentar y disminuir los jugadores", (0.38 + ancho_botón / 2, 0.28 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
-        Escribir.render_text(pantalla, f"Número de Partidos: {constantes.num_partidos}", (0.05 + ancho_botón / 2, 0.32 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
+        Escribir.render_text(pantalla, f"Número de Partidos: {constantes.NUM_PARTIDAS}", (0.05 + ancho_botón / 2, 0.32 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
         Escribir.render_text(pantalla, "Use las flechas derecha e izquierda para aumentar y disminuir jugadores", (0.47 + ancho_botón / 2, 0.32 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
-        Escribir.render_text(pantalla, f"Efectos de Entorno: {'Activado' if constantes.efectos_entorno else 'Desactivado'}", (0.08 + ancho_botón / 2, 0.36 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
-        Escribir.render_text(pantalla, f"Dimenciones: {constantes.dimenciones[0]},{constantes.dimenciones[1]}", (0.06 + ancho_botón / 2, 0.4 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
+        Escribir.render_text(pantalla, f"Efectos de Entorno: {'Activado' if constantes.EFECTOS_ENTORNO else 'Desactivado'}", (0.08 + ancho_botón / 2, 0.36 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
+        Escribir.render_text(pantalla, f"Dimensiones: {constantes.DIMENSIONES[0]},{constantes.DIMENSIONES[1]}", (0.06 + ancho_botón / 2, 0.4 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if Volver.si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
-                        constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA = constantes.dimenciones[0], \
-                        constantes.dimenciones[1]
+                        constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA = constantes.DIMENSIONES[0], \
+                        constantes.DIMENSIONES[1]
                         menu(pantalla, game)       
                 if boton_dimenciones[1].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
-                    constantes.dimenciones[0] = int(constantes.config_defecto.ancho_pantalla)
-                    constantes.dimenciones[1] = int(constantes.config_defecto.alto_pantalla)
+                    constantes.DIMENSIONES[0] = int(constantes.config_defecto.ancho_pantalla)
+                    constantes.DIMENSIONES[1] = int(constantes.config_defecto.alto_pantalla)
                 if boton_dimenciones[0].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
-                    constantes.dimenciones[0] = int(constantes.config_maximas.ancho_pantalla)
-                    constantes.dimenciones[1] = int(constantes.config_maximas.alto_pantalla)
+                    constantes.DIMENSIONES[0] = int(constantes.config_maximas.ancho_pantalla)
+                    constantes.DIMENSIONES[1] = int(constantes.config_maximas.alto_pantalla)
 
         pygame.display.update()
         pygame.display.flip()
@@ -231,8 +231,8 @@ def tutorial(pantalla, game):
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if Volver.si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
-                        constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA = constantes.dimenciones[0], \
-                        constantes.dimenciones[1]
+                        constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA = constantes.DIMENSIONES[0], \
+                        constantes.DIMENSIONES[1]
                         menu(pantalla, game)
 
         pygame.display.update()
@@ -254,9 +254,9 @@ def crear_jugadores():
         "morado" : (99, 11, 87)
     }
     pos_inicial = 0
-    pos_final = pos_inicial + constantes.ANCHO_VENTANA // constantes.num_jugadores
+    pos_final = pos_inicial + constantes.ANCHO_VENTANA // constantes.NUM_JUGADORES
     colores_disponibles = list(colores_rgb.values())
-    for i in range(constantes.num_jugadores) :
+    for i in range(constantes.NUM_JUGADORES) :
         color = random.choice(colores_disponibles)
         colores_disponibles.remove(color)
         jugador = Jugador(None, Tanque(color))
@@ -265,7 +265,7 @@ def crear_jugadores():
         jugador.tanque.angulo_canon = 0
         constantes.JUGADORES.append(jugador)
         pos_inicial = pos_final
-        pos_final = pos_inicial + constantes.ANCHO_VENTANA // constantes.num_jugadores
+        pos_final = pos_inicial + constantes.ANCHO_VENTANA // constantes.NUM_JUGADORES
     elegir_nombres()
 
 
@@ -284,7 +284,7 @@ def definir_turnos():
 
 def cambiar_turno():
     constantes.TURNO_ACTUAL += 1
-    if constantes.TURNO_ACTUAL > constantes.num_jugadores:
+    if constantes.TURNO_ACTUAL >= constantes.NUM_JUGADORES:
         constantes.TURNO_ACTUAL = 0
 
 
@@ -568,7 +568,7 @@ def controles_compra(teclas, turno):
 
 
 def combrobar_compra_de_todos_los_jugadores():
-    if constantes.TURNO_ACTUAL > constantes.CANT_JUGADORES:
+    if constantes.TURNO_ACTUAL >= constantes.NUM_JUGADORES:
         constantes.EN_RONDA_DE_COMPRA = False
         constantes.TURNO_ACTUAL = 0
 
@@ -603,15 +603,15 @@ def avanzar_partido():
         jugador.tanque.salud = 100
 
     pos_inicial = 0
-    pos_final = pos_inicial + constantes.ANCHO_VENTANA // constantes.num_jugadores
+    pos_final = pos_inicial + constantes.ANCHO_VENTANA // constantes.NUM_JUGADORES
     for jugador in constantes.JUGADORES:
         jugador.tanque.posicion_x = random.randint(pos_inicial, pos_final)
         jugador.tanque.posicion_y = 30
         jugador.tanque.angulo_canon = 0
         pos_inicial = pos_final
-        pos_final = pos_inicial + constantes.ANCHO_VENTANA // constantes.num_jugadores
+        pos_final = pos_inicial + constantes.ANCHO_VENTANA // constantes.NUM_JUGADORES
 
-    altura_terreno = constantes.TERRENO.generar_terreno_perlin(constantes.dimenciones[0])
+    altura_terreno = constantes.TERRENO.generar_terreno_perlin(constantes.DIMENSIONES[0])
     constantes.TERRENO.generar_matriz(constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA, altura_terreno)
     iniciar_tanques(constantes.TERRENO)
     definir_turnos()
@@ -673,7 +673,7 @@ def partida(pantalla, game):
     img_musica = pygame.image.load("img/musica.png")
     img_musica = pygame.transform.scale(img_musica, (70, 70))
     img_linea_diagonal_sin_musica = pygame.image.load("img/linea_diagonal.png")
-    altura_terreno = constantes.TERRENO.generar_terreno_perlin(constantes.dimenciones[0])
+    altura_terreno = constantes.TERRENO.generar_terreno_perlin(constantes.DIMENSIONES[0])
     constantes.TERRENO.generar_matriz(constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA, altura_terreno)
     iniciar_tanques(constantes.TERRENO)
     definir_turnos()
@@ -748,7 +748,7 @@ def partida(pantalla, game):
 
 
         # Texto con el jugador ganador
-        if (game.ganador is not None) and constantes.num_partidos == constantes.RONDA_ACTUAL-1:
+        if (game.ganador is not None) and constantes.NUM_PARTIDAS == constantes.RONDA_ACTUAL-1:
             pygame.mixer.music.stop()
             disparo.recorrido(pantalla, turno.tanque.color)
             # Esperar 5 segundos antes de cerrar la ventana
