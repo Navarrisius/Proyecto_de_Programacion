@@ -504,6 +504,7 @@ def controles(event, teclas, turno, tanques, terreno, game):
 
 def ui_pre_disparo(ui, pantalla, turno):
     ui.rectangulo(pantalla)
+    ui.texto_jugador(pantalla, turno.tanque.color, turno.nombre)
     ui.texto_ajustes_disparo(pantalla)
     ui.texto_angulo(pantalla, turno.tanque.angulo_n)
     ui.texto_velocidad(pantalla, turno.tanque.velocidad_disparo)
@@ -638,22 +639,30 @@ def comprobar_jugadores_vivos():
         avanzar_partido()
 
 
-def encontrar_ganador(jugadores):
-    ganador = None
-    max_kills = 0
-
-    for jugador in jugadores:
-        # Comprobar si este jugador tiene más kills que el máximo actual
-        if jugador.kills > max_kills:
-            max_kills = jugador.kills
-            ganador = jugador
-
-    return ganador
-
-
 def verificar_termino_partida(game):
     if not constantes.RONDA_ACTUAL <= constantes.NUM_PARTIDAS:
         game.en_partida = False
+
+
+def definir_ganador():
+    max_kills = -1
+    ganador_temp = None
+    index_ganador = None
+    for i in range(len(constantes.JUGADORES)):
+        if constantes.JUGADORES[i].kills > max_kills:
+            max_kills = constantes.JUGADORES[i].kills
+            ganador_temp = constantes.JUGADORES[i]
+            index_ganador = i
+    
+    empate = False
+    for i in range(len(constantes.JUGADORES)):
+        if i != index_ganador and constantes.JUGADORES[i].kills == max_kills:
+            empate = True
+
+    if not empate:
+        return ganador_temp
+    else:
+        return -1
 
 
 def partida(pantalla, game):
@@ -733,11 +742,10 @@ def partida(pantalla, game):
                 jugador.tanque.calcular_damage_caida(jugador.tanque.caida_tanque)
                 ui.mensaje_caida(pantalla=pantalla, ancho=constantes.ANCHO_VENTANA, diff_y=abs(jugador.tanque.posicion_y - jugador.tanque.caida_tanque))
                 jugador.tanque.caida_tanque = jugador.tanque.posicion_y
-
-        for jugador in constantes.JUGADORES :
-            if jugador.tanque.salud <= 0 :
-                jugador.tanque.corregir_salud()
-                jugador.vivo = False
+                if jugador.tanque.salud <= 0 :
+                    jugador.tanque.corregir_salud()
+                    jugador.vivo = False
+                    jugador.puede_jugar = False
 
         # Terreno
         constantes.TERRENO.dibujar_terreno(pantalla)
@@ -745,13 +753,6 @@ def partida(pantalla, game):
         
 
         ui_pre_disparo(ui, pantalla, turno)
-
-        ui.texto_jugador(pantalla, turno.tanque.color, turno.nombre)
-
-        print(f"NUMERO DE RONDAS: {constantes.NUM_PARTIDAS}")
-        print(f"RONDA ACTUAL: {constantes.RONDA_ACTUAL}")
-
-        #game.ganador = encontrar_ganador(constantes.JUGADORES)
 
 
         # Texto con el jugador ganador
@@ -807,3 +808,8 @@ def partida(pantalla, game):
 
         # Limita los FPS a 60
         reloj.tick(60)
+
+    for jugador in constantes.JUGADORES:
+        print(f"{jugador.nombre}: {jugador.kills} kills, {jugador.tanque.salud} HP")
+    ganador = definir_ganador()
+    ui.pantalla_ganador(ganador)
