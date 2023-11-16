@@ -614,9 +614,7 @@ def avanzar_partido():
     altura_terreno = constantes.TERRENO.generar_terreno_perlin(constantes.DIMENSIONES[0])
     constantes.TERRENO.generar_matriz(constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA, altura_terreno)
     iniciar_tanques(constantes.TERRENO)
-    definir_turnos()
-    
-        
+    definir_turnos()  
 
 
 def saltar_turno_tanque_sin_municion(turno):
@@ -639,6 +637,7 @@ def comprobar_jugadores_vivos():
     if queda_un_jugador_vivo() and constantes.EN_RONDA_DE_COMPRA == False:
         avanzar_partido()
 
+
 def encontrar_ganador(jugadores):
     ganador = None
     max_kills = 0
@@ -650,6 +649,12 @@ def encontrar_ganador(jugadores):
             ganador = jugador
 
     return ganador
+
+
+def verificar_termino_partida(game):
+    if not constantes.RONDA_ACTUAL <= constantes.NUM_PARTIDAS:
+        game.en_partida = False
+
 
 def partida(pantalla, game):
     global reloj
@@ -663,7 +668,6 @@ def partida(pantalla, game):
     turno = None
     constantes.TERRENO = Terreno()
     fondo = Fondo()
-    running = game.en_partida
     pygame.time.Clock()
     ui = UI()
     img_reiniciar = pygame.image.load("img/reiniciar.png")
@@ -678,7 +682,7 @@ def partida(pantalla, game):
     iniciar_tanques(constantes.TERRENO)
     definir_turnos()
 
-    while running:
+    while game.en_partida:
         turno = constantes.ARRAY_TURNOS[constantes.TURNO_ACTUAL]
         reloj = pygame.time.Clock()
         teclas = pygame.key.get_pressed()
@@ -691,7 +695,7 @@ def partida(pantalla, game):
                 detectar_termino_partida(event, pantalla, game)
                 detectar_musica(event)
                 if event.type == pygame.QUIT:
-                    running = False
+                    game.en_partida = False
                 elif event.type == pygame.VIDEORESIZE:
                     NUEVO_ANCHO, NUEVA_ALTURA = event.size
                     pantalla = pygame.display.set_mode((NUEVO_ANCHO, NUEVA_ALTURA), pygame.RESIZABLE, pygame.OPENGL)
@@ -710,7 +714,7 @@ def partida(pantalla, game):
                 detectar_termino_partida(event, pantalla, game)
                 detectar_musica(event)
                 if event.type == pygame.QUIT:
-                    running = False
+                    game.en_partida = False
                 elif event.type == pygame.VIDEORESIZE:
                     NUEVO_ANCHO, NUEVA_ALTURA = event.size
                     pantalla = pygame.display.set_mode((NUEVO_ANCHO, NUEVA_ALTURA), pygame.RESIZABLE, pygame.OPENGL)
@@ -743,6 +747,9 @@ def partida(pantalla, game):
         ui_pre_disparo(ui, pantalla, turno)
 
         ui.texto_jugador(pantalla, turno.tanque.color, turno.nombre)
+
+        print(f"NUMERO DE RONDAS: {constantes.NUM_PARTIDAS}")
+        print(f"RONDA ACTUAL: {constantes.RONDA_ACTUAL}")
 
         #game.ganador = encontrar_ganador(constantes.JUGADORES)
 
@@ -793,6 +800,8 @@ def partida(pantalla, game):
         
         combrobar_municion_tanques()
         comprobar_jugadores_vivos()
+
+        verificar_termino_partida(game)
 
         pygame.display.flip()
 
