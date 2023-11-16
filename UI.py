@@ -226,3 +226,15 @@ class UI:
         else:
             Escribir.render_text(pantalla,f"{kills} kills",(0.208 + ancho_botón / 2, 0.877 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
 
+    
+    def pantalla_ganador(self, jugador):
+        if jugador != -1:
+            nombre = jugador.nombre
+            kills = jugador.kills
+            if kills == 1:
+                print(f"Gana {nombre} con 1 kill")
+            else:
+                print(f"Gana {nombre} con {kills} kills")
+        else:
+            print("Empate")
+

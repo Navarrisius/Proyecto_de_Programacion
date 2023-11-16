@@ -191,6 +191,7 @@ def controles(event, teclas, turno, tanques, terreno, game):
 
 def ui_pre_disparo(ui, pantalla, turno):
     ui.rectangulo(pantalla)
+    ui.texto_jugador(pantalla, turno.tanque.color, turno.nombre)
     ui.texto_ajustes_disparo(pantalla)
     ui.texto_angulo(pantalla, turno.tanque.angulo_n)
     ui.texto_velocidad(pantalla, turno.tanque.velocidad_disparo)
@@ -295,6 +296,7 @@ def avanzar_partido():
     altura_terreno = constantes.TERRENO.generar_terreno_perlin(constantes.DIMENSIONES[0])
     constantes.TERRENO.generar_matriz(constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA, altura_terreno)
     iniciar_tanques(constantes.TERRENO)
+
     definir_turnos()
 
 def saltar_turno_tanque_sin_municion(turno):
@@ -316,14 +318,31 @@ def comprobar_jugadores_vivos():
     if queda_un_jugador_vivo() and constantes.EN_RONDA_DE_COMPRA == False:
         avanzar_partido()
 
-def encontrar_ganador(jugadores):
-    ganador = None
-    max_kills = 0
 
-    for jugador in jugadores:
-        # Comprobar si este jugador tiene más kills que el máximo actual
-        if jugador.kills > max_kills:
-            max_kills = jugador.kills
-            ganador = jugador
+def verificar_termino_partida(game):
+    if not constantes.RONDA_ACTUAL <= constantes.NUM_PARTIDAS:
+        game.en_partida = False
 
-    return ganador
+
+def definir_ganador():
+    max_kills = -1
+    ganador_temp = None
+    index_ganador = None
+    for i in range(len(constantes.JUGADORES)):
+        if constantes.JUGADORES[i].kills > max_kills:
+            max_kills = constantes.JUGADORES[i].kills
+            ganador_temp = constantes.JUGADORES[i]
+            index_ganador = i
+    
+    empate = False
+    for i in range(len(constantes.JUGADORES)):
+        if i != index_ganador and constantes.JUGADORES[i].kills == max_kills:
+            empate = True
+
+    if not empate:
+        return ganador_temp
+    else:
+        return -1
+
+
+

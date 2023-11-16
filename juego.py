@@ -193,4 +193,8 @@ class EnPartida:
 
             # Limita los FPS a 60
             reloj.tick(60)
+            for jugador in constantes.JUGADORES:
+                print(f"{jugador.nombre}: {jugador.kills} kills, {jugador.tanque.salud} HP")
+            ganador = funciones.definir_ganador()
+            ui.pantalla_ganador(ganador)
 
