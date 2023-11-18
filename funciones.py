@@ -5,8 +5,8 @@ from Disparo import Disparo
 from Jugador import Jugador
 from Partida import Partida
 from Tanque import Tanque
-from pausar import Pausar
-from termino import Termino
+from Pausa import Pausa
+from Termino import Termino
 import constantes
 import random
 import sys
@@ -82,7 +82,7 @@ def terminar_turnos(jugadores):
     return posibles_jugadores
 
 def pausar(self):
-    return  Pausar.run(self)
+    return Pausa.run(self)
 
 def terminar_de_juego(self):
     return Termino.run(self)

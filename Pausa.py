@@ -4,7 +4,7 @@ from Boton import Boton
 import sys
 from Escribir import Escribir
 
-class Pausar:
+class Pausa:
     def __init__(self, pantalla, gameStateManager,game):
         self.gameStateManager = gameStateManager
         self.pantalla = pantalla

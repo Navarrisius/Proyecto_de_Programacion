@@ -5,6 +5,7 @@ import sys
 from Escribir import Escribir
 from Fondo import Fondo
 from Boton import Boton
+
 class Menu:
     def __init__(self, pantalla, gameStateManager,game):
         self.gameStateManager = gameStateManager

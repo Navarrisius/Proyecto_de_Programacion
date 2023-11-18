@@ -4,11 +4,11 @@ import funciones
 import sys
 from gameStateManager import GameStateManager
 from juego import EnPartida
-from menu import Menu
-from tutorial import Tutorial
-from configurar import Configurar
-from pausar import Pausar
-from termino import Termino
+from Menu import Menu
+from Tutorial import Tutorial
+from Configurar import Configurar
+from Pausa import Pausa
+from Termino import Termino
 class Game:
     def __init__(self):
         pygame.init()
@@ -30,7 +30,7 @@ class Game:
         self.Tutorial = Tutorial(self.pantalla,self.gameStateManager,self.game)
         self.Partida = EnPartida(self.pantalla,self.gameStateManager,self.game)
         self.Configurar = Configurar(self.pantalla,self.gameStateManager,self.game)
-        self.Pausar = Pausar(self.pantalla,self.gameStateManager,self.game)
+        self.Pausar = Pausa(self.pantalla,self.gameStateManager,self.game)
         self.Termino = Termino(self.pantalla,self.gameStateManager,self.game)
 
         self.estados = {'menu':self.Menu,'tutorial':self.Tutorial,'partida':self.Partida,'configurar':self.Configurar,'pausar':self.Pausar,'termino':self.Termino}

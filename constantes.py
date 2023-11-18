@@ -1,11 +1,11 @@
-from configuraciones import Configuracion
+from Configuracion import Configuracion
 
 
 NOMBRE_VENTANA = "PessiTank"
 LIMITE_ANGULO_MIN = 0
 LIMITE_ANGULO_MAX = 180
 LIMITE_VELOCIDAD_MIN = 30
-GRAVEDAD = 9.8
+GRAVEDAD = 0.5
 ANCHO_VENTANA = 800
 ALTO_VENTANA = 800
 JUGADORES = []

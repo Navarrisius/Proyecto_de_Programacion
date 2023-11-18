@@ -134,7 +134,7 @@ class EnPartida:
 
             ui.texto_jugador(self.pantalla, turno.tanque.color, turno.nombre)
 
-            self.game.ganador = funciones.encontrar_ganador(constantes.JUGADORES)
+            self.game.ganador = funciones.definir_ganador()
 
 
             # Texto con el jugador ganador

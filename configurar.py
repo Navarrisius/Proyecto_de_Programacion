@@ -2,7 +2,7 @@ import pygame
 import constantes
 from Escribir import Escribir
 from Boton import Boton
-from configuraciones import Configuracion
+from Configuracion import Configuracion
 import sys
 
 class Configurar:

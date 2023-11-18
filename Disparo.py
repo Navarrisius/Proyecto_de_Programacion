@@ -44,8 +44,8 @@ class Disparo:
 
     def actualizar(self):
         self.x_bala += self.velocidad_x * self.tiempo
-        self.y_bala += (self.velocidad_y * self.tiempo) + (0.5 * 9.81 * (self.tiempo ** 2))
-        self.velocidad_y += 9.81 * self.tiempo
+        self.y_bala += (self.velocidad_y * self.tiempo) + (0.5 * constantes.GRAVEDAD * (self.tiempo ** 2))
+        self.velocidad_y += constantes.GRAVEDAD * self.tiempo
         self.eje_x.append(self.x_bala)
         self.eje_y.append(self.y_bala)
         self.velocidad_actual = math.sqrt(self.velocidad_x ** 2 + self.velocidad_y ** 2)
@@ -67,7 +67,7 @@ class Disparo:
             pygame.draw.polygon(pantalla, color_jugador, vertices)
 
     def calcular_altura_maxima(self):
-        self.altura_maxima = abs((self.velocidad_inicial ** 2 * (math.sin(self.angulo_radianes) ** 2)) / (2 * 9.81))
+        self.altura_maxima = abs((self.velocidad_inicial ** 2 * (math.sin(self.angulo_radianes) ** 2)) / (2 * constantes.GRAVEDAD))
 
     def calcular_distancia_maxima(self, tanque_posicion_x):
         self.distancia_maxima = abs(self.x_bala - self.distancia_maxima - tanque_posicion_x)
