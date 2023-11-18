@@ -2,8 +2,8 @@ import pygame
 import constantes
 import funciones
 import sys
-from gameStateManager import GameStateManager
-from juego import EnPartida
+from GameStateManager import GameStateManager
+from EnPartida import EnPartida
 from Menu import Menu
 from Tutorial import Tutorial
 from Configurar import Configurar
