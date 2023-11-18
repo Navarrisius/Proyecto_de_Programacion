@@ -119,7 +119,7 @@ class EnPartida:
                 jugador.tanque.posicion_y = funciones.calcular_y(constantes.TERRENO.matriz, jugador.tanque)
                 if jugador.tanque.posicion_y != jugador.tanque.caida_tanque:
                     jugador.tanque.calcular_damage_caida(jugador.tanque.caida_tanque)
-                    ui.mensaje_caida(pantalla=self.pantalla, ancho=constantes.ANCHO_VENTANA, diff_y=abs(jugador.tanque.posicion_y - jugador.tanque.caida_tanque))
+                    ui.mensaje_caida(pantalla=self.pantalla, ancho=constantes.ANCHO_VENTANA, diff_y=abs(jugador.tanque.posicion_y - jugador.tanque.caida_tanque), dano=jugador.tanque.dano_caida)
                     jugador.tanque.caida_tanque = jugador.tanque.posicion_y
 
             for jugador in constantes.JUGADORES :

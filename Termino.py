@@ -31,9 +31,9 @@ class Termino:
                     sys.exit()
                 if evento.type == pygame.MOUSEBUTTONDOWN:
                     if botones[0].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
-                            self.gameStateManager.set_estado('menu')
-                            termino = False 
-                            return termino
+                            termino = True
+                            pygame.quit()
+                            sys.exit()
                     if botones[1].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
                             self.gameStateManager.set_estado('partida')
                             termino = False

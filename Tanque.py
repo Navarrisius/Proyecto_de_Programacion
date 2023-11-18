@@ -1,4 +1,4 @@
-import math, pygame
+import math, pygame, constantes
 from Bala import Bala
 from Fondo import Fondo
 from UI import UI
@@ -18,6 +18,7 @@ class Tanque:
     turret_end = None
     imagen = None
     caida_tanque = None
+    dano_caida = None
     
     def __init__(self, color):
         self.municion = [Bala(0), Bala(1), Bala(2)]
@@ -107,5 +108,6 @@ class Tanque:
 
     def calcular_damage_caida(self, pos_y_anterior):
         diff_y = abs(self.posicion_y - pos_y_anterior) // 2
-        self.salud -= diff_y
+        self.dano_caida = int(diff_y * (constantes.GRAVEDAD / 10))
+        self.salud -= self.dano_caida
         self.corregir_salud()
