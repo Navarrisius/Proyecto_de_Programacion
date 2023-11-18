@@ -151,18 +151,16 @@ class EnPartida:
             # Texto con el jugador ganador
             if (self.game.ganador is not None) and constantes.NUM_PARTIDAS == constantes.RONDA_ACTUAL-1:
                 pygame.mixer.music.stop()
-                # Esperar 5 segundos antes de cerrar la ventana
-                tiempo_inicial = pygame.time.get_ticks()
-                tiempo_espera = 5000
-                while pygame.time.get_ticks() - tiempo_inicial < tiempo_espera:
-                    pygame.display.update()
-                    termino = funciones.terminar_de_juego(self,self.game.ganador)
-                    if termino == False:
-                            funciones.vaciar_variables()
-                            running = False
-                    elif termino == 1:
-                        funciones.vaciar_variables()
-                        self.run()
+                termino = None
+                pygame.display.update()
+                termino = funciones.terminar_de_juego(self,self.game.ganador)
+                if termino == False:
+                    funciones.cambiar_musica('mp3/aria_math.mp3')
+                    funciones.vaciar_variables()
+                    running = False
+                elif termino == 1:
+                    funciones.vaciar_variables()
+                    self.run()
                 pygame.display.update()
                 
             else:

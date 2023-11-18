@@ -20,9 +20,9 @@ class Termino:
             Escribir.render_text(self.pantalla, f"Ganador:{conclusion}" , (0.37 + ancho_botón / 2, 0.17 - 0.5 * altura_botón + margin_ratio), 60, constantes.NEGRO, "More Sugar")
         botones = [
             Boton(0.5 - ancho_botón / 2, 0.5 - 0.5 * altura_botón + margin_ratio, ancho_botón,
-                altura_botón, "Salir",
+                altura_botón, "Reiniciar",
                 constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
-            Boton(0.5 - ancho_botón / 2, 0.5 + 1.5 * altura_botón, ancho_botón, altura_botón, "Reiniciar",
+            Boton(0.5 - ancho_botón / 2, 0.5 + 1.5 * altura_botón, ancho_botón, altura_botón, "Salir",
                 constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50)]
         termino = True
         pygame.display.flip()
@@ -34,11 +34,11 @@ class Termino:
                     pygame.quit()
                     sys.exit()
                 if evento.type == pygame.MOUSEBUTTONDOWN:
-                    if botones[0].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
-                            termino = True
-                            pygame.quit()
-                            sys.exit()
                     if botones[1].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
+                            self.gameStateManager.set_estado('menu')
+                            termino = False
+                            return termino
+                    if botones[0].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
                             self.gameStateManager.set_estado('partida')
                             termino = False
                             return 1
