@@ -42,6 +42,7 @@ class EnPartida:
 
         while running:
             turno = constantes.ARRAY_TURNOS[constantes.TURNO_ACTUAL]
+            turno.puede_jugar = True
             reloj = pygame.time.Clock()
             teclas = pygame.key.get_pressed()
             if constantes.EN_RONDA_DE_COMPRA:
@@ -57,12 +58,12 @@ class EnPartida:
                                 funciones.cambiar_musica('mp3/aria_math.mp3')
                                 pygame.mixer.music.set_volume(0.1)
                                 pygame.mixer.music.play(-1)
-                                funciones.limpiar_constantes()
+                                funciones.vaciar_variables()
                                 self.gameStateManager.set_estado('menu')
                                 running = False
                             # Verificar si el clic ocurrió dentro de la imagen, reiniciar juego
                             if constantes.ANCHO_VENTANA - 200 <= clic_x <= constantes.ANCHO_VENTANA - 136 and 40 <= clic_y <= 40 + 64:
-                                funciones.limpiar_constantes()
+                                funciones.vaciar_variables()
                                 self.run()
                     funciones.detectar_musica(event)
                     if event.type == pygame.QUIT:
@@ -75,7 +76,7 @@ class EnPartida:
                         pausa = funciones.pausar(self)
                         if pausa == False:
                             funciones.cambiar_musica('mp3/aria_math.mp3')
-                            funciones.limpiar_constantes()
+                            funciones.vaciar_variables()
                             running = False
                         if pausa == True:
                             pass
@@ -95,12 +96,12 @@ class EnPartida:
                                 funciones.cambiar_musica('mp3/aria_math.mp3')
                                 pygame.mixer.music.set_volume(0.1)
                                 pygame.mixer.music.play(-1)
-                                funciones.limpiar_constantes()
+                                funciones.vaciar_variables()
                                 self.gameStateManager.set_estado('menu')
                                 running = False
                             # Verificar si el clic ocurrió dentro de la imagen, reiniciar juego
                             if constantes.ANCHO_VENTANA - 200 <= clic_x <= constantes.ANCHO_VENTANA - 136 and 40 <= clic_y <= 40 + 64:
-                                funciones.limpiar_constantes()
+                                funciones.vaciar_variables()
                                 self.run()
                     funciones.detectar_musica(event)
                     if event.type == pygame.QUIT:
@@ -113,7 +114,7 @@ class EnPartida:
                         pausa = funciones.pausar(self)
                         if pausa == False:
                             funciones.cambiar_musica('mp3/aria_math.mp3')
-                            funciones.limpiar_constantes()
+                            funciones.vaciar_variables()
                             running = False
                         if pausa == True:
                             pass
@@ -157,10 +158,10 @@ class EnPartida:
                     pygame.display.update()
                     termino = funciones.terminar_de_juego(self,self.game.ganador)
                     if termino == False:
-                            funciones.limpiar_constantes()
+                            funciones.vaciar_variables()
                             running = False
                     elif termino == 1:
-                        funciones.limpiar_constantes()
+                        funciones.vaciar_variables()
                         self.run()
                 pygame.display.update()
                 

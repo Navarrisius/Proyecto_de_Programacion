@@ -59,6 +59,7 @@ def definir_turnos():
     random.shuffle(constantes.ARRAY_TURNOS)
     for jugador in constantes.ARRAY_TURNOS:
         constantes.TANQUES.append(jugador.tanque)
+        jugador.puede_jugar = False
 
 
 def cambiar_turno():
@@ -74,15 +75,6 @@ def elegir_nombres():
         nombres.remove(nombre)
         jugador.nombre = nombre
     
-def terminar_turnos(jugadores):
-    posibles_jugadores = []
-    for jugador in jugadores:
-        jugador.puede_jugar = False
-        if jugador.ya_jugado == False:
-            posibles_jugadores.append(jugador)
-        else:
-            jugador.ya_jugado = False
-    return posibles_jugadores
 
 def pausar(self):
     return Pausa.run(self)
@@ -124,18 +116,21 @@ def shoot(turno, tanques, terreno, game):
             
         turno.tanque.municion[turno.tanque.tipo_bala].unidades -= 1
         turno.tanque.balas -= 1
+        turno.puede_jugar = False
         cambiar_turno()
         return disparo
     else:
         return None
-    
+
+
 def detectar_suicidio(turno):
-    turno.puede_jugar = False
     turno.dinero -= 5000
+
 
 def detectar_kill(turno):
     turno.kills += 1
     turno.dinero += 5000
+
 
 def limpiar_constantes():
     constantes.JUGADORES = []
@@ -143,6 +138,20 @@ def limpiar_constantes():
     constantes.ARRAY_TURNOS = []
     constantes.EN_RONDA_DE_COMPRA = True
     constantes.RONDA_ACTUAL = 1
+    constantes.TURNO_ACTUAL = 0
+
+def vaciar_variables():
+    limpiar_constantes()
+    for jugador in constantes.JUGADORES:
+        jugador.puede_jugar = False
+        jugador.dinero = 10000
+        jugador.kills = 0
+        
+        # Limpiar balas
+        jugador.tanque.municion[0].unidades = 0
+        jugador.tanque.municion[1].unidades = 0
+        jugador.tanque.municion[2].unidades = 0
+        jugador.tanque.balas = 0
 
 def controles(event, teclas, turno, tanques, terreno, game):
     if teclas[pygame.K_a]:
@@ -226,6 +235,7 @@ def controles_compra(teclas, turno):
 
         # Comprar al apretar la tecla 'B'
         if teclas[pygame.K_b]:
+            print("TECLA B APRETADA | COMPRA EXITOSA")
             sound = pygame.mixer.Sound('mp3/sonido_compra.mp3')
             sound.set_volume(0.2)
             if turno.tanque.tipo_bala == 0 and turno.dinero >= 1000:
@@ -266,7 +276,7 @@ def cambiar_musica(nueva_cancion):
     pygame.mixer.music.play()
 
 def tanque_sin_municion(tanque_turno):
-    if tanque_turno.municion[0].unidades == 0 and tanque_turno.municion[1].unidades == 0 and tanque_turno.municion[2].unidades == 0:
+    if tanque_turno.balas <= 0:
         return True
     else:
         return False
@@ -277,11 +287,12 @@ def combrobar_municion_tanques():
         if tanque_sin_municion(tanque):
             tanques_sin_municion += 1
 
-    if tanques_sin_municion == len(constantes.TANQUES) and constantes.EN_RONDA_DE_COMPRA == False:
+    if tanques_sin_municion >= len(constantes.TANQUES) and constantes.EN_RONDA_DE_COMPRA == False:
         avanzar_partido()
 
 def avanzar_partido():
     constantes.RONDA_ACTUAL += 1
+    constantes.TURNO_ACTUAL = 0
     constantes.EN_RONDA_DE_COMPRA = True
     for jugador in constantes.JUGADORES:
         jugador.dinero += 10000
@@ -304,6 +315,7 @@ def avanzar_partido():
 
 def saltar_turno_tanque_sin_municion(turno):
     if tanque_sin_municion(turno.tanque):
+        turno.puede_jugar = False
         cambiar_turno()
 
 
@@ -321,11 +333,9 @@ def comprobar_jugadores_vivos():
     if queda_un_jugador_vivo() and constantes.EN_RONDA_DE_COMPRA == False:
         avanzar_partido()
 
-
 def verificar_termino_partida(game):
     if not constantes.RONDA_ACTUAL <= constantes.NUM_PARTIDAS:
         game.en_partida = False
-
 
 def definir_ganador():
     max_kills = -1
@@ -353,4 +363,3 @@ def definir_ganador():
 def actualizar_velocidad_viento():
     constantes.VELOCIDAD_VIENTO = random.randint(-30, 30)
     print(f"Velocidad Viento: {constantes.VELOCIDAD_VIENTO} m/s.")
-
