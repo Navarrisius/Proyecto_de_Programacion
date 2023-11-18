@@ -1,7 +1,5 @@
 import pygame
 
-import constantes
-
 
 class Boton:
     def __init__(self, x, y, ancho, alto, text, color, hover_color, color_texto, borde):
@@ -14,6 +12,7 @@ class Boton:
         self.hover_color = hover_color
         self.color_texto = color_texto
         self.borde = borde
+
 
     def dibujar(self, surface, ancho, alto):
         x = self.x_ratio * ancho
@@ -34,6 +33,7 @@ class Boton:
         text_surf = font.render(self.text, True, self.color_texto)
         text_rect = text_surf.get_rect(center=(x + w // 2, y + h // 2))
         surface.blit(text_surf, text_rect)
+
 
     def si_clic(self, ancho, alto):
         x = self.x_ratio * ancho

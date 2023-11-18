@@ -11,6 +11,8 @@ class EnPartida:
         self.gameStateManager = gameStateManager
         self.pantalla = pantalla
         self.game = game
+
+    
     def run(self):
         global reloj
         pygame.mixer.init()
@@ -190,11 +192,4 @@ class EnPartida:
             funciones.comprobar_jugadores_vivos()
 
             pygame.display.flip()
-
-            # Limita los FPS a 60
-            reloj.tick(60)
-            for jugador in constantes.JUGADORES:
-                print(f"{jugador.nombre}: {jugador.kills} kills, {jugador.tanque.salud} HP")
-            ganador = funciones.definir_ganador()
-            ui.pantalla_ganador(ganador)
 

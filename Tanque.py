@@ -38,9 +38,11 @@ class Tanque:
         elif color == (252, 3, 186):
             self.imagen = pygame.image.load("img/tanque_rosado.png").convert_alpha()
 
+
     def corregir_salud(self):
         if self.salud <= 0:
             self.salud = 0
+
 
     def draw_tank(self, pantalla):
         turret_length = 30
@@ -103,7 +105,6 @@ class Tanque:
             pygame.display.flip()
 
 
-    
     def calcular_damage_caida(self, pos_y_anterior):
         diff_y = abs(self.posicion_y - pos_y_anterior) // 2
         self.salud -= diff_y

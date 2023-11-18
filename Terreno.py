@@ -7,6 +7,7 @@ class Terreno:
         self.arreglo = []
         self.tipo = random.randint(1,3)
 
+
     def generar_terreno_perlin(self, rango_onda):
         if rango_onda == 800:
             onda = 0.012
@@ -31,14 +32,17 @@ class Terreno:
             arr.append(int(constantes.ALTO_VENTANA / 2 + perlin(x * onda) * 600))
         return arr
 
+
     def dibujar_terreno(self, pantalla):
         for pos in range(len(self.arreglo)):
             if pos % 2 == 0:
                 pygame.draw.line(pantalla, (173, 204, 246), self.arreglo[pos], self.arreglo[pos + 1])
 
+
     def generar_matriz(self, ancho_ventana, alto_ventana, arreglo_terreno):
         self.matriz = [['x' if x >= arreglo_terreno[y] else 'o' for y in range(ancho_ventana)] for x in range(alto_ventana)]
         self.generar_arreglo_m()
+
 
     def destruir_terreno(self, alto, ancho, bala, municion):
         impacto_x = int(bala.eje_x[-1])

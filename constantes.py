@@ -30,12 +30,4 @@ EN_RONDA_DE_COMPRA = True
 MUSICA = None
 RONDA_ACTUAL = 1
 TERRENO = None
-VELOCIDAD_VIENTO = 25
-
-'''
-HitBox del tanque:
-x_izq = -40
-x_der = 30
-y_arriba = -30
-y_abajo = 12
-'''
+VELOCIDAD_VIENTO = -10

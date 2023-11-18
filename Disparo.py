@@ -34,8 +34,10 @@ class Disparo:
         self.eje_y = []
         self.add_viento()
 
+
     def add_viento(self):
         self.velocidad_x += constantes.VELOCIDAD_VIENTO
+
 
     def elegir_imagen(self, tipo_municion):
         if tipo_municion == 0:
@@ -46,6 +48,7 @@ class Disparo:
             self.img_bala = pygame.image.load("img/105mm.png")
         self.img_bala = pygame.transform.scale(self.img_bala, (9.25, 20))
 
+
     def actualizar(self):
         self.x_bala += self.velocidad_x * self.tiempo
         self.y_bala += (self.velocidad_y * self.tiempo) + (0.5 * constantes.GRAVEDAD * (self.tiempo ** 2))
@@ -54,10 +57,12 @@ class Disparo:
         self.eje_y.append(self.y_bala)
         self.velocidad_actual = math.sqrt(self.velocidad_x ** 2 + self.velocidad_y ** 2)
 
+
     def actualizar_dibujo(self, pantalla, color):
         self.actualizar()
         self.dibujar(pantalla)
         self.dibujar_indicador(pantalla, color)
+
 
     def dibujar(self, pantalla):
         angulo_rotacion = math.degrees(math.atan2(-self.velocidad_y, self.velocidad_x))
@@ -65,16 +70,20 @@ class Disparo:
         imagen_rotada = pygame.transform.rotate(self.img_bala, angulo_rotacion)
         pantalla.blit(imagen_rotada, (int(self.x_bala - 4.625), int(self.y_bala - 10)))
 
+
     def dibujar_indicador(self, pantalla, color_jugador):
         vertices = [(self.eje_x[-1], 20), (self.eje_x[-1] + 10, 5), (self.eje_x[-1] + 20, 20)]
         if self.eje_y[-1] < 0:
             pygame.draw.polygon(pantalla, color_jugador, vertices)
 
+
     def calcular_altura_maxima(self):
         self.altura_maxima = abs((self.velocidad_inicial ** 2 * (math.sin(self.angulo_radianes) ** 2)) / (2 * constantes.GRAVEDAD))
 
+
     def calcular_distancia_maxima(self, tanque_posicion_x):
         self.distancia_maxima = abs(self.x_bala - self.distancia_maxima - tanque_posicion_x)
+
 
     def verificar_impacto_tanque_enemigo(self, tanque_enemigo):
         if (self.y_bala >= tanque_enemigo.posicion_y - 12) and (
@@ -103,9 +112,11 @@ class Disparo:
         else:
             return 1
     
+
     def recorrido(self, pantalla, color):
         for i in range(len(self.eje_x)):
             pygame.draw.circle(pantalla, color, (int(self.eje_x[i]), int(self.eje_y[i])), 2)
+    
     
     def calcular_damage(self, tanque, radio_impacto, ancho):
         if self.impacto_terreno:

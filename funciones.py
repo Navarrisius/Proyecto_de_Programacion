@@ -9,7 +9,6 @@ from Pausa import Pausa
 from Termino import Termino
 import constantes
 import random
-import sys
 
 def posicion(x,y,ancho_botón,altura_botón,margin_ratio):
     pos_x_rel = x + ancho_botón / 2
@@ -48,21 +47,25 @@ def crear_jugadores():
         pos_final = pos_inicial + constantes.ANCHO_VENTANA // constantes.NUM_JUGADORES
     elegir_nombres()
 
+
 def calcular_y(matriz, tanque):
     for y in range(len(matriz)):
         if (matriz[y][tanque.posicion_x] == "x"):
             return y - 1
         
+
 def definir_turnos():
     constantes.ARRAY_TURNOS = constantes.JUGADORES.copy()
     random.shuffle(constantes.ARRAY_TURNOS)
     for jugador in constantes.ARRAY_TURNOS:
         constantes.TANQUES.append(jugador.tanque)
 
+
 def cambiar_turno():
     constantes.TURNO_ACTUAL += 1
     if constantes.TURNO_ACTUAL >= constantes.NUM_JUGADORES:
         constantes.TURNO_ACTUAL = 0
+
 
 def elegir_nombres():
     nombres = ["Pessi", "Penaldo", "Bendepan", "Empujaland", "Abuelowski", "Fictisius Jr"]

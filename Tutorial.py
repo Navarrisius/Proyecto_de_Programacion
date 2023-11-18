@@ -9,6 +9,8 @@ class Tutorial:
         self.gameStateManager = gameStateManager
         self.pantalla = pantalla
         self.game = game
+
+    
     def run(self):
         en_tuto = True
         nuevo_ancho = 100
@@ -80,6 +82,5 @@ class Tutorial:
                             constantes.DIMENSIONES[1]
                             self.gameStateManager.set_estado('menu')
                             en_tuto = False
-
 
             pygame.display.update()

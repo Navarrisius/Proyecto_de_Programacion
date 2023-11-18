@@ -1,14 +1,17 @@
 import pygame
 import constantes
 from Escribir import Escribir
+
 ancho_botón, altura_botón = 0.10, 0.04
 margin_ratio = 0.05
+
 def posicion(x,y,ancho_botón,altura_botón,margin_ratio):
         pos_x_rel = x + ancho_botón / 2
         pos_y_rel = y - 0.5 * altura_botón + margin_ratio
         pos_x = constantes.ANCHO_VENTANA * pos_x_rel
         pos_y = constantes.ALTO_VENTANA * pos_y_rel
         return pos_x, pos_y
+
 class UI:
     def __init__(self):
         self.png_alerta = pygame.image.load("img/alerta.png").convert_alpha()
@@ -21,35 +24,6 @@ class UI:
         self.png_bala105 = pygame.image.load("img/105mm.png").convert_alpha()
         self.png_kills = pygame.image.load("img/kills.png").convert_alpha()
 
-    def info_post_disparo(self, pantalla, ancho, alto, color_jugador, altura, distancia):  
-        ancho_rectangulo = 1200
-        alto_rectangulo = 150
-        png_altura = pygame.image.load("img/altura.png").convert_alpha()
-        png_distancia = pygame.image.load("img/distancia.png").convert_alpha()
-        pygame.draw.rect(surface=pantalla, color=color_jugador, rect=(
-            ancho // 2 - ancho_rectangulo // 2, alto  - alto_rectangulo, ancho_rectangulo, alto_rectangulo),
-                         border_radius=20)
-        Escribir.escribir_texto(pantalla, f"Información del disparo", "Verdana", 30, [255, 255, 255], color_jugador,ancho // 2 - 180, alto  - alto_rectangulo)
-        #Escribir.render_text(pantalla,f"Información del disparo",(0.47 + ancho_botón / 2, 0.07 - 0.5 * altura_botón + margin_ratio),30,[255, 255, 255],"Verdana")
-        pantalla.blit(png_altura, (ancho // 2 - ancho_rectangulo // 2 + 130, alto - 75))
-        pantalla.blit(png_distancia, (ancho // 2 - ancho_rectangulo // 2 + 640, alto  - 75))
-        Escribir.escribir_texto(pantalla, f"{int(altura)} metros", "Verdana", 30, [255, 255, 255], color_jugador,
-                                ancho // 2 - ancho_rectangulo // 2 + 220, alto  - 70)
-        if distancia != -1:
-            Escribir.escribir_texto(pantalla, f"{int(distancia)} metros", "Verdana", 30, [255, 255, 255], color_jugador,
-                                    ancho // 2 - ancho_rectangulo // 2 + 720, alto  - 70)
-        else:
-            Escribir.escribir_texto(pantalla, f"Bala fuera del mapa", "Verdana", 30, [255, 255, 255], color_jugador,
-                                    ancho // 2 - ancho_rectangulo // 2 + 790, alto  - 65)
-    
-    def info_velocidad_bala(pantalla, ancho, alto, velocidad):
-        ancho_rectangulo = 600
-        alto_rectangulo = 100
-        pygame.draw.rect(surface=pantalla, color=(0, 0, 0), rect=(
-            ancho // 2 - ancho_rectangulo // 2, alto  - alto_rectangulo, ancho_rectangulo, alto_rectangulo),
-                         border_radius=20)
-        Escribir.escribir_texto(pantalla, f"Velocidad actual de la bala: {velocidad}m/s", "Verdana", 30, [255, 255, 255], (0, 0, 0),
-                    ancho // 2 - ancho_rectangulo // 2 + 10, alto  - 70)
 
     def mensaje_caida(self, pantalla, ancho, diff_y):
         ancho_rectangulo = 925
@@ -59,6 +33,7 @@ class UI:
                     ancho_rectangulo, alto_rectangulo), border_radius=20)
         Escribir.escribir_texto(pantalla, f"¡El tanque cayó {diff_y} metros y ha recibido {diff_y // 2} de daño extra!", "Verdana", 30, [255, 255, 255], (0, 0, 0), ancho // 2 - ancho_rectangulo // 2 + 10, 25)
     
+
     def rectangulo(self, pantalla):
         alto_rectangulo = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 5
         pygame.draw.rect(surface=pantalla, color=(50, 50, 50),
@@ -135,8 +110,7 @@ class UI:
             Escribir.render_text(pantalla, f"x{unidades} unidades.",(0.83 + ancho_botón / 2, 0.945 - 0.5 * altura_botón + margin_ratio),10, constantes.BLANCO,"Verdana") 
         else:
             Escribir.render_text(pantalla, f"x1 unidad.",(0.83 + ancho_botón / 2, 0.945 - 0.5 * altura_botón + margin_ratio),10, constantes.BLANCO,"Verdana") 
-
-           
+  
 
     def cantidad_img_balas(self, pantalla, tipo_bala, unidades):
         if unidades == 0:
@@ -160,6 +134,7 @@ class UI:
                 for i in range(20):
                     pantalla.blit(bala, (x_primera_bala + (18 * i), y_primera_bala))
             self.texto_unidades(pantalla, unidades)
+
 
     def barras_de_salud(self, pantalla):
         for tanque in constantes.TANQUES:

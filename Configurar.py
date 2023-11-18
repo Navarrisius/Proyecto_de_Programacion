@@ -10,6 +10,7 @@ class Configurar:
         self.gameStateManager = gameStateManager
         self.pantalla = pantalla
         self.game = game
+    
     def run(self):
         en_config = True
         font = pygame.font.Font(None, 42)

@@ -11,6 +11,8 @@ class Menu:
         self.gameStateManager = gameStateManager
         self.pantalla = pantalla
         self.game = game
+    
+        
     def run(self):
         constantes.PANTALLA = pygame.display.set_mode((constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA), pygame.RESIZABLE, pygame.OPENGL)
         en_menu = True
