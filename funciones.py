@@ -87,8 +87,8 @@ def terminar_turnos(jugadores):
 def pausar(self):
     return Pausa.run(self)
 
-def terminar_de_juego(self):
-    return Termino.run(self)
+def terminar_de_juego(self,conclusion):
+    return Termino.run(self,conclusion)
 
 def detectar_musica(event):
     if event.type == pygame.MOUSEBUTTONDOWN:
@@ -341,9 +341,11 @@ def definir_ganador():
     for i in range(len(constantes.JUGADORES)):
         if i != index_ganador and constantes.JUGADORES[i].kills == max_kills:
             empate = True
+            return empate
 
     if not empate:
-        return ganador_temp
+        if ganador_temp is not None:
+            return ganador_temp.nombre
     else:
         return -1
     

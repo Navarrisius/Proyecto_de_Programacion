@@ -54,7 +54,7 @@ class EnPartida:
                             clic_x, clic_y = pygame.mouse.get_pos()
                             # Verificar si el clic ocurrió dentro de la imagen, ir a menu
                             if constantes.ANCHO_VENTANA - 100 <= clic_x <= constantes.ANCHO_VENTANA - 30 and 40 <= clic_y <= 37 + 64:
-                                pygame.mixer.music.load('mp3/aria_math.mp3')
+                                funciones.cambiar_musica('mp3/aria_math.mp3')
                                 pygame.mixer.music.set_volume(0.1)
                                 pygame.mixer.music.play(-1)
                                 funciones.limpiar_constantes()
@@ -72,9 +72,13 @@ class EnPartida:
                         self.pantalla = pygame.display.set_mode((NUEVO_ANCHO, NUEVA_ALTURA), pygame.RESIZABLE, pygame.OPENGL)
                         constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA = NUEVO_ANCHO, NUEVA_ALTURA
                     elif teclas[pygame.K_ESCAPE]:
-                        running = funciones.pausar(self)
-                        if running == False:
+                        pausa = funciones.pausar(self)
+                        if pausa == False:
+                            funciones.cambiar_musica('mp3/aria_math.mp3')
                             funciones.limpiar_constantes()
+                            running = False
+                        if pausa == True:
+                            pass
                     funciones.controles_compra(teclas, turno)
                     funciones.combrobar_compra_de_todos_los_jugadores()
             else:
@@ -88,7 +92,7 @@ class EnPartida:
                             clic_x, clic_y = pygame.mouse.get_pos()
                             # Verificar si el clic ocurrió dentro de la imagen, ir a menu
                             if constantes.ANCHO_VENTANA - 100 <= clic_x <= constantes.ANCHO_VENTANA - 30 and 40 <= clic_y <= 37 + 64:
-                                pygame.mixer.music.load('mp3/aria_math.mp3')
+                                funciones.cambiar_musica('mp3/aria_math.mp3')
                                 pygame.mixer.music.set_volume(0.1)
                                 pygame.mixer.music.play(-1)
                                 funciones.limpiar_constantes()
@@ -106,9 +110,13 @@ class EnPartida:
                         self.pantalla = pygame.display.set_mode((NUEVO_ANCHO, NUEVA_ALTURA), pygame.RESIZABLE, pygame.OPENGL)
                         constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA = NUEVO_ANCHO, NUEVA_ALTURA
                     elif teclas[pygame.K_ESCAPE]:
-                        running = funciones.pausar(self)
-                        if running == False:
+                        pausa = funciones.pausar(self)
+                        if pausa == False:
+                            funciones.cambiar_musica('mp3/aria_math.mp3')
                             funciones.limpiar_constantes()
+                            running = False
+                        if pausa == True:
+                            pass
                     funciones.controles(event, teclas, turno, constantes.TANQUES, constantes.TERRENO, self.game)
 
             # VACIA PANTALLA
@@ -147,7 +155,7 @@ class EnPartida:
                 tiempo_espera = 5000
                 while pygame.time.get_ticks() - tiempo_inicial < tiempo_espera:
                     pygame.display.update()
-                    termino = funciones.terminar_de_juego(self)
+                    termino = funciones.terminar_de_juego(self,self.game.ganador)
                     if termino == False:
                             funciones.limpiar_constantes()
                             running = False

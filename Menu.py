@@ -44,6 +44,7 @@ class Menu:
             for event in pygame.event.get():
                 if teclas[pygame.K_ESCAPE]:
                     en_menu = False
+                    sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if botones[0].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
                         self.gameStateManager.set_estado('partida')

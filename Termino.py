@@ -9,11 +9,15 @@ class Termino:
         self.gameStateManager = gameStateManager
         self.pantalla = pantalla
         self.game = game
-    def run(self):
+    def run(self,conclusion):
         self.pantalla.fill((225, 225, 208))
         ancho_botón, altura_botón = 0.25, 0.08  # Margen de separación entre botones
         margin_ratio = 0.05
-        Escribir.render_text(self.pantalla, "Juego terminado", (0.35 + ancho_botón / 2, 0.07 - 0.5 * altura_botón + margin_ratio), 60, constantes.NEGRO, "More Sugar")
+        Escribir.render_text(self.pantalla, "Juego terminado", (0.37 + ancho_botón / 2, 0.07 - 0.5 * altura_botón + margin_ratio), 60, constantes.NEGRO, "More Sugar")
+        if conclusion == True:
+            Escribir.render_text(self.pantalla, "por Empate", (0.37 + ancho_botón / 2, 0.17 - 0.5 * altura_botón + margin_ratio), 60, constantes.NEGRO, "More Sugar")
+        else:
+            Escribir.render_text(self.pantalla, f"Ganador:{conclusion}" , (0.37 + ancho_botón / 2, 0.17 - 0.5 * altura_botón + margin_ratio), 60, constantes.NEGRO, "More Sugar")
         botones = [
             Boton(0.5 - ancho_botón / 2, 0.5 - 0.5 * altura_botón + margin_ratio, ancho_botón,
                 altura_botón, "Salir",

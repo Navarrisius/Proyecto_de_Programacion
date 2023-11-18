@@ -14,11 +14,12 @@ class Pausa:
     def run(self):
         self.pantalla.fill((225, 225, 208))
         ancho_botón, altura_botón = 0.25, 0.08  # Margen de separación entre botones
-        margin_ratio = 0.05
-        Escribir.render_text(self.pantalla, "En Pausa", (0.35 + ancho_botón / 2, 0.07 - 0.5 * altura_botón + margin_ratio), 60, constantes.NEGRO, "More Sugar")
+        margin_ratio = 0.1
+        Escribir.render_text(self.pantalla, "En Pausa", (0.37 + ancho_botón / 2, 0.07 - 0.5 * altura_botón + margin_ratio), 60, constantes.NEGRO, "More Sugar")
         botones = [
-            Boton(0.5 - ancho_botón / 2, 0.5 + 1.5 * altura_botón, ancho_botón, altura_botón, "Salir"
-                  ,constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50)]
+            Boton(0.5 - ancho_botón / 2, 0.5 + 1.5 * altura_botón + margin_ratio, ancho_botón, altura_botón, "Salir"
+                  ,constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),Boton(0.5 - ancho_botón / 2, 0.5 + 1.5 * altura_botón, ancho_botón, altura_botón, "ESC para continuar"
+                  ,constantes.BLANCO, constantes.BLANCO, constantes.NEGRO, 50)]
         pausado = True
         pygame.display.flip()
         pygame.display.update()
@@ -31,13 +32,13 @@ class Pausa:
                     sys.exit()
                 if evento.type == pygame.MOUSEBUTTONDOWN:
                     if botones[0].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
-                            pygame.quit()
-                            sys.exit()
+                            self.gameStateManager.set_estado('menu')
                             pausado = False 
                             return pausado
                 if teclas[pygame.K_ESCAPE]:
-                        self.gameStateManager.set_estado('partida')
+                        seguir =  True
                         pausado = False
+                        return seguir
             for boton in botones:
                 boton.dibujar(self.pantalla, constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA)
 
