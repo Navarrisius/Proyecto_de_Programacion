@@ -32,6 +32,10 @@ class Disparo:
         self.autor = autor
         self.eje_x = []
         self.eje_y = []
+        self.add_viento()
+
+    def add_viento(self):
+        self.velocidad_x += constantes.VELOCIDAD_VIENTO
 
     def elegir_imagen(self, tipo_municion):
         if tipo_municion == 0:
