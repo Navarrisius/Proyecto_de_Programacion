@@ -58,9 +58,9 @@ class Tutorial:
             self.pantalla.blit(png_tecla_d_ajustado,  funciones.posicion(0.025,0.35,ancho_botón,altura_botón,margin_ratio))
             Escribir.render_text(self.pantalla, "Aumento o disminución  del ángulo", (0.28 + ancho_botón / 2, 0.40 - 0.5 * altura_botón + margin_ratio), 24, constantes.NEGRO, "More Sugar")
             
-            png_tecla_b = pygame.image.load("img/tecla_b.png").convert_alpha()
-            png_tecla_b_ajustado = pygame.transform.scale(png_tecla_b, (nuevo_ancho, nuevo_alto))
-            self.pantalla.blit(png_tecla_b_ajustado, funciones.posicion(-0.017,0.50,ancho_botón,altura_botón,margin_ratio))
+            png_tecla_q = pygame.image.load("img/tecla_q.png").convert_alpha()
+            png_tecla_q_ajustado = pygame.transform.scale(png_tecla_q, (nuevo_ancho, nuevo_alto))
+            self.pantalla.blit(png_tecla_q_ajustado, funciones.posicion(-0.017,0.50,ancho_botón,altura_botón,margin_ratio))
             Escribir.render_text(self.pantalla, "Cambio de munición", (0.205 + ancho_botón / 2, 0.55 - 0.5 * altura_botón + margin_ratio), 24, constantes.NEGRO, "More Sugar")
             
             png_tecla_espacio = pygame.image.load("img/Space.png").convert_alpha()

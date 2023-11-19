@@ -9,7 +9,7 @@ from Tutorial import Tutorial
 from Configurar import Configurar
 from Pausa import Pausa
 from Termino import Termino
-
+from Compra import Compra
 
 class Game:
     def __init__(self):
@@ -34,8 +34,9 @@ class Game:
         self.Configurar = Configurar(self.pantalla,self.gameStateManager,self.game)
         self.Pausar = Pausa(self.pantalla,self.gameStateManager,self.game)
         self.Termino = Termino(self.pantalla,self.gameStateManager,self.game)
+        self.Compra = Compra(self.pantalla,self.gameStateManager,self.game)
 
-        self.estados = {'menu':self.Menu,'tutorial':self.Tutorial,'partida':self.Partida,'configurar':self.Configurar,'pausar':self.Pausar,'termino':self.Termino}
+        self.estados = {'menu':self.Menu,'tutorial':self.Tutorial,'partida':self.Partida,'configurar':self.Configurar,'pausar':self.Pausar,'termino':self.Termino,'compra':self.Compra}
     
     
     def run(self):
