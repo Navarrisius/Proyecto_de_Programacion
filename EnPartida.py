@@ -61,7 +61,6 @@ class EnPartida:
             if constantes.EN_RONDA_DE_COMPRA and not funciones.verificar_termino_partida():
                 funciones.controles_compra(self,turno)
                 funciones.combrobar_compra_de_todos_los_jugadores()
-                funciones.combrobar_municion_tanques()
                 funciones.comprobar_jugadores_vivos()
                 if constantes.MUSICA != 'mp3/C418_Living_Mice.mp3':
                     funciones.cambiar_musica('mp3/C418_Living_Mice.mp3')
@@ -187,7 +186,7 @@ class EnPartida:
                     pass
                 constantes.DISPARO = None
 
-            if funciones.queda_un_jugador_vivo():
+            if funciones.queda_un_jugador_vivo() or funciones.combrobar_todos_tanques_sin_municion():
                 funciones.avanzar_partido()
             
             '''if constantes.EN_RONDA_DE_COMPRA:

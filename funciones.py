@@ -240,14 +240,16 @@ def tanque_sin_municion(tanque_turno):
     else:
         return False
     
-def combrobar_municion_tanques():
+def combrobar_todos_tanques_sin_municion():
     tanques_sin_municion = 0
     for tanque in constantes.TANQUES:
         if tanque_sin_municion(tanque):
             tanques_sin_municion += 1
-
-    if tanques_sin_municion >= len(constantes.TANQUES) and constantes.EN_RONDA_DE_COMPRA == False:
-        avanzar_partido()
+    
+    if tanques_sin_municion == len(constantes.TANQUES):
+        return True
+    else:
+        return False
 
 def avanzar_partido():
     constantes.RONDA_ACTUAL += 1
