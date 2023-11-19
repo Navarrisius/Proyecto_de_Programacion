@@ -51,10 +51,14 @@ class EnPartida:
 
         while running:
             turno = constantes.ARRAY_TURNOS[constantes.TURNO_ACTUAL]
-            turno.puede_jugar = True
+            if turno.tanque.salud > 0:
+                turno.puede_jugar = True
+            else:
+                turno.puede_jugar = False
+                funciones.cambiar_turno()
             reloj = pygame.time.Clock()
             teclas = pygame.key.get_pressed()
-            if constantes.EN_RONDA_DE_COMPRA:
+            if constantes.EN_RONDA_DE_COMPRA and not funciones.verificar_termino_partida():
                 funciones.controles_compra(self,turno)
                 funciones.combrobar_compra_de_todos_los_jugadores()
                 funciones.combrobar_municion_tanques()
@@ -118,11 +122,14 @@ class EnPartida:
                     jugador.tanque.calcular_damage_caida(jugador.tanque.caida_tanque)
                     ui.mensaje_caida(pantalla=self.pantalla, ancho=constantes.ANCHO_VENTANA, diff_y=abs(jugador.tanque.posicion_y - jugador.tanque.caida_tanque), dano=jugador.tanque.dano_caida)
                     jugador.tanque.caida_tanque = jugador.tanque.posicion_y
+                    if jugador.tanque.salud <= 0 and (jugador == turno):
+                        funciones.detectar_suicidio(turno)
 
             for jugador in constantes.JUGADORES :
                 if jugador.tanque.salud <= 0 :
                     jugador.tanque.corregir_salud()
                     jugador.vivo = False
+                    jugador.puede_jugar = False
 
             # Terreno
             constantes.TERRENO.dibujar_terreno(self.pantalla)
@@ -135,9 +142,8 @@ class EnPartida:
 
             self.game.ganador = funciones.definir_ganador()
 
-
             # Texto con el jugador ganador
-            if (self.game.ganador is not None) and constantes.NUM_PARTIDAS == constantes.RONDA_ACTUAL-1:
+            if funciones.verificar_termino_partida():
                 pygame.mixer.music.stop()
                 termino = None
                 pygame.display.update()
@@ -150,6 +156,7 @@ class EnPartida:
                     funciones.vaciar_variables()
                     self.run()
                 pygame.display.update()
+                return
                 
             else:
                 # Botón reinicio
@@ -179,6 +186,9 @@ class EnPartida:
                 while pygame.time.get_ticks() - tiempo_inicial < tiempo_espera:
                     pass
                 constantes.DISPARO = None
+
+            if funciones.queda_un_jugador_vivo():
+                funciones.avanzar_partido()
             
             '''if constantes.EN_RONDA_DE_COMPRA:
                 funciones.controles_compra(self,turno)

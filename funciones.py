@@ -280,8 +280,8 @@ def saltar_turno_tanque_sin_municion(turno):
 
 def queda_un_jugador_vivo():
     jugadores_vivos = 0
-    for tanque in constantes.TANQUES:
-        if tanque.salud > 0:
+    for jugador in constantes.JUGADORES:
+        if jugador.tanque.salud > 0:
             jugadores_vivos += 1
     if jugadores_vivos == 1:
         return True
@@ -292,9 +292,11 @@ def comprobar_jugadores_vivos():
     if queda_un_jugador_vivo() and constantes.EN_RONDA_DE_COMPRA == False:
         avanzar_partido()
 
-def verificar_termino_partida(game):
+def verificar_termino_partida():
     if not constantes.RONDA_ACTUAL <= constantes.NUM_PARTIDAS:
-        game.en_partida = False
+        return True
+    else:
+        return False
 
 def definir_ganador():
     max_kills = -1
@@ -318,7 +320,6 @@ def definir_ganador():
     else:
         return -1
     
-
 def actualizar_velocidad_viento():
     constantes.VELOCIDAD_VIENTO = random.randint(-30, 30)
     print(f"Velocidad Viento: {constantes.VELOCIDAD_VIENTO} m/s.")

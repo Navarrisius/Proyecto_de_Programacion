@@ -9,6 +9,7 @@ class Termino:
         self.gameStateManager = gameStateManager
         self.pantalla = pantalla
         self.game = game
+    
     def run(self,conclusion):
         self.pantalla.fill((225, 225, 208))
         ancho_botón, altura_botón = 0.25, 0.08  # Margen de separación entre botones
