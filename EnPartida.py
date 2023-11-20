@@ -23,7 +23,7 @@ class EnPartida:
 
     
     def run(self):
-        global reloj
+        global reloj ,running
         pygame.mixer.init()
         pygame.mixer.music.load('mp3/C418_Living_Mice.mp3')
         pygame.mixer.music.set_volume(0.05)
@@ -92,8 +92,8 @@ class EnPartida:
                                 running = False
                             # Verificar si el clic ocurrió dentro de la imagen, reiniciar juego
                             if constantes.ANCHO_VENTANA - 200 <= clic_x <= constantes.ANCHO_VENTANA - 136 and 40 <= clic_y <= 40 + 64:
-                                funciones.vaciar_variables()
-                                self.run()
+                                funciones.detectar_reinicio(self.gameStateManager)
+                                running = False
                     funciones.detectar_musica(event)
                     if event.type == pygame.QUIT:
                         running = False
@@ -110,89 +110,89 @@ class EnPartida:
                         if pausa == True:
                             pass
                     funciones.controles(event, teclas, turno, constantes.TANQUES, constantes.TERRENO, self.game)
-
+            if running:
             # VACIA PANTALLA
-            fondo.cargar_fondo(self.pantalla, 1)
-
-            # Mantener el tanque en el terreno y comprobar caida
-            for jugador in constantes.JUGADORES:
-                jugador.tanque.posicion_y = funciones.calcular_y(constantes.TERRENO.matriz, jugador.tanque)
-                if jugador.tanque.posicion_y != jugador.tanque.caida_tanque:
-                    jugador.tanque.calcular_damage_caida(jugador.tanque.caida_tanque)
-                    ui.mensaje_caida(pantalla=self.pantalla, ancho=constantes.ANCHO_VENTANA, diff_y=abs(jugador.tanque.posicion_y - jugador.tanque.caida_tanque), dano=jugador.tanque.dano_caida)
-                    jugador.tanque.caida_tanque = jugador.tanque.posicion_y
-                    if jugador.tanque.salud <= 0 and (jugador == turno):
-                        funciones.detectar_suicidio(turno)
-
-            for jugador in constantes.JUGADORES :
-                if jugador.tanque.salud <= 0 :
-                    jugador.tanque.corregir_salud()
-                    jugador.vivo = False
-                    jugador.puede_jugar = False
-
-            # Terreno
-            constantes.TERRENO.dibujar_terreno(self.pantalla)
-            ui.barras_de_salud(self.pantalla)
-            
-
-            funciones.ui_pre_disparo(ui, self.pantalla, turno)
-
-            ui.texto_jugador(self.pantalla, turno.tanque.color, turno.nombre)
-
-            self.game.ganador = funciones.definir_ganador()
-
-            # Texto con el jugador ganador
-            if funciones.verificar_termino_partida():
-                pygame.mixer.music.stop()
-                termino = None
-                pygame.display.update()
-                termino = funciones.terminar_de_juego(self,self.game.ganador)
-                if termino == False:
-                    funciones.cambiar_musica('mp3/aria_math.mp3')
-                    funciones.vaciar_variables()
-                    running = False
-                elif termino == 1:
-                    funciones.vaciar_variables()
-                    self.run()
-                pygame.display.update()
-                return
-                
-            else:
-                # Botón reinicio
-                self.pantalla.blit(img_reiniciar, (constantes.ANCHO_VENTANA - 200, 40))
-
-                # Botón término partida
-                self.pantalla.blit(img_terminar_partida, (constantes.ANCHO_VENTANA - 100, 37))
-
-                # Botón música
-                if constantes.MUSICA_PARTIDA:
-                    self.pantalla.blit(img_musica, (constantes.ANCHO_VENTANA - 300, 37))
-                else:
-                    self.pantalla.blit(img_musica, (constantes.ANCHO_VENTANA - 300, 37))
-                    self.pantalla.blit(img_linea_diagonal_sin_musica, (constantes.ANCHO_VENTANA - 297, 40))
+                fondo.cargar_fondo(self.pantalla, 1)
+                # Mantener el tanque en el terreno y comprobar caida
+                for jugador in constantes.JUGADORES:
+                    jugador.tanque.posicion_y = funciones.calcular_y(constantes.TERRENO.matriz, jugador.tanque)
+                    if jugador.tanque.posicion_y != jugador.tanque.caida_tanque:
+                        jugador.tanque.calcular_damage_caida(jugador.tanque.caida_tanque)
+                        ui.mensaje_caida(pantalla=self.pantalla, ancho=constantes.ANCHO_VENTANA, diff_y=abs(jugador.tanque.posicion_y - jugador.tanque.caida_tanque), dano=jugador.tanque.dano_caida)
+                        jugador.tanque.caida_tanque = jugador.tanque.posicion_y
+                        if jugador.tanque.salud <= 0 and (jugador == turno):
+                            funciones.detectar_suicidio(turno)
 
                 for jugador in constantes.JUGADORES :
-                    jugador.tanque.draw_tank(self.pantalla)
+                    if jugador.tanque.salud <= 0 :
+                        jugador.tanque.corregir_salud()
+                        jugador.vivo = False
+                        jugador.puede_jugar = False
 
-            if constantes.DISPARO is not None:
-                disparo = constantes.DISPARO
-                disparo.recorrido(self.pantalla, turno.tanque.color)
-                ui.info_bala(self.pantalla, -1, int(disparo.altura_maxima), int(disparo.distancia_maxima))
-                pygame.display.update()
-                # Esperar 2 segundos
-                tiempo_inicial = pygame.time.get_ticks()
-                tiempo_espera = 2000
-                while pygame.time.get_ticks() - tiempo_inicial < tiempo_espera:
-                    pass
-                constantes.DISPARO = None
+                # Terreno
+                constantes.TERRENO.dibujar_terreno(self.pantalla)
+                ui.barras_de_salud(self.pantalla)
+                
 
-            if funciones.queda_un_jugador_vivo() or funciones.combrobar_todos_tanques_sin_municion():
-                funciones.avanzar_partido()
-            
-            '''if constantes.EN_RONDA_DE_COMPRA:
-                funciones.controles_compra(self,turno)
-                funciones.combrobar_compra_de_todos_los_jugadores()'''
-            
+                funciones.ui_pre_disparo(ui, self.pantalla, turno)
 
-            pygame.display.flip()
+                ui.texto_jugador(self.pantalla, turno.tanque.color, turno.nombre)
+
+                self.game.ganador = funciones.definir_ganador()
+
+                # Texto con el jugador ganador
+                if funciones.verificar_termino_partida():
+                    pygame.mixer.music.stop()
+                    termino = None
+                    pygame.display.update()
+                    termino = funciones.terminar_de_juego(self,self.game.ganador)
+                    if termino == False:
+                        funciones.cambiar_musica('mp3/aria_math.mp3')
+                        funciones.vaciar_variables()
+                        running = False
+                    elif termino == 1:
+                        funciones.vaciar_variables()
+                        self.run()
+                    pygame.display.update()
+                    return
+                    
+                else:
+                    # Botón reinicio
+                    self.pantalla.blit(img_reiniciar, (constantes.ANCHO_VENTANA - 200, 40))
+
+                    # Botón término partida
+                    self.pantalla.blit(img_terminar_partida, (constantes.ANCHO_VENTANA - 100, 37))
+
+                    # Botón música
+                    if constantes.MUSICA_PARTIDA:
+                        self.pantalla.blit(img_musica, (constantes.ANCHO_VENTANA - 300, 37))
+                    else:
+                        self.pantalla.blit(img_musica, (constantes.ANCHO_VENTANA - 300, 37))
+                        self.pantalla.blit(img_linea_diagonal_sin_musica, (constantes.ANCHO_VENTANA - 297, 40))
+
+                    for jugador in constantes.JUGADORES :
+                        jugador.tanque.draw_tank(self.pantalla)
+
+                if constantes.DISPARO is not None:
+                    disparo = constantes.DISPARO
+                    disparo.recorrido(self.pantalla, turno.tanque.color)
+                    ui.info_bala(self.pantalla, -1, int(disparo.altura_maxima), int(disparo.distancia_maxima))
+                    pygame.display.update()
+                    # Esperar 2 segundos
+                    tiempo_inicial = pygame.time.get_ticks()
+                    tiempo_espera = 2000
+                    while pygame.time.get_ticks() - tiempo_inicial < tiempo_espera:
+                        pass
+                    constantes.DISPARO = None
+
+                if funciones.queda_un_jugador_vivo() or funciones.combrobar_todos_tanques_sin_municion():
+                    if not constantes.EN_RONDA_DE_COMPRA:
+                        funciones.avanzar_partido()
+                
+                '''if constantes.EN_RONDA_DE_COMPRA:
+                    funciones.controles_compra(self,turno)
+                    funciones.combrobar_compra_de_todos_los_jugadores()'''
+                
+
+                pygame.display.flip()
 
