@@ -123,6 +123,8 @@ class EnPartida:
                     jugador.tanque.caida_tanque = jugador.tanque.posicion_y
                     if jugador.tanque.salud <= 0 and (jugador == turno):
                         funciones.detectar_suicidio(turno)
+                    elif jugador.tanque.salud <= 0 and (jugador != turno):
+                        funciones.detectar_kill(turno)
 
             for jugador in constantes.JUGADORES :
                 if jugador.tanque.salud <= 0 :
