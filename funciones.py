@@ -8,8 +8,14 @@ from Compra import Compra
 from Tanque import Tanque
 from Pausa import Pausa
 from Termino import Termino
+from EnPartida import EnPartida
 import constantes
 import random
+
+
+def detectar_reinicio(gameStateManager):
+    vaciar_variables()
+    gameStateManager.set_estado('partida')
 
 def posicion(x,y,ancho_botón,altura_botón,margin_ratio):
     pos_x_rel = x + ancho_botón / 2
