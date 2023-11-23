@@ -53,6 +53,10 @@ class EnPartida:
             turno = constantes.ARRAY_TURNOS[constantes.TURNO_ACTUAL]
             if turno.tanque.salud > 0:
                 turno.puede_jugar = True
+                if not constantes.EN_RONDA_DE_COMPRA and turno.tanque.balas > 0:
+                    turno.puede_jugar = True
+                else:
+                    turno.puede_jugar = False
             else:
                 turno.puede_jugar = False
                 funciones.cambiar_turno()
@@ -187,9 +191,8 @@ class EnPartida:
                         pass
                     constantes.DISPARO = None
 
-                if funciones.queda_un_jugador_vivo() or funciones.combrobar_todos_tanques_sin_municion():
-                    if not constantes.EN_RONDA_DE_COMPRA:
-                        funciones.avanzar_partido()
+                funciones.comprobar_jugadores_vivos()
+                funciones.comprobar_todos_tanques_sin_municion()
                 
                 '''if constantes.EN_RONDA_DE_COMPRA:
                     funciones.controles_compra(self,turno)

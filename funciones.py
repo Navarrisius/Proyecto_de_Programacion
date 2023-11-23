@@ -74,7 +74,6 @@ def cambiar_turno():
     if constantes.TURNO_ACTUAL >= constantes.NUM_JUGADORES:
         constantes.TURNO_ACTUAL = 0
 
-
 def elegir_nombres():
     nombres = ["Pessi", "Penaldo", "Bendepan", "Empujaland", "Abuelowski", "Fictisius Jr"]
     for jugador in constantes.JUGADORES:
@@ -246,16 +245,17 @@ def tanque_sin_municion(tanque_turno):
     else:
         return False
     
-def combrobar_todos_tanques_sin_municion():
+def comprobar_todos_tanques_sin_municion():
     tanques_sin_municion = 0
-    for tanque in constantes.TANQUES:
-        if tanque_sin_municion(tanque):
+    tanques_vivos = 0
+    for jugador in constantes.JUGADORES:
+        if jugador.tanque.salud > 0:
+            tanques_vivos += 1
+    for jugador in constantes.JUGADORES:
+        if tanque_sin_municion(jugador.tanque):
             tanques_sin_municion += 1
-    
-    if tanques_sin_municion == len(constantes.TANQUES):
-        return True
-    else:
-        return False
+    if tanques_sin_municion == tanques_vivos and constantes.EN_RONDA_DE_COMPRA == False:
+        avanzar_partido()
 
 def avanzar_partido():
     constantes.RONDA_ACTUAL += 1
@@ -264,6 +264,7 @@ def avanzar_partido():
     for jugador in constantes.JUGADORES:
         jugador.dinero += 10000
         jugador.tanque.salud = 100
+        jugador.puede_jugar = False
 
     pos_inicial = 0
     pos_final = pos_inicial + constantes.ANCHO_VENTANA // constantes.NUM_JUGADORES
@@ -284,7 +285,6 @@ def saltar_turno_tanque_sin_municion(turno):
     if tanque_sin_municion(turno.tanque):
         turno.puede_jugar = False
         cambiar_turno()
-
 
 def queda_un_jugador_vivo():
     jugadores_vivos = 0
