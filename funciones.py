@@ -324,7 +324,7 @@ def definir_ganador():
 
     if not empate:
         if ganador_temp is not None:
-            return ganador_temp.nombre
+            return ganador_temp
     else:
         return -1
     
