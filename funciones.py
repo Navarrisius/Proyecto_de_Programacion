@@ -111,10 +111,10 @@ def shoot(turno, tanques, terreno, game):
         # Ningun tanque dañado
         if tanque_danyado != -1:
             if tanque_danyado.salud <= 0:
+                constantes.TANQUES.remove(tanque_danyado)
                 if turno.tanque == tanque_danyado:
                     detectar_suicidio(turno)
                 else:
-                    constantes.TANQUES.remove(tanque_danyado)
                     detectar_kill(turno)
                     
             
@@ -240,7 +240,7 @@ def cambiar_musica(nueva_cancion):
     pygame.mixer.music.play()
 
 def tanque_sin_municion(tanque_turno):
-    if tanque_turno.balas <= 0:
+    if tanque_turno.balas <= 0 and not constantes.EN_RONDA_DE_COMPRA:
         return True
     else:
         return False

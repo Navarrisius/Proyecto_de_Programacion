@@ -51,15 +51,9 @@ class EnPartida:
 
         while running:
             turno = constantes.ARRAY_TURNOS[constantes.TURNO_ACTUAL]
-            if turno.tanque.salud > 0:
-                turno.puede_jugar = True
-                if not constantes.EN_RONDA_DE_COMPRA and turno.tanque.balas > 0:
-                    turno.puede_jugar = True
-                else:
-                    turno.puede_jugar = False
-            else:
-                turno.puede_jugar = False
+            if turno.tanque.salud <= 0 or funciones.tanque_sin_municion(turno.tanque):
                 funciones.cambiar_turno()
+
             reloj = pygame.time.Clock()
             teclas = pygame.key.get_pressed()
             if constantes.EN_RONDA_DE_COMPRA and not funciones.verificar_termino_partida():
@@ -176,8 +170,8 @@ class EnPartida:
                         self.pantalla.blit(img_musica, (constantes.ANCHO_VENTANA - 300, 37))
                         self.pantalla.blit(img_linea_diagonal_sin_musica, (constantes.ANCHO_VENTANA - 297, 40))
 
-                    for jugador in constantes.JUGADORES :
-                        jugador.tanque.draw_tank(self.pantalla)
+                    for tanque in constantes.TANQUES:
+                        tanque.draw_tank(self.pantalla)
 
                 if constantes.DISPARO is not None:
                     disparo = constantes.DISPARO
