@@ -28,8 +28,9 @@ class Configurar:
                              Boton(0.05 + ancho_botón / 2, 0.63 - 0.5 * altura_botón + margin_ratio, ancho_botón,altura_botón, "<", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
                              Boton(0.25 + ancho_botón / 2, 0.63 - 0.5 * altura_botón + margin_ratio, ancho_botón,altura_botón, ">", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
                              Boton(0.45 + ancho_botón / 2, 0.48 - 0.5 * altura_botón + margin_ratio, ancho_botón,altura_botón, "<", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
-                             Boton(0.69 + ancho_botón / 2, 0.48 - 0.5 * altura_botón + margin_ratio, ancho_botón,altura_botón, ">", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50)
-                             ]
+                             Boton(0.69 + ancho_botón / 2, 0.48 - 0.5 * altura_botón + margin_ratio, ancho_botón,altura_botón, ">", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
+                             Boton(0.45 + ancho_botón / 2, 0.63 - 0.5 * altura_botón + margin_ratio, ancho_botón,altura_botón, "<", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
+                             Boton(0.69 + ancho_botón / 2, 0.63 - 0.5 * altura_botón + margin_ratio, ancho_botón,altura_botón, ">", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50)]
         while en_config:
             mouse = pygame.mouse.get_pos()
             for event in pygame.event.get():
@@ -59,12 +60,14 @@ class Configurar:
             Escribir.render_text(self.pantalla, f"Número de Partidos", (0.2 + ancho_botón / 2, 0.43 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
             Escribir.render_text(self.pantalla, f"{constantes.NUM_PARTIDAS}", (0.2 + ancho_botón / 2, 0.5 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
             Escribir.render_text(self.pantalla, "CPU",(0.2 + ancho_botón / 2, 0.57 - 0.5 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
-            Escribir.render_text(self.pantalla, "0",(0.2 + ancho_botón / 2, 0.64 - 0.57 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
+            Escribir.render_text(self.pantalla, f"{constantes.NUM_CPU}",(0.2 + ancho_botón / 2, 0.64 - 0.57 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
             #Escribir.render_text(self.pantalla, f"Efectos de Entorno: {'Activado' if constantes.EFECTOS_ENTORNO else 'Desactivado'}", (0.08 + ancho_botón / 2, 0.36 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
             Escribir.render_text(self.pantalla,"Resolucion",(0.62 + ancho_botón / 2, 0.28 - 0.5 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
             Escribir.render_text(self.pantalla, str(constantes.DIMENSIONES),(0.62 + ancho_botón / 2, 0.35 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO,"Arial")
             Escribir.render_text(self.pantalla, "Efectos de Entorno",(0.62 + ancho_botón / 2, 0.43 - 0.5 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
             Escribir.render_text(self.pantalla,f"{'Activado' if constantes.EFECTOS_ENTORNO else 'Desactivado'}",(0.62 + ancho_botón / 2, 0.50 - 0.5 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
+            Escribir.render_text(self.pantalla, "Gravedad",(0.62 + ancho_botón / 2, 0.57 - 0.5 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
+            Escribir.render_text(self.pantalla,f"{constantes.GRAVEDAD}",(0.62 + ancho_botón / 2, 0.64 - 0.57 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -95,6 +98,11 @@ class Configurar:
                         constantes.EFECTOS_ENTORNO = not constantes.EFECTOS_ENTORNO
                     if boton_dimenciones[9].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
                         constantes.EFECTOS_ENTORNO = not constantes.EFECTOS_ENTORNO
+                    if boton_dimenciones[10].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
+                        constantes.GRAVEDAD = max(constantes.GRAVEDAD - 1,30)
+                    if boton_dimenciones[11].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
+                        constantes.GRAVEDAD = min(constantes.GRAVEDAD + 1,70)
+
 
 
 
