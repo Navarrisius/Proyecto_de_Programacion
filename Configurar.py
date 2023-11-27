@@ -18,9 +18,14 @@ class Configurar:
         last_change_time = 0
         ancho_botón, altura_botón = 0.10, 0.04
         margin_ratio = 0.05  # Margen de separación entre botones
-        Volver = Boton(0.36 + ancho_botón / 2, 0.65 + 0.5 * altura_botón + margin_ratio, 0.18, 0.10, "Volver", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50)
+        Volver = Boton(0.36 + ancho_botón / 2, 0.75 + 0.5 * altura_botón + margin_ratio, 0.18, 0.10, "Volver", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50)
         boton_dimenciones = [Boton(0.8 + ancho_botón / 2, 0.5 - 0.5 * altura_botón + margin_ratio, ancho_botón, altura_botón, "->", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
-                            Boton(0.5 + ancho_botón / 2, 0.5 - 0.5 * altura_botón + margin_ratio, ancho_botón, altura_botón, "<-", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50)]
+                            Boton(0.5 + ancho_botón / 2, 0.5 - 0.5 * altura_botón + margin_ratio, ancho_botón, altura_botón, "<-", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
+                             Boton(0.05 + ancho_botón / 2, 0.33 - 0.5 * altura_botón + margin_ratio, ancho_botón, altura_botón, "<",constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
+                             Boton(0.25 + ancho_botón / 2, 0.33 - 0.5 * altura_botón + margin_ratio, ancho_botón, altura_botón, ">",constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
+                             Boton(0.05 + ancho_botón / 2, 0.48 - 0.5 * altura_botón + margin_ratio, ancho_botón,altura_botón, "<", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50),
+                             Boton(0.25 + ancho_botón / 2, 0.48 - 0.5 * altura_botón + margin_ratio, ancho_botón,altura_botón, ">", constantes.BLANCO, constantes.CELESTE, constantes.NEGRO, 50)
+                             ]
         while en_config:
             mouse = pygame.mouse.get_pos()
             for event in pygame.event.get():
@@ -62,12 +67,14 @@ class Configurar:
             Escribir.render_text(self.pantalla, str(constantes.DIMENSIONES),(0.7 + ancho_botón / 2, 0.5 - 0.5 * altura_botón + margin_ratio), 30, constantes.NEGRO,"Arial")
             Escribir.render_text(self.pantalla, "Ajustes del juego", (0.47 + ancho_botón / 2, 0.07 - 0.5 * altura_botón + margin_ratio), 60, constantes.NEGRO, "More Sugar")
             # Muestra las opciones y valores en la pantalla
-            Escribir.render_text(self.pantalla, f"Jugadores: {constantes.NUM_JUGADORES}", (0.016 + ancho_botón / 2, 0.28 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
-            Escribir.render_text(self.pantalla, "Use las flechas arriba y abajo para aumentar y disminuir los jugadores", (0.38 + ancho_botón / 2, 0.28 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
-            Escribir.render_text(self.pantalla, f"Número de Partidos: {constantes.NUM_PARTIDAS}", (0.05 + ancho_botón / 2, 0.32 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
-            Escribir.render_text(self.pantalla, "Use las flechas derecha e izquierda para aumentar y disminuir jugadores", (0.47 + ancho_botón / 2, 0.32 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
-            Escribir.render_text(self.pantalla, f"Efectos de Entorno: {'Activado' if constantes.EFECTOS_ENTORNO else 'Desactivado'}", (0.08 + ancho_botón / 2, 0.36 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
-            Escribir.render_text(self.pantalla, f"Dimensiones: {constantes.DIMENSIONES[0]},{constantes.DIMENSIONES[1]}", (0.06 + ancho_botón / 2, 0.4 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
+            Escribir.render_text(self.pantalla, "Jugadores", (0.2 + ancho_botón / 2, 0.28 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
+            Escribir.render_text(self.pantalla, f"{constantes.NUM_JUGADORES}", (0.2 + ancho_botón / 2, 0.35 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
+            Escribir.render_text(self.pantalla, f"Número de Partidos", (0.2 + ancho_botón / 2, 0.43 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
+            Escribir.render_text(self.pantalla, f"{constantes.NUM_PARTIDAS}", (0.2 + ancho_botón / 2, 0.5 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
+            Escribir.render_text(self.pantalla, "CPU",(0.2 + ancho_botón / 2, 0.57 - 0.5 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
+            Escribir.render_text(self.pantalla, "0",(0.2 + ancho_botón / 2, 0.64 - 0.57 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
+            #Escribir.render_text(self.pantalla, f"Efectos de Entorno: {'Activado' if constantes.EFECTOS_ENTORNO else 'Desactivado'}", (0.08 + ancho_botón / 2, 0.36 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
+            #Escribir.render_text(self.pantalla, f"Dimensiones: {constantes.DIMENSIONES[0]},{constantes.DIMENSIONES[1]}", (0.06 + ancho_botón / 2, 0.4 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
