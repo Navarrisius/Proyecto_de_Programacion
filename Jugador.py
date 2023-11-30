@@ -6,6 +6,7 @@ class Jugador:
     dinero = None
     ya_jugado = False
     kills = 0
+    bot = False
 
     def __init__(self, nombre, tanque):
         self.nombre = nombre

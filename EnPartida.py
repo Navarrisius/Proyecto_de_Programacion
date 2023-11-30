@@ -51,9 +51,10 @@ class EnPartida:
 
         while running:
             turno = constantes.ARRAY_TURNOS[constantes.TURNO_ACTUAL]
+            turno.puede_jugar = True
             if turno.tanque.salud <= 0 or funciones.tanque_sin_municion(turno.tanque):
+                turno.puede_jugar = False
                 funciones.cambiar_turno()
-
             reloj = pygame.time.Clock()
             teclas = pygame.key.get_pressed()
             if constantes.EN_RONDA_DE_COMPRA and not funciones.verificar_termino_partida():
@@ -72,6 +73,8 @@ class EnPartida:
                     if pausa == True:
                         pass  
             else:
+                if turno.bot == True and turno.puede_jugar == True:
+                    funciones.disparo_bot(turno, constantes.TANQUES, constantes.TERRENO, self.game)
                 for event in pygame.event.get():
                     funciones.saltar_turno_tanque_sin_municion(turno)
                     if constantes.MUSICA != 'mp3/Death_by_Glamour.mp3':
@@ -107,7 +110,8 @@ class EnPartida:
                             running = False
                         if pausa == True:
                             pass
-                    funciones.controles(event, teclas, turno, constantes.TANQUES, constantes.TERRENO, self.game)
+                    if turno.puede_jugar == True :
+                        funciones.controles(event, teclas, turno, constantes.TANQUES, constantes.TERRENO, self.game)
             if running:
             # VACIA PANTALLA
                 fondo.cargar_fondo(self.pantalla, 1)

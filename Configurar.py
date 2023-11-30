@@ -83,7 +83,7 @@ class Configurar:
                         constantes.DIMENSIONES[0] = int(constantes.config_maximas.ancho_pantalla)
                         constantes.DIMENSIONES[1] = int(constantes.config_maximas.alto_pantalla)
                     if boton_dimenciones[2].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
-                        constantes.NUM_JUGADORES = max(constantes.NUM_JUGADORES - 1, 2)
+                        constantes.NUM_JUGADORES = max(constantes.NUM_JUGADORES - 1, 0)
                     if boton_dimenciones[3].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
                         constantes.NUM_JUGADORES = min(constantes.NUM_JUGADORES + 1, 6)
                     if boton_dimenciones[4].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):

@@ -40,9 +40,9 @@ def crear_jugadores():
         "morado" : (99, 11, 87)
     }
     pos_inicial = 0
-    pos_final = pos_inicial + constantes.ANCHO_VENTANA // constantes.NUM_JUGADORES
+    pos_final = pos_inicial + constantes.ANCHO_VENTANA // (constantes.NUM_JUGADORES + constantes.NUM_CPU)
     colores_disponibles = list(colores_rgb.values())
-    for i in range(constantes.NUM_JUGADORES) :
+    for i in range(constantes.NUM_JUGADORES + constantes.NUM_CPU) :
         color = random.choice(colores_disponibles)
         colores_disponibles.remove(color)
         jugador = Jugador(None, Tanque(color))
@@ -51,7 +51,13 @@ def crear_jugadores():
         jugador.tanque.angulo_canon = 0
         constantes.JUGADORES.append(jugador)
         pos_inicial = pos_final
-        pos_final = pos_inicial + constantes.ANCHO_VENTANA // constantes.NUM_JUGADORES
+        pos_final = pos_inicial + constantes.ANCHO_VENTANA // (constantes.NUM_JUGADORES + constantes.NUM_CPU)
+    cant_bot = 0
+    while cant_bot < constantes.NUM_CPU :
+        jugador = random.choice(constantes.JUGADORES)
+        if jugador.bot == False :
+            jugador.bot = True
+            cant_bot += 1
     elegir_nombres()
 
 
@@ -59,7 +65,7 @@ def calcular_y(matriz, tanque):
     for y in range(len(matriz)):
         if (matriz[y][tanque.posicion_x] == "x"):
             return y - 1
-        
+    
 
 def definir_turnos():
     constantes.ARRAY_TURNOS = constantes.JUGADORES.copy()
@@ -71,15 +77,21 @@ def definir_turnos():
 
 def cambiar_turno():
     constantes.TURNO_ACTUAL += 1
-    if constantes.TURNO_ACTUAL >= constantes.NUM_JUGADORES:
+    if constantes.TURNO_ACTUAL >= (constantes.NUM_JUGADORES + constantes.NUM_CPU):
         constantes.TURNO_ACTUAL = 0
 
 def elegir_nombres():
-    nombres = ["Pessi", "Penaldo", "Bendepan", "Empujaland", "Abuelowski", "Fictisius Jr"]
+    nombresPlayer = ["Pessi", "Penaldo", "Bendepan", "Empujaland", "Abuelowski", "Fictisius Jr"]
+    nombresCPU = ["Bot1", "Bot2", "Bot3", "Bot4", "Bot5", "Bot6"]
     for jugador in constantes.JUGADORES:
-        nombre = random.choice(nombres)
-        nombres.remove(nombre)
-        jugador.nombre = nombre
+        if jugador.bot == False:
+            nombre = random.choice(nombresPlayer)
+            nombresPlayer.remove(nombre)
+            jugador.nombre = nombre
+        else:
+            nombre = random.choice(nombresCPU)
+            nombresCPU.remove(nombre)
+            jugador.nombre = nombre
     
 
 def pausar(self):
@@ -103,7 +115,11 @@ def detectar_musica(event):
 
 def shoot(turno, tanques, terreno, game):
     # Se intancia el disparo
-    disparo = Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque, Bala(turno.tanque.tipo_bala))
+    if turno.bot == True:
+        
+        disparo = Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque, Bala(turno.tanque.tipo_bala))
+    else:
+        disparo = Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque, Bala(turno.tanque.tipo_bala))
     if turno.tanque.municion[turno.tanque.tipo_bala].unidades > 0:
         tanque_danyado = turno.tanque.disparar(pantalla=constantes.PANTALLA, terreno=terreno, ancho=constantes.ANCHO_VENTANA,
                                     alto=constantes.ALTO_VENTANA, disparo=disparo,
@@ -158,6 +174,14 @@ def vaciar_variables():
         jugador.tanque.municion[1].unidades = 0
         jugador.tanque.municion[2].unidades = 0
         jugador.tanque.balas = 0
+
+def disparo_bot(turno, tanques, terreno, game):
+    turno.tanque.angulo_n = random.randint(0, 180)
+    turno.tanque.velocidad_disparo = random.randint(30, 300)
+    turno.tanque.angulo_canon = math.radians(turno.tanque.angulo_n)
+    for tanque in constantes.TANQUES:
+        tanque.draw_tank(constantes.PANTALLA)
+    constantes.DISPARO = shoot(turno, tanques, terreno, game)
 
 def controles(event, teclas, turno, tanques, terreno, game):
     if teclas[pygame.K_a]:
@@ -229,7 +253,7 @@ def controles_compra(self,turno):
     Compra.run(self,turno)
 
 def combrobar_compra_de_todos_los_jugadores():
-    if constantes.TURNO_ACTUAL >= constantes.NUM_JUGADORES:
+    if constantes.TURNO_ACTUAL >= (constantes.NUM_JUGADORES + constantes.NUM_CPU):
         constantes.EN_RONDA_DE_COMPRA = False
         constantes.TURNO_ACTUAL = 0
         
@@ -267,13 +291,13 @@ def avanzar_partido():
         jugador.puede_jugar = False
 
     pos_inicial = 0
-    pos_final = pos_inicial + constantes.ANCHO_VENTANA // constantes.NUM_JUGADORES
+    pos_final = pos_inicial + constantes.ANCHO_VENTANA // (constantes.NUM_JUGADORES + constantes.NUM_CPU)
     for jugador in constantes.JUGADORES:
         jugador.tanque.posicion_x = random.randint(pos_inicial, pos_final)
         jugador.tanque.posicion_y = 30
         jugador.tanque.angulo_canon = 0
         pos_inicial = pos_final
-        pos_final = pos_inicial + constantes.ANCHO_VENTANA // constantes.NUM_JUGADORES
+        pos_final = pos_inicial + constantes.ANCHO_VENTANA // (constantes.NUM_JUGADORES + constantes.NUM_CPU)
 
     altura_terreno = constantes.TERRENO.generar_terreno_perlin(constantes.DIMENSIONES[0])
     constantes.TERRENO.generar_matriz(constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA, altura_terreno)
