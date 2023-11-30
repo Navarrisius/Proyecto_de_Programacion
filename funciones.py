@@ -116,10 +116,12 @@ def detectar_musica(event):
 def shoot(turno, tanques, terreno, game):
     # Se intancia el disparo
     if turno.bot == True:
-        
         disparo = Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque, Bala(turno.tanque.tipo_bala))
     else:
         disparo = Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque, Bala(turno.tanque.tipo_bala))
+    sound = pygame.mixer.Sound("mp3/sonido_disparo.mp3")
+    sound.set_volume(0.2)
+    sound.play()
     if turno.tanque.municion[turno.tanque.tipo_bala].unidades > 0:
         tanque_danyado = turno.tanque.disparar(pantalla=constantes.PANTALLA, terreno=terreno, ancho=constantes.ANCHO_VENTANA,
                                     alto=constantes.ALTO_VENTANA, disparo=disparo,
@@ -133,8 +135,11 @@ def shoot(turno, tanques, terreno, game):
                 else:
                     detectar_kill(turno)
                     
-            
+        sound = pygame.mixer.Sound("mp3/sonido_explosion.mp3")
+        sound.set_volume(0.2)
+        sound.play()  
         terreno.destruir_terreno(constantes.ALTO_VENTANA, constantes.ANCHO_VENTANA, disparo, disparo.proyectil)
+        
             
         turno.tanque.municion[turno.tanque.tipo_bala].unidades -= 1
         turno.tanque.balas -= 1
