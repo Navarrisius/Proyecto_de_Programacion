@@ -116,19 +116,18 @@ def detectar_musica(event):
 def shoot(turno, tanques, terreno, game):
     # Se intancia el disparo
     if turno.bot == True:
-        if turno.tanque.municion[turno.tanque.tipo_bala].unidades == 0:
+        sin_municion = True
+        while sin_municion:
             turno.tanque.tipo_bala += 1
-            if turno.tanque.tipo_bala == 2:
+            if turno.tanque.tipo_bala < 2:
+                turno.tanque.tipo_bala += 1
+            else:
                 turno.tanque.tipo_bala = 0
             if turno.tanque.municion[turno.tanque.tipo_bala].unidades == 0:
-                turno.tanque.tipo_bala += 1
-                if turno.tanque.tipo_bala == 2:
-                    turno.tanque.tipo_bala = 0
-            disparo = Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque, Bala(turno.tanque.tipo_bala))
-        else:
-            disparo = Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque, Bala(turno.tanque.tipo_bala))
-
-
+                sin_municion = True
+            else:
+                sin_municion = False
+        disparo = Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque, Bala(turno.tanque.tipo_bala))
     else:
         disparo = Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque, Bala(turno.tanque.tipo_bala))
     sound = pygame.mixer.Sound("mp3/sonido_disparo.mp3")

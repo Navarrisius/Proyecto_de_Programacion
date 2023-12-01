@@ -67,7 +67,7 @@ class Configurar:
             Escribir.render_text(self.pantalla, "Efectos de Entorno",(0.62 + ancho_botón / 2, 0.43 - 0.5 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
             Escribir.render_text(self.pantalla,f"{'Activado' if constantes.EFECTOS_ENTORNO else 'Desactivado'}",(0.62 + ancho_botón / 2, 0.50 - 0.5 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
             Escribir.render_text(self.pantalla, "Gravedad",(0.62 + ancho_botón / 2, 0.57 - 0.5 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
-            Escribir.render_text(self.pantalla,f"{constantes.GRAVEDAD}",(0.62 + ancho_botón / 2, 0.64 - 0.57 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
+            Escribir.render_text(self.pantalla,f"{round(constantes.GRAVEDAD, 1)} m/s^2",(0.62 + ancho_botón / 2, 0.64 - 0.57 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -99,9 +99,9 @@ class Configurar:
                     if boton_dimenciones[9].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
                         constantes.EFECTOS_ENTORNO = not constantes.EFECTOS_ENTORNO
                     if boton_dimenciones[10].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
-                        constantes.GRAVEDAD = max(constantes.GRAVEDAD - 1,30)
+                        constantes.GRAVEDAD = max(constantes.GRAVEDAD - 1,1)
                     if boton_dimenciones[11].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
-                        constantes.GRAVEDAD = min(constantes.GRAVEDAD + 1,70)
+                        constantes.GRAVEDAD = min(constantes.GRAVEDAD + 1,50)
 
 
 
