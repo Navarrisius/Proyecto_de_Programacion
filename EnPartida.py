@@ -58,12 +58,13 @@ class EnPartida:
             reloj = pygame.time.Clock()
             teclas = pygame.key.get_pressed()
             if constantes.EN_RONDA_DE_COMPRA and not funciones.verificar_termino_partida():
-                funciones.controles_compra(self,turno)
-                funciones.combrobar_compra_de_todos_los_jugadores()
-                funciones.comprobar_jugadores_vivos()
                 if constantes.MUSICA != 'mp3/C418_Living_Mice.mp3':
                     funciones.cambiar_musica('mp3/C418_Living_Mice.mp3')
                     constantes.MUSICA = 'mp3/C418_Living_Mice.mp3'
+                 
+                funciones.controles_compra(self,turno)
+                funciones.combrobar_compra_de_todos_los_jugadores()
+                funciones.comprobar_jugadores_vivos()
                 if teclas[pygame.K_ESCAPE]:
                     pausa = funciones.pausar(self)
                     if pausa == False:
@@ -73,13 +74,13 @@ class EnPartida:
                     if pausa == True:
                         pass  
             else:
+                if constantes.MUSICA != 'mp3/Death_by_Glamour.mp3':
+                        funciones.cambiar_musica('mp3/Death_by_Glamour.mp3')
+                        constantes.MUSICA = 'mp3/Death_by_Glamour.mp3'
                 if turno.bot == True and turno.puede_jugar == True:
                     funciones.disparo_bot(turno, constantes.TANQUES, constantes.TERRENO, self.game)
                 for event in pygame.event.get():
                     funciones.saltar_turno_tanque_sin_municion(turno)
-                    if constantes.MUSICA != 'mp3/Death_by_Glamour.mp3':
-                        funciones.cambiar_musica('mp3/Death_by_Glamour.mp3')
-                        constantes.MUSICA = 'mp3/Death_by_Glamour.mp3'
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if event.button == 1: 
                             clic_x, clic_y = pygame.mouse.get_pos()
@@ -191,9 +192,5 @@ class EnPartida:
 
                 funciones.comprobar_jugadores_vivos()
                 funciones.comprobar_todos_tanques_sin_municion()
-                
-                '''if constantes.EN_RONDA_DE_COMPRA:
-                    funciones.controles_compra(self,turno)
-                    funciones.combrobar_compra_de_todos_los_jugadores()'''
                 
                 pygame.display.flip()

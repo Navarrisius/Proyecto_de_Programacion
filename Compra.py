@@ -1,5 +1,7 @@
 import pygame
 import constantes
+import random
+import funciones
 from Boton import Boton
 from Escribir import Escribir
 ancho_botón, altura_botón = 0.10, 0.04
@@ -98,48 +100,65 @@ class Compra:
         while running:
             self.pantalla.fill((1, 30, 97))
             Escribir.render_text(self.pantalla, f"Tiempo de compra - Partida {constantes.RONDA_ACTUAL}", (0.42 + ancho_botón / 2, 0.07 - 0.5 * altura_botón + margin_ratio), 60, constantes.BLANCO, "More Sugar")
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
+            if turno.bot == True:
+                sound = pygame.mixer.Sound('mp3/sonido_compra.mp3')
+                sound.set_volume(0.2)
+                tipo_compra = random.choice([0, 1, 2])  # Decide qué tipo de munición comprar
+                if tipo_compra == 0 and turno.dinero >= 1000:
+                    turno.comprar_bala_60mm()
+                    sound.play()
+                elif tipo_compra == 1  and turno.dinero >= 2500:
+                    turno.comprar_bala_80mm()
+                    sound.play()
+                elif tipo_compra == 2 and turno.dinero >= 4000:
+                    turno.comprar_bala_105mm()
+                    sound.play()
+                else:
+                    constantes.TURNO_ACTUAL += 1
                     running = False
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if botones[0].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
-                        sound = pygame.mixer.Sound('mp3/sonido_compra.mp3')
-                        sound.set_volume(0.2)
-                        if turno.tanque.tipo_bala == 0 and turno.dinero >= 1000:
-                            turno.comprar_bala_60mm()
-                            sound.play()
-                        if turno.tanque.tipo_bala == 1 and turno.dinero >= 2500:
-                            turno.comprar_bala_80mm()
-                            sound.play()
-                        if turno.tanque.tipo_bala == 2 and turno.dinero >= 4000:
-                            turno.comprar_bala_105mm()
-                            sound.play()
-                    if botones[1].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
-                        sound = pygame.mixer.Sound('mp3/sonido_venta.mp3')
-                        sound.set_volume(0.2)
-                        if turno.tanque.tipo_bala == 0 and turno.tanque.municion[0].unidades > 0:
-                            turno.vender_bala_60mm()
-                            sound.play()
-                        if turno.tanque.tipo_bala == 1 and turno.tanque.municion[1].unidades > 0:
-                            turno.vender_bala_80mm()
-                            sound.play()
-                        if turno.tanque.tipo_bala == 2 and turno.tanque.municion[2].unidades > 0:
-                            turno.vender_bala_105mm()
-                            sound.play()
-                    if botones[2].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
-                        if turno.tanque.tipo_bala < 2:
-                            turno.tanque.tipo_bala += 1
-                        else:
-                            turno.tanque.tipo_bala = 0
-                    if botones[3].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
-                        constantes.TURNO_ACTUAL += 1
+            else:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
                         running = False
-            texto_tipo_bala_compra(self.pantalla, turno.tanque.tipo_bala)
-            cantidad_img_balas_compra(self,self.pantalla, turno.tanque.tipo_bala, turno.tanque.municion[turno.tanque.tipo_bala].unidades)
-            texto_jugador_compra(self,self.pantalla, turno.tanque.color, turno.nombre)
-            texto_dinero_compra(self,self.pantalla, turno.dinero)
-            for boton in botones:
-                boton.dibujar(self.pantalla, constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA)
+                    elif event.type == pygame.MOUSEBUTTONDOWN:
+                        if botones[0].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
+                            sound = pygame.mixer.Sound('mp3/sonido_compra.mp3')
+                            sound.set_volume(0.2)
+                            if turno.tanque.tipo_bala == 0 and turno.dinero >= 1000:
+                                turno.comprar_bala_60mm()
+                                sound.play()
+                            if turno.tanque.tipo_bala == 1 and turno.dinero >= 2500:
+                                turno.comprar_bala_80mm()
+                                sound.play()
+                            if turno.tanque.tipo_bala == 2 and turno.dinero >= 4000:
+                                turno.comprar_bala_105mm()
+                                sound.play()
+                        if botones[1].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
+                            sound = pygame.mixer.Sound('mp3/sonido_venta.mp3')
+                            sound.set_volume(0.2)
+                            if turno.tanque.tipo_bala == 0 and turno.tanque.municion[0].unidades > 0:
+                                turno.vender_bala_60mm()
+                                sound.play()
+                            if turno.tanque.tipo_bala == 1 and turno.tanque.municion[1].unidades > 0:
+                                turno.vender_bala_80mm()
+                                sound.play()
+                            if turno.tanque.tipo_bala == 2 and turno.tanque.municion[2].unidades > 0:
+                                turno.vender_bala_105mm()
+                                sound.play()
+                        if botones[2].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
+                            if turno.tanque.tipo_bala < 2:
+                                turno.tanque.tipo_bala += 1
+                            else:
+                                turno.tanque.tipo_bala = 0
+                        if botones[3].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
+                            constantes.TURNO_ACTUAL += 1
+                            running = False
+                texto_tipo_bala_compra(self.pantalla, turno.tanque.tipo_bala)
+                cantidad_img_balas_compra(self,self.pantalla, turno.tanque.tipo_bala, turno.tanque.municion[turno.tanque.tipo_bala].unidades)
+                texto_jugador_compra(self,self.pantalla, turno.tanque.color, turno.nombre)
+                texto_dinero_compra(self,self.pantalla, turno.dinero)
+                for boton in botones:
+                    boton.dibujar(self.pantalla, constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA)
 
 
             pygame.display.flip()
