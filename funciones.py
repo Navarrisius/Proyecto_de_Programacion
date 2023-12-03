@@ -117,6 +117,7 @@ def shoot(turno, tanques, terreno, game):
     # Se intancia el disparo
     if turno.bot == True:
         sin_municion = True
+        cambios = 0
         while sin_municion:
             turno.tanque.tipo_bala += 1
             if turno.tanque.tipo_bala < 2:
@@ -125,8 +126,16 @@ def shoot(turno, tanques, terreno, game):
                 turno.tanque.tipo_bala = 0
             if turno.tanque.municion[turno.tanque.tipo_bala].unidades == 0:
                 sin_municion = True
+                cambios += 1
             else:
                 sin_municion = False
+            if cambios > 3:
+                turno.puede_jugar = False
+                turno.tanque.balas = 0
+                turno.puede_jugar = False
+                cambiar_turno()
+                return None
+
         disparo = Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque, Bala(turno.tanque.tipo_bala))
     else:
         disparo = Disparo(turno.tanque.angulo_n, turno.tanque.velocidad_disparo, turno.tanque, Bala(turno.tanque.tipo_bala))
