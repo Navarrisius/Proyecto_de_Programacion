@@ -64,8 +64,8 @@ class Configurar:
             #Escribir.render_text(self.pantalla, f"Efectos de Entorno: {'Activado' if constantes.EFECTOS_ENTORNO else 'Desactivado'}", (0.08 + ancho_botón / 2, 0.36 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO, None)
             Escribir.render_text(self.pantalla,"Resolucion",(0.62 + ancho_botón / 2, 0.28 - 0.5 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
             Escribir.render_text(self.pantalla, str(constantes.DIMENSIONES),(0.62 + ancho_botón / 2, 0.35 - 0.5 * altura_botón + margin_ratio), 20, constantes.NEGRO,"Arial")
-            Escribir.render_text(self.pantalla, "Efectos de Entorno",(0.62 + ancho_botón / 2, 0.43 - 0.5 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
-            Escribir.render_text(self.pantalla,f"{'Activado' if constantes.EFECTOS_ENTORNO else 'Desactivado'}",(0.62 + ancho_botón / 2, 0.50 - 0.5 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
+            Escribir.render_text(self.pantalla, "Viento Aleatorio",(0.62 + ancho_botón / 2, 0.43 - 0.5 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
+            Escribir.render_text(self.pantalla,f"{'Desactivado' if not constantes.VIENTO_ALEATORIO else 'Activado'}",(0.62 + ancho_botón / 2, 0.50 - 0.5 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
             Escribir.render_text(self.pantalla, "Gravedad",(0.62 + ancho_botón / 2, 0.57 - 0.5 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
             Escribir.render_text(self.pantalla,f"{round(constantes.GRAVEDAD, 1)} m/s^2",(0.62 + ancho_botón / 2, 0.64 - 0.57 * altura_botón + margin_ratio), 20,constantes.NEGRO, None)
             pygame.display.update()
@@ -83,9 +83,9 @@ class Configurar:
                         constantes.DIMENSIONES[0] = int(constantes.config_maximas.ancho_pantalla)
                         constantes.DIMENSIONES[1] = int(constantes.config_maximas.alto_pantalla)
                     if boton_dimenciones[2].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
-                        constantes.NUM_JUGADORES = max(constantes.NUM_JUGADORES - 1, 0)
+                            constantes.NUM_JUGADORES = max(constantes.NUM_JUGADORES - 1, 0)
                     if boton_dimenciones[3].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
-                        constantes.NUM_JUGADORES = min(constantes.NUM_JUGADORES + 1, 6)
+                        constantes.NUM_JUGADORES = min(constantes.NUM_JUGADORES + 1, 6 - constantes.NUM_CPU)
                     if boton_dimenciones[4].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
                         constantes.NUM_PARTIDAS = max(constantes.NUM_PARTIDAS - 1, 1)
                     if boton_dimenciones[5].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
@@ -93,11 +93,11 @@ class Configurar:
                     if boton_dimenciones[6].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
                         constantes.NUM_CPU = max(constantes.NUM_CPU - 1, 0)
                     if boton_dimenciones[7].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
-                        constantes.NUM_CPU = min(constantes.NUM_CPU + 1, 6)
+                        constantes.NUM_CPU = min(constantes.NUM_CPU + 1, 6 - constantes.NUM_JUGADORES)
                     if boton_dimenciones[8].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
-                        constantes.EFECTOS_ENTORNO = not constantes.EFECTOS_ENTORNO
+                        constantes.VIENTO_ALEATORIO = not constantes.VIENTO_ALEATORIO
                     if boton_dimenciones[9].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
-                        constantes.EFECTOS_ENTORNO = not constantes.EFECTOS_ENTORNO
+                        constantes.VIENTO_ALEATORIO = not constantes.VIENTO_ALEATORIO
                     if boton_dimenciones[10].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):
                         constantes.GRAVEDAD = max(constantes.GRAVEDAD - 1,1)
                     if boton_dimenciones[11].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):

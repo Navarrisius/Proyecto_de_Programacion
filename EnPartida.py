@@ -48,6 +48,8 @@ class EnPartida:
         constantes.TERRENO.generar_matriz(constantes.ANCHO_VENTANA, constantes.ANCHO_VENTANA, altura_terreno)
         funciones.iniciar_tanques(constantes.TERRENO)
         funciones.definir_turnos()
+        if constantes.VIENTO_ALEATORIO:
+            funciones.actualizar_velocidad_viento()
 
         while running:
             turno = constantes.ARRAY_TURNOS[constantes.TURNO_ACTUAL]
@@ -78,6 +80,9 @@ class EnPartida:
                         funciones.cambiar_musica('mp3/Death_by_Glamour.mp3')
                         constantes.MUSICA = 'mp3/Death_by_Glamour.mp3'
                 if turno.bot == True and turno.puede_jugar == True:
+                    if constantes.VIENTO_ALEATORIO:
+                        ui.indicador_viento(constantes.PANTALLA)
+                    ui.esperar(1)
                     funciones.disparo_bot(turno, constantes.TANQUES, constantes.TERRENO, self.game)
                 for event in pygame.event.get():
                     funciones.saltar_turno_tanque_sin_municion(turno)
@@ -111,7 +116,7 @@ class EnPartida:
                             running = False
                         if pausa == True:
                             pass
-                    if turno.puede_jugar == True :
+                    if turno.puede_jugar == True:
                         funciones.controles(event, teclas, turno, constantes.TANQUES, constantes.TERRENO, self.game)
             if running:
             # VACIA PANTALLA
@@ -142,6 +147,9 @@ class EnPartida:
                 funciones.ui_pre_disparo(ui, self.pantalla, turno)
 
                 ui.texto_jugador(self.pantalla, turno.tanque.color, turno.nombre)
+
+                if constantes.VIENTO_ALEATORIO:
+                    ui.indicador_viento(constantes.PANTALLA)
 
                 self.game.ganador = funciones.definir_ganador()
 

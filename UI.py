@@ -23,6 +23,11 @@ class UI:
         self.png_bala80 = pygame.image.load("img/80mm.png").convert_alpha()
         self.png_bala105 = pygame.image.load("img/105mm.png").convert_alpha()
         self.png_kills = pygame.image.load("img/kills.png").convert_alpha()
+        self.png_viento = pygame.image.load("img/viento.png").convert_alpha()
+        self.flecha_izquierda = pygame.image.load("img/flecha_izquierda.png").convert_alpha()
+        self.flecha_derecha = pygame.image.load("img/flecha_derecha.png").convert_alpha()
+        self.flecha_izquierda = pygame.transform.scale(self.flecha_izquierda, (50, 50))
+        self.flecha_derecha = pygame.transform.scale(self.flecha_derecha, (50, 50))
 
 
     def mensaje_caida(self, pantalla, ancho, diff_y, dano):
@@ -213,3 +218,14 @@ class UI:
         else:
             print("Empate")
 
+    def indicador_viento(self, pantalla):
+        ancho_rectangulo = 250
+        alto_rectangulo = 120
+        pygame.draw.rect(surface=pantalla, color=(0, 0, 0),
+                rect=(0, 0, ancho_rectangulo, alto_rectangulo))
+        pantalla.blit(self.png_viento, (10, 55))
+        Escribir.escribir_texto(pantalla, f"{abs(constantes.VELOCIDAD_VIENTO)} m/s", "verdana", 24, constantes.BLANCO, constantes.NEGRO, 100, 40)
+        if constantes.VELOCIDAD_VIENTO < 0:
+            pantalla.blit(self.flecha_izquierda, (10, 10))
+        else:
+            pantalla.blit(self.flecha_derecha, (10, 10))

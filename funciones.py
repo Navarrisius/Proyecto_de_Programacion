@@ -79,6 +79,8 @@ def cambiar_turno():
     constantes.TURNO_ACTUAL += 1
     if constantes.TURNO_ACTUAL >= (constantes.NUM_JUGADORES + constantes.NUM_CPU):
         constantes.TURNO_ACTUAL = 0
+    if constantes.VIENTO_ALEATORIO:
+        actualizar_velocidad_viento()
 
 def elegir_nombres():
     nombresPlayer = ["Pessi", "Penaldo", "Bendepan", "Empujaland", "Abuelowski", "Fictisius Jr"]
