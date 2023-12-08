@@ -45,18 +45,22 @@ class Terreno:
 
 
     def destruir_terreno(self, alto, ancho, bala, municion):
-        impacto_x = int(bala.eje_x[-1])
-        impacto_y = int(bala.eje_y[-1])
+        try:
+            impacto_x = int(bala.eje_x[-1])
+            impacto_y = int(bala.eje_y[-1])
 
-        radio = municion.radio_impacto
-        
-        for y in range(max(0, impacto_y - radio), min(alto, impacto_y + radio)):
-            for x in range(max(0, impacto_x - radio), min(ancho, impacto_x + radio)):
-                distancia = ((x - impacto_x) ** 2 + (y - impacto_y) ** 2) ** 0.5
-                if distancia <= radio:
-                    self.matriz[y][x] = "o"
+            radio = municion.radio_impacto
+            
+            for y in range(max(0, impacto_y - radio), min(alto, impacto_y + radio)):
+                for x in range(max(0, impacto_x - radio), min(ancho, impacto_x + radio)):
+                    distancia = ((x - impacto_x) ** 2 + (y - impacto_y) ** 2) ** 0.5
+                    if distancia <= radio:
+                        self.matriz[y][x] = "o"
 
-        self.generar_arreglo_m()
+            self.generar_arreglo_m()
+        except IndexError:
+            # Manejar la excepción IndexError aquí
+            print("¡Error: índice fuera de rango!")
         
 
     def generar_arreglo_m(self):
