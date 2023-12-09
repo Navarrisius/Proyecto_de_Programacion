@@ -219,13 +219,16 @@ class UI:
             print("Empate")
 
     def indicador_viento(self, pantalla):
-        ancho_rectangulo = 250
+        ancho_rectangulo = 240
         alto_rectangulo = 120
-        pygame.draw.rect(surface=pantalla, color=(0, 0, 0),
-                rect=(0, 0, ancho_rectangulo, alto_rectangulo))
-        pantalla.blit(self.png_viento, (10, 55))
-        Escribir.escribir_texto(pantalla, f"{abs(constantes.VELOCIDAD_VIENTO)} m/s", "verdana", 24, constantes.BLANCO, constantes.NEGRO, 100, 40)
+        if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
+            self.png_viento = pygame.transform.scale(self.png_viento, (20, 20))
+            self.flecha_izquierda = pygame.transform.scale(self.flecha_izquierda, (20, 20))
+            self.flecha_derecha = pygame.transform.scale(self.flecha_derecha, (20, 20))
+        #pygame.draw.rect(surface=pantalla, color=(0, 0, 0), rect=(0, 0, ancho_rectangulo, alto_rectangulo))
+        pantalla.blit(self.png_viento, posicion(-0.043,0.02,ancho_botón,altura_botón,margin_ratio))
+        Escribir.render_text(pantalla,f"{abs(constantes.VELOCIDAD_VIENTO)} m/s",(0.028 + ancho_botón / 2, 0.015 - 0.5 * altura_botón + margin_ratio),15, (0, 64, 202), "verdana bold")
         if constantes.VELOCIDAD_VIENTO < 0:
-            pantalla.blit(self.flecha_izquierda, (10, 10))
+            pantalla.blit(self.flecha_izquierda, posicion(-0.043,-0.03,ancho_botón,altura_botón,margin_ratio))
         else:
-            pantalla.blit(self.flecha_derecha, (10, 10))
+            pantalla.blit(self.flecha_derecha, posicion(-0.043,-0.03,ancho_botón,altura_botón,margin_ratio))

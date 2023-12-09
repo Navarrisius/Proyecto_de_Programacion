@@ -380,5 +380,5 @@ def definir_ganador():
         return -1
     
 def actualizar_velocidad_viento():
-    constantes.VELOCIDAD_VIENTO = random.randint(-30, 30)
+    constantes.VELOCIDAD_VIENTO = random.randint(-10, 10)
     print(f"Velocidad Viento: {constantes.VELOCIDAD_VIENTO} m/s.")
