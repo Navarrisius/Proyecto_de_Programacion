@@ -77,11 +77,18 @@ class Configurar:
                             self.gameStateManager.set_estado('menu')  
                             en_config = False     
                     if boton_dimenciones[1].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
-                        constantes.DIMENSIONES[0] = int(constantes.config_defecto.ancho_pantalla)
-                        constantes.DIMENSIONES[1] = int(constantes.config_defecto.alto_pantalla)
+                        constantes.DIMENSIONES_INDICE = min(constantes.DIMENSIONES_INDICE+1,5)
+                        print(constantes.DIMENSIONES_INDICE)
+                        indice = constantes.DIMENSIONES_INDICE
+                        constantes.DIMENSIONES[0] = int(constantes.DIMENSIONES_ANCHO[indice ])
+                        constantes.DIMENSIONES[1] = int(constantes.DIMENSIONES_ALTO[indice ])
+
                     if boton_dimenciones[0].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
-                        constantes.DIMENSIONES[0] = int(constantes.config_maximas.ancho_pantalla)
-                        constantes.DIMENSIONES[1] = int(constantes.config_maximas.alto_pantalla)
+                        constantes.DIMENSIONES_INDICE = max(constantes.DIMENSIONES_INDICE-1,0)
+                        print(constantes.DIMENSIONES_INDICE)
+                        indice = constantes.DIMENSIONES_INDICE
+                        constantes.DIMENSIONES[0] = int(constantes.DIMENSIONES_ANCHO[indice ])
+                        constantes.DIMENSIONES[1] = int(constantes.DIMENSIONES_ALTO[indice ])
                     if boton_dimenciones[2].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
                             constantes.NUM_JUGADORES = max(constantes.NUM_JUGADORES - 1, 0)
                     if boton_dimenciones[3].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
