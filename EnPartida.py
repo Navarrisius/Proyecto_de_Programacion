@@ -198,7 +198,8 @@ class EnPartida:
                         pass
                     constantes.DISPARO = None
 
-                funciones.comprobar_jugadores_vivos()
-                funciones.comprobar_todos_tanques_sin_municion()
+                if funciones.comprobar_jugadores_vivos() or funciones.comprobar_todos_tanques_sin_municion():
+                    ui.tabla_puntuacion()
+                    ui.esperar(2)
                 
                 pygame.display.flip()

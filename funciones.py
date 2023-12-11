@@ -307,6 +307,7 @@ def comprobar_todos_tanques_sin_municion():
             tanques_sin_municion += 1
     if tanques_sin_municion == tanques_vivos and constantes.EN_RONDA_DE_COMPRA == False:
         avanzar_partido()
+        return True
 
 def avanzar_partido():
     constantes.RONDA_ACTUAL += 1
@@ -350,6 +351,7 @@ def queda_un_jugador_vivo():
 def comprobar_jugadores_vivos():
     if queda_un_jugador_vivo() and constantes.EN_RONDA_DE_COMPRA == False:
         avanzar_partido()
+        return True
 
 def verificar_termino_partida():
     if not constantes.RONDA_ACTUAL <= constantes.NUM_PARTIDAS:

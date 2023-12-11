@@ -232,3 +232,41 @@ class UI:
             pantalla.blit(self.flecha_izquierda, posicion(-0.043,-0.03,ancho_botón,altura_botón,margin_ratio))
         else:
             pantalla.blit(self.flecha_derecha, posicion(-0.043,-0.03,ancho_botón,altura_botón,margin_ratio))
+
+    def tabla_puntuacion(self):
+        ancho_botónt, altura_botónt = 0.25, 0.08
+
+        pos_x_kill = 0.8 - ancho_botónt / 2
+        jugadores_ordenados = sorted(constantes.JUGADORES, key=lambda x: x.kills, reverse=True)
+
+        # boton jugar
+        ancho_botón, altura_botón = 0.75, 0.75
+
+        x_ratio = 0.5 - ancho_botón / 2
+        y_ratio = 0.5 - 0.5 * altura_botón
+        width_ratio = ancho_botón
+        height_ratio = altura_botón
+        borde = 50
+        hover_color = constantes.CELESTE
+
+
+        x = x_ratio * constantes.ANCHO_VENTANA
+        y = y_ratio * constantes.ALTO_VENTANA
+        w = width_ratio * constantes.ANCHO_VENTANA
+        h = height_ratio * constantes.ALTO_VENTANA
+        pygame.draw.rect(constantes.PANTALLA, hover_color, (x, y, w, h), border_radius=borde)
+        pos_x = 0.5 - ancho_botónt / 2
+        pos_y = 0.25 + 1.5 * altura_botónt
+        pos_x_img = 0.4 - ancho_botónt / 2
+        Escribir.render_text(constantes.PANTALLA, "Puntuación", (0.64 - ancho_botónt / 2, 0.08 + 1.5 * altura_botónt), 40,constantes.NEGRO, "timesnewroman")
+        Escribir.render_text(constantes.PANTALLA, "Jugador", (0.5 - ancho_botónt / 2, 0.17 + 1.5 * altura_botónt), 15, constantes.NEGRO, "arial")
+        Escribir.render_text(constantes.PANTALLA, "Kills", (0.8 - ancho_botónt / 2, 0.17 + 1.5 * altura_botónt), 15,constantes.NEGRO, "arial")
+
+
+        for player in jugadores_ordenados:
+            #self.pantalla.blit(player.tanque.imagen, [pos_x_img, pos_y])
+            Escribir.render_text(constantes.PANTALLA, player.nombre, (pos_x, pos_y), 15, constantes.NEGRO, "arial")
+            Escribir.render_text(constantes.PANTALLA, str(player.kills), (pos_x_kill, pos_y),15, constantes.NEGRO, "arial")
+            pos_y += 0.09
+
+        pygame.display.flip()

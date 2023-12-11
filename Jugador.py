@@ -12,7 +12,7 @@ class Jugador:
         self.nombre = nombre
         self.tanque = tanque
         self.dinero = 10000
-        self.kills = kills
+        self.kills = 0
 
     def comprar_bala_60mm(self):
         self.tanque.municion[0].unidades += 1
