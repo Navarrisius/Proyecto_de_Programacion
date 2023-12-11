@@ -90,11 +90,11 @@ class Configurar:
                         constantes.DIMENSIONES[0] = int(constantes.DIMENSIONES_ANCHO[indice ])
                         constantes.DIMENSIONES[1] = int(constantes.DIMENSIONES_ALTO[indice ])
                     if constantes.NUM_CPU == 0 and constantes.NUM_JUGADORES == 0:
-                        min = 1
+                        minimo = 1
                     else:
-                        min = 0
+                        minimo = 0
                     if boton_dimenciones[2].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
-                        constantes.NUM_JUGADORES = max(abs(constantes.NUM_JUGADORES - 1), min)
+                        constantes.NUM_JUGADORES = max(abs(constantes.NUM_JUGADORES - 1), minimo)
                     if boton_dimenciones[3].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
                         constantes.NUM_JUGADORES = min(constantes.NUM_JUGADORES + 1, 6 - constantes.NUM_CPU)
                     if boton_dimenciones[4].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
@@ -102,7 +102,7 @@ class Configurar:
                     if boton_dimenciones[5].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
                         constantes.NUM_PARTIDAS = min(constantes.NUM_PARTIDAS + 1, 20)
                     if boton_dimenciones[6].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
-                        constantes.NUM_CPU = max(abs(constantes.NUM_CPU - 1), min)
+                        constantes.NUM_CPU = max(abs(constantes.NUM_CPU - 1), minimo)
                     if boton_dimenciones[7].si_clic(constantes.ANCHO_VENTANA,constantes.ALTO_VENTANA):
                         constantes.NUM_CPU = min(constantes.NUM_CPU + 1, 6 - constantes.NUM_JUGADORES)
                     if boton_dimenciones[8].si_clic(constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA):

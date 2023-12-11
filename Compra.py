@@ -7,8 +7,7 @@ from Escribir import Escribir
 ancho_botón, altura_botón = 0.10, 0.04
 margin_ratio = 0.05
 def texto_dinero_compra(self, pantalla, dinero):
-        if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
-            self.png_dinero = pygame.transform.scale(self.png_dinero, (30, 40))
+        self.png_dinero = pygame.transform.scale(self.png_dinero, (40, 45))
         pantalla.blit(self.png_dinero, posicion(-0.034,0.57,ancho_botón,altura_botón,margin_ratio))
         Escribir.render_text(pantalla,f"${dinero}",(0.05 + ancho_botón / 2, 0.6 - 0.5 * altura_botón + margin_ratio),15, constantes.BLANCO,"Verdana")
 def texto_tipo_bala_compra(pantalla, tipo_bala):
@@ -20,7 +19,7 @@ def texto_tipo_bala_compra(pantalla, tipo_bala):
             texto = "Bala 105mm"
         Escribir.render_text(pantalla, texto,(0.445 + ancho_botón / 2, 0.37 - 0.5 * altura_botón + margin_ratio),20, constantes.BLANCO,"Verdana")
 def texto_jugador_compra(self, pantalla, color_jugador, texto_jugador):
-        x = 30
+        x = 20
         y = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 2
         alto_rectangulo = constantes.ALTO_VENTANA // 15
         ancho_rectangulo = constantes.ALTO_VENTANA // 3
@@ -40,8 +39,7 @@ def texto_sin_municion_compra(self, pantalla):
     color_fondo = (255, 62, 50)
     pygame.draw.rect(surface=pantalla, color=color_fondo,
             rect=(x, y, ancho_rectangulo, alto_rectangulo), border_radius=10)
-    if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
-        self.png_alerta = pygame.transform.scale(self.png_alerta, (23,43))
+    self.png_alerta = pygame.transform.scale(self.png_alerta, (33,43))
     pantalla.blit(self.png_alerta, posicion(0.37,0.48,ancho_botón,altura_botón,margin_ratio))
     Escribir.render_text(pantalla,"No hay munición",(0.47 + ancho_botón / 2, 0.5 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO,"Verdana")
 
@@ -62,7 +60,7 @@ def cantidad_img_balas_compra(self, pantalla, tipo_bala, unidades):
             bala = self.png_bala80
         else:
             bala = self.png_bala105
-        bala = pygame.transform.scale(bala, (9.25 * 3, 20 * 3))
+        bala = pygame.transform.scale(bala, (6.25 * 3, 20 * 3))
         if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
             bala = pygame.transform.scale(bala, (15, 40))
         x_primera_bala = constantes.ANCHO_VENTANA // 2.3

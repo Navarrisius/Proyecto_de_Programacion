@@ -29,15 +29,41 @@ class UI:
         self.flecha_izquierda = pygame.transform.scale(self.flecha_izquierda, (50, 50))
         self.flecha_derecha = pygame.transform.scale(self.flecha_derecha, (50, 50))
 
-
+    def reescalado_imagen(self,imagen):
+        if constantes.DIMENSIONES_INDICE==5:
+            imagen = pygame.transform.scale(imagen, (23, 20))
+        if constantes.DIMENSIONES_INDICE==4:
+            imagen = pygame.transform.scale(imagen, (23, 25))
+        if constantes.DIMENSIONES_INDICE==3:
+            imagen = pygame.transform.scale(imagen, (23, 35))
+        if constantes.DIMENSIONES_INDICE==2:
+            imagen = pygame.transform.scale(imagen, (23, 40))
+        if constantes.DIMENSIONES_INDICE==1:
+            imagen = pygame.transform.scale(imagen, (23, 45))
+        return imagen
+    def reescalado_rect(self,x):
+        if x < 35:
+            if constantes.DIMENSIONES_INDICE==5:
+                x=15
+            if constantes.DIMENSIONES_INDICE==4:
+                x=35
+            else:
+                x=30
+        else:
+            if constantes.DIMENSIONES_INDICE==5:
+                x=constantes.ALTO_VENTANA // 6
+            if constantes.DIMENSIONES_INDICE==4:
+                x=constantes.ALTO_VENTANA // 5
+            if constantes.DIMENSIONES_INDICE==3:
+                x=constantes.ALTO_VENTANA // 4
+            if constantes.DIMENSIONES_INDICE==2:
+                x=constantes.ALTO_VENTANA // 3.5
+            if constantes.DIMENSIONES_INDICE==1:
+                x=constantes.ALTO_VENTANA // 4.5
+        return int(x)
     def mensaje_caida(self, pantalla, ancho, diff_y, dano):
-        ancho_rectangulo = 925
-        alto_rectangulo = 70
-        pygame.draw.rect(surface=pantalla, color=(0, 0, 0),
-                rect=(ancho // 2 - ancho_rectangulo // 2, 10,
-                    ancho_rectangulo, alto_rectangulo), border_radius=20)
-        Escribir.escribir_texto(pantalla, f"¡El tanque cayó {diff_y} metros y ha recibido {dano} de daño extra!", "Verdana", 30, [255, 255, 255], (0, 0, 0), ancho // 2 - ancho_rectangulo // 2 + 10, 25)
-    
+        Escribir.render_text(pantalla, f"¡El tanque cayó {diff_y} metros y ha recibido {dano} de daño extra!", (0.42 + ancho_botón / 2, 0.0 - 0.5 * altura_botón + margin_ratio), 15, (175, 0, 0), "Verdana")
+
 
     def rectangulo(self, pantalla):
         alto_rectangulo = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 5
@@ -47,22 +73,29 @@ class UI:
                 rect=(0, constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 5, constantes.ANCHO_VENTANA, 20))
 
     def texto_jugador(self, pantalla, color_jugador, texto_jugador):
-        x = 30
+        x = 15
+        if constantes.ANCHO_VENTANA!=1920 and constantes.ALTO_VENTANA!=1080:
+            x = self.reescalado_rect(x)
         y = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 5.75
         alto_rectangulo = constantes.ALTO_VENTANA // 20
         ancho_rectangulo = constantes.ALTO_VENTANA // 3
+        if constantes.ANCHO_VENTANA!=1920 and constantes.ALTO_VENTANA!=1080:
+            ancho_rectangulo = self.reescalado_rect(ancho_rectangulo)
         pygame.draw.rect(surface=pantalla, color=color_jugador, rect=(x, y, ancho_rectangulo, alto_rectangulo), border_radius=20)
         Escribir.render_text(pantalla, texto_jugador,(0.05 + ancho_botón / 2, 0.82 - 0.5 * altura_botón + margin_ratio),15, constantes.BLANCO, "verdana")
         
     def texto_dinero(self, pantalla, dinero):
-        if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
-            self.png_dinero = pygame.transform.scale(self.png_dinero, (30, 40))
+        if constantes.ANCHO_VENTANA!=1920 and constantes.ALTO_VENTANA!=1080:
+            if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
+                self.png_dinero = pygame.transform.scale(self.png_dinero, (30, 40))
+            else:
+                self.png_dinero = self.reescalado_imagen(self.png_dinero) 
         pantalla.blit(self.png_dinero, posicion(-0.034,0.85,ancho_botón,altura_botón,margin_ratio))
         Escribir.render_text(pantalla,f"${dinero}",(0.05 + ancho_botón / 2, 0.88 - 0.5 * altura_botón + margin_ratio),15, constantes.BLANCO,"Verdana")
 
     def texto_salud(self, pantalla, salud):
-        if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
-            self.png_salud = pygame.transform.scale(self.png_salud, (20, 20))
+        if constantes.ANCHO_VENTANA!=1920 and constantes.ALTO_VENTANA!=1080:
+            self.png_salud = self.reescalado_imagen(self.png_salud)
         pantalla.blit(self.png_salud, posicion(-0.02,0.92,ancho_botón,altura_botón,margin_ratio))
         Escribir.render_text(pantalla,f"{int(salud)} HP",(0.05 + ancho_botón / 2, 0.935 - 0.5 * altura_botón + margin_ratio),15, constantes.BLANCO,"Verdana")
         
@@ -73,16 +106,17 @@ class UI:
 
     def texto_angulo(self, pantalla, angulo):
         Escribir.render_text(pantalla,"Ángulo:",(0.38 + ancho_botón / 2, 0.88 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO,"Verdana")
-        if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
-            self.png_angulo = pygame.transform.scale(self.png_angulo, (23,43))
+        if constantes.ANCHO_VENTANA!=1920 and constantes.ALTO_VENTANA!=1080:
+            self.png_angulo = self.reescalado_imagen(self.png_angulo)
+            #self.png_angulo = pygame.transform.scale(self.png_angulo, (23,43))
         pantalla.blit(self.png_angulo, posicion(0.41,0.84,ancho_botón,altura_botón,margin_ratio))
         Escribir.render_text(pantalla,f"{round(angulo, 1)}°",(0.465 + ancho_botón / 2, 0.88 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO,"Verdana")
         
 
     def texto_velocidad(self, pantalla, velocidad):
         Escribir.render_text(pantalla,"Velocidad:",(0.373 + ancho_botón / 2, 0.94 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO,"Verdana")
-        if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
-            self.png_velocidad = pygame.transform.scale(self.png_velocidad, (23, 45))
+        if constantes.ANCHO_VENTANA!=1920 and constantes.ALTO_VENTANA!=1080:
+           self.png_velocidad = self.reescalado_imagen(self.png_velocidad)
         pantalla.blit(self.png_velocidad, posicion(0.41,0.91,ancho_botón,altura_botón,margin_ratio))
         Escribir.render_text(pantalla,f"{int(velocidad)} m/s",(0.48 + ancho_botón / 2, 0.94 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO,"Verdana")
     
@@ -105,8 +139,8 @@ class UI:
         color_fondo = (255, 62, 50)
         pygame.draw.rect(surface=pantalla, color=color_fondo,
                 rect=(x, y, ancho_rectangulo, alto_rectangulo), border_radius=10)
-        if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
-            self.png_alerta = pygame.transform.scale(self.png_alerta, (23,43))
+        if constantes.ANCHO_VENTANA!=1920 and constantes.ALTO_VENTANA!=1080:
+           self.png_alerta = self.reescalado_imagen(self.png_alerta)
         pantalla.blit(self.png_alerta, posicion(0.753,0.857,ancho_botón,altura_botón,margin_ratio))
         Escribir.render_text(pantalla,"No hay munición",(0.85 + ancho_botón / 2, 0.885 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO,"Verdana")
 
@@ -128,8 +162,11 @@ class UI:
             else:
                 bala = self.png_bala105
             bala = pygame.transform.scale(bala, (9.25 * 3, 20 * 3))
-            if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
-                bala = pygame.transform.scale(bala, (15, 40))
+            if constantes.ANCHO_VENTANA!=1920 and constantes.ALTO_VENTANA!=1080:
+                if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
+                    bala = pygame.transform.scale(bala, (15, 40))
+                else:
+                    bala = self.reescalado_imagen(bala)
             x_primera_bala = constantes.ANCHO_VENTANA // 1.28
             y_primera_bala = constantes.ALTO_VENTANA - constantes.ALTO_VENTANA // 8.5
             if unidades <= 20:
@@ -198,8 +235,11 @@ class UI:
         
     
     def kills(self, pantalla, kills):
-        if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
-            self.png_kills = pygame.transform.scale(self.png_kills, (20, 20))
+        if constantes.ANCHO_VENTANA!=1920 and constantes.ALTO_VENTANA!=1080:
+            if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
+                self.png_kills = pygame.transform.scale(self.png_kills, (20, 20))
+            else:
+                self.png_kills =self.reescalado_imagen(self.png_kills)
         pantalla.blit(self.png_kills, posicion(0.165,0.865,ancho_botón,altura_botón,margin_ratio))
         if kills == 1:
             Escribir.render_text(pantalla,f"{kills} kill",(0.208 + ancho_botón / 2, 0.877 - 0.5 * altura_botón + margin_ratio),12, constantes.BLANCO, "verdana")
@@ -219,13 +259,10 @@ class UI:
             print("Empate")
 
     def indicador_viento(self, pantalla):
-        ancho_rectangulo = 240
-        alto_rectangulo = 120
-        if constantes.ANCHO_VENTANA==800 and constantes.ALTO_VENTANA==800:
-            self.png_viento = pygame.transform.scale(self.png_viento, (20, 20))
-            self.flecha_izquierda = pygame.transform.scale(self.flecha_izquierda, (20, 20))
-            self.flecha_derecha = pygame.transform.scale(self.flecha_derecha, (20, 20))
-        #pygame.draw.rect(surface=pantalla, color=(0, 0, 0), rect=(0, 0, ancho_rectangulo, alto_rectangulo))
+        if constantes.ANCHO_VENTANA!=1920 and constantes.ALTO_VENTANA!=1080:
+            self.png_viento = self.reescalado_imagen(self.png_viento)
+            self.flecha_izquierda= self.reescalado_imagen(self.flecha_izquierda)
+            self.flecha_derecha = self.reescalado_imagen(self.flecha_derecha)
         pantalla.blit(self.png_viento, posicion(-0.043,0.02,ancho_botón,altura_botón,margin_ratio))
         Escribir.render_text(pantalla,f"{abs(constantes.VELOCIDAD_VIENTO)} m/s",(0.028 + ancho_botón / 2, 0.015 - 0.5 * altura_botón + margin_ratio),15, (0, 64, 202), "verdana bold")
         if constantes.VELOCIDAD_VIENTO < 0:
